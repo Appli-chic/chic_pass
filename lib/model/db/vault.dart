@@ -1,14 +1,14 @@
 class Vault {
   int id;
   String name;
-  String hash;
+  String signature;
   DateTime createdAt;
   DateTime updatedAt;
 
   Vault({
     this.id,
     this.name,
-    this.hash,
+    this.signature,
     this.createdAt,
     this.updatedAt,
   });
@@ -17,7 +17,7 @@ class Vault {
     return Vault(
       id: json['id'],
       name: json['name'],
-      hash: json['hash'],
+      signature: json['signature'],
       createdAt: json['created_at'],
       updatedAt: json['updated_at'],
     );

@@ -1,5 +1,6 @@
 import 'package:chicpass/localization/app_translations.dart';
 import 'package:chicpass/model/db/vault.dart';
+import 'package:chicpass/provider/security_provider.dart';
 import 'package:chicpass/provider/theme_provider.dart';
 import 'package:chicpass/ui/component/vault_item.dart';
 import 'package:flutter/material.dart';
@@ -12,6 +13,7 @@ class VaultScreen extends StatefulWidget {
 
 class _VaultScreenState extends State<VaultScreen> {
   ThemeProvider _themeProvider;
+  SecurityProvider _securityProvider;
   List<Vault> _vaults = [];
 
   Widget _displaysEmptyVaults() {
@@ -55,6 +57,7 @@ class _VaultScreenState extends State<VaultScreen> {
   @override
   Widget build(BuildContext context) {
     _themeProvider = Provider.of<ThemeProvider>(context, listen: true);
+    _securityProvider = Provider.of<SecurityProvider>(context);
 
     return Scaffold(
       backgroundColor: _themeProvider.backgroundColor,

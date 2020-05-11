@@ -6,6 +6,7 @@ import 'package:provider/provider.dart';
 import 'localization/app_translations_delegate.dart';
 import 'localization/application.dart';
 import 'model/env.dart';
+import 'provider/security_provider.dart';
 import 'ui/screen/vault_screen.dart';
 
 void main() {
@@ -49,6 +50,9 @@ class _AppState extends State<App> {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
+        Provider<SecurityProvider>.value(
+          value: SecurityProvider(env: _env),
+        ),
         ChangeNotifierProvider(
           create: (_) => ThemeProvider(),
         ),
