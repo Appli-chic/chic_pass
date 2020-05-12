@@ -1,4 +1,5 @@
 import 'package:chicpass/provider/theme_provider.dart';
+import 'package:chicpass/ui/screen/new_vault_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:provider/provider.dart';
@@ -75,6 +76,7 @@ class _AppState extends State<App> {
         initialRoute: '/',
         routes: {
           '/': (context) => VaultScreen(),
+          '/new_vault': (context) => NewVaultScreen(),
         },
       ),
     );

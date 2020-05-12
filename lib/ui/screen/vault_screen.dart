@@ -54,6 +54,10 @@ class _VaultScreenState extends State<VaultScreen> {
     );
   }
 
+  _addNewVault() async {
+    await Navigator.pushNamed(context, '/new_vault');
+  }
+
   @override
   Widget build(BuildContext context) {
     _themeProvider = Provider.of<ThemeProvider>(context, listen: true);
@@ -65,6 +69,7 @@ class _VaultScreenState extends State<VaultScreen> {
         brightness: _themeProvider.getBrightness(),
         backgroundColor: _themeProvider.secondBackgroundColor,
         elevation: 0,
+        centerTitle: true,
         title: Text(
           AppTranslations.of(context).text("vaults_title"),
           style: TextStyle(
@@ -74,7 +79,7 @@ class _VaultScreenState extends State<VaultScreen> {
         actions: <Widget>[
           IconButton(
             icon: Icon(Icons.add, color: _themeProvider.textColor),
-            onPressed: () {},
+            onPressed: _addNewVault,
           ),
         ],
       ),
@@ -84,7 +89,7 @@ class _VaultScreenState extends State<VaultScreen> {
           Icons.add,
           color: Colors.white,
         ),
-        onPressed: () {},
+        onPressed: _addNewVault,
       ),
       body: _vaults.isEmpty ? _displaysEmptyVaults() : _displaysVaults(),
     );
