@@ -7,6 +7,7 @@ class ChicTheme {
   final Color primaryColor;
   final Color textColor;
   final Color secondTextColor;
+  final Color thirdTextColor;
   final bool isLight;
 
   ChicTheme({
@@ -16,6 +17,7 @@ class ChicTheme {
     @required this.primaryColor,
     @required this.textColor,
     @required this.secondTextColor,
+    @required this.thirdTextColor,
     @required this.isLight,
   });
 }

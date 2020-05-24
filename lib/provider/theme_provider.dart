@@ -25,6 +25,7 @@ class ThemeProvider with ChangeNotifier {
       primaryColor: Color(0xFFE02020),
       textColor: Color(0xFF2D2D2D),
       secondTextColor: Color(0xFF575757),
+      thirdTextColor: Color(0xFF7F7F7F),
       isLight: true,
     );
 
@@ -78,4 +79,7 @@ class ThemeProvider with ChangeNotifier {
 
   /// Retrieve the second text color corresponding to the [_theme]
   Color get secondTextColor => _theme.secondTextColor;
+
+  /// Retrieve the third text color corresponding to the [_theme]
+  Color get thirdTextColor => _theme.thirdTextColor;
 }
