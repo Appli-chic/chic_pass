@@ -7,11 +7,14 @@ import 'package:provider/provider.dart';
 import 'localization/app_translations_delegate.dart';
 import 'localization/application.dart';
 import 'model/env.dart';
-import 'provider/security_provider.dart';
 import 'ui/screen/vault_screen.dart';
+import 'utils/sqlite.dart';
 
-void main() {
+Env env = Env();
+
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await openChicDatabase();
   runApp(App());
 }
 
@@ -22,7 +25,6 @@ class App extends StatefulWidget {
 
 class _AppState extends State<App> {
   AppTranslationsDelegate _newLocaleDelegate;
-  Env _env = Env();
 
   @override
   void initState() {
@@ -43,7 +45,7 @@ class _AppState extends State<App> {
 
   /// Load the env file which contains critic data
   void _onLoadEnvFile() async {
-    _env = await EnvParser().load();
+    env = await EnvParser().load();
     setState(() {});
   }
 
@@ -51,9 +53,6 @@ class _AppState extends State<App> {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
-        Provider<SecurityProvider>.value(
-          value: SecurityProvider(env: _env),
-        ),
         ChangeNotifierProvider(
           create: (_) => ThemeProvider(),
         ),

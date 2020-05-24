@@ -1,6 +1,7 @@
 import 'package:chicpass/localization/app_translations.dart';
 import 'package:chicpass/model/db/vault.dart';
-import 'package:chicpass/provider/security_provider.dart';
+import 'package:chicpass/service/vault_service.dart';
+import 'package:chicpass/utils/security.dart';
 import 'package:chicpass/provider/theme_provider.dart';
 import 'package:chicpass/ui/component/vault_item.dart';
 import 'package:flutter/material.dart';
@@ -13,8 +14,18 @@ class VaultScreen extends StatefulWidget {
 
 class _VaultScreenState extends State<VaultScreen> {
   ThemeProvider _themeProvider;
-  SecurityProvider _securityProvider;
   List<Vault> _vaults = [];
+
+  @override
+  void initState() {
+    _loadVaults();
+    super.initState();
+  }
+
+  _loadVaults() async {
+    _vaults = await VaultService.getAll();
+    setState(() {});
+  }
 
   Widget _displaysEmptyVaults() {
     return Center(
@@ -55,17 +66,25 @@ class _VaultScreenState extends State<VaultScreen> {
   }
 
   _addNewVault() async {
-    await Navigator.pushNamed(context, '/new_vault');
+    var result = await Navigator.pushNamed(context, '/new_vault');
+
+    if (result != null && result) {
+      // Refresh the list of vaults
+      _loadVaults();
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     _themeProvider = Provider.of<ThemeProvider>(context, listen: true);
-    _securityProvider = Provider.of<SecurityProvider>(context);
 
     return Scaffold(
       backgroundColor: _themeProvider.backgroundColor,
       appBar: AppBar(
+        leading: IconButton(
+          icon: Icon(Icons.person, color: _themeProvider.textColor),
+          onPressed: () {},
+        ),
         brightness: _themeProvider.getBrightness(),
         backgroundColor: _themeProvider.secondBackgroundColor,
         elevation: 0,
