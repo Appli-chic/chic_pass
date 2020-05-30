@@ -9,5 +9,6 @@
   "error": "Erreur",
   "ok": "OK",
   "name_empty_error": "Le nom ne doit pas être vide.",
-  "password_size_error": "Le most de passe doit faire au moins 6 caractères."
+  "password_size_error": "Le most de passe doit faire au moins 6 caractères.",
+  "passwords_title": "Mots de passe"
 }

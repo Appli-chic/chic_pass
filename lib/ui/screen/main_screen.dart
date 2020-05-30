@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:preload_page_view/preload_page_view.dart';
 import 'package:provider/provider.dart';
 
+import 'home_screen.dart';
+
 class MainScreen extends StatefulWidget {
   @override
   _MainScreenState createState() => _MainScreenState();
@@ -120,6 +122,7 @@ class _MainScreenState extends State<MainScreen> {
         child: FloatingActionButton(
           backgroundColor: Colors.transparent,
           elevation: 0,
+          highlightElevation: 0,
           onPressed: () async {},
           child: Container(
             height: 70,
@@ -148,7 +151,7 @@ class _MainScreenState extends State<MainScreen> {
         controller: _pageController,
         physics: NeverScrollableScrollPhysics(),
         children: <Widget>[
-          Container(),
+          HomeScreen(),
           Container(),
           Container(),
           Container(),

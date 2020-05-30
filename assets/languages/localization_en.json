@@ -9,5 +9,6 @@
   "error": "Error",
   "ok": "OK",
   "name_empty_error": "The name must not be empty.",
-  "password_size_error": "The password must contains at least 6 characters."
+  "password_size_error": "The password must contains at least 6 characters.",
+  "passwords_title": "Passwords"
 }
