@@ -8,7 +8,10 @@
   "save": "SAVE",
   "error": "Error",
   "ok": "OK",
+  "cancel": "CANCEL",
   "name_empty_error": "The name must not be empty.",
   "password_size_error": "The password must contains at least 6 characters.",
-  "passwords_title": "Passwords"
+  "passwords_title": "Passwords",
+  "search_hint": "Search...",
+  "unlock": "Unlock"
 }

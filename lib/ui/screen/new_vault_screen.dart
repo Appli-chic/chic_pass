@@ -87,7 +87,8 @@ class _NewVaultScreenState extends State<NewVaultScreen> {
       var mapSignature = HashMap<String, String>();
       mapSignature['second_security_key'] = env.secondSecurityKey;
       mapSignature['hash'] = hash;
-      var signature = await compute(Security.encryptSignature, mapSignature);
+      var signature = await compute(
+          Security.encryptSignature, mapSignature);
 
       await VaultService.save(
         Vault(

@@ -1,12 +1,14 @@
+import 'package:chicpass/model/db/vault.dart';
 import 'package:chicpass/provider/theme_provider.dart';
+import 'package:chicpass/ui/component/password_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class VaultItem extends StatelessWidget {
-  final String title;
+  final Vault vault;
 
   VaultItem({
-    @required this.title,
+    @required this.vault,
   });
 
   @override
@@ -15,7 +17,12 @@ class VaultItem extends StatelessWidget {
 
     return GestureDetector(
       onTap: () async {
-        await Navigator.pushNamed(context, '/main_screen');
+        showDialog(
+          context: context,
+          builder: (_) {
+            return PasswordDialog(vault: vault);
+          },
+        );
       },
       child: Container(
         height: 75,
@@ -38,7 +45,7 @@ class VaultItem extends StatelessWidget {
               child: Container(
                 padding: EdgeInsets.only(left: 16, right: 16),
                 child: Text(
-                  title,
+                  vault.name,
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
                   style: TextStyle(

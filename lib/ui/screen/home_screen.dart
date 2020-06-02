@@ -11,6 +11,7 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   ThemeProvider _themeProvider;
+  TextEditingController _searchTextController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -34,7 +35,7 @@ class _HomeScreenState extends State<HomeScreen> {
         children: <Widget>[
           Padding(
             padding: const EdgeInsets.only(top: 2),
-            child: SearchInput(),
+            child: SearchInput(controller: _searchTextController),
           ),
         ],
       ),
