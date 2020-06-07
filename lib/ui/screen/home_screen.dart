@@ -4,6 +4,7 @@ import 'package:chicpass/provider/data_provider.dart';
 import 'package:chicpass/provider/theme_provider.dart';
 import 'package:chicpass/service/entry_serice.dart';
 import 'package:chicpass/ui/component/input.dart';
+import 'package:chicpass/ui/component/password_item.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -21,8 +22,7 @@ class _HomeScreenState extends State<HomeScreen> {
     super.didChangeDependencies();
 
     if (_dataProvider == null) {
-      _dataProvider =
-          Provider.of<DataProvider>(context, listen: true);
+      _dataProvider = Provider.of<DataProvider>(context, listen: true);
       _loadEntries();
     }
   }
@@ -66,7 +66,9 @@ class _HomeScreenState extends State<HomeScreen> {
             itemCount: _dataProvider.entries.length,
             shrinkWrap: true,
             itemBuilder: (BuildContext context, int index) {
-              return Text(_dataProvider.entries[index].title);
+              return PasswordItem(
+                entry: _dataProvider.entries[index],
+              );
             },
           )
         ],
