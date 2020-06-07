@@ -16,14 +16,12 @@ class Env {
   final String accessTokenKey;
   final String refreshTokenKey;
   final String securityKey;
-  final String secondSecurityKey;
 
   Env({
     this.apiUrl,
     this.accessTokenKey,
     this.refreshTokenKey,
     this.securityKey,
-    this.secondSecurityKey,
   });
 
   factory Env.fromJson(Map<String, dynamic> jsonMap) {
@@ -32,7 +30,6 @@ class Env {
       accessTokenKey: jsonMap["ACCESS_TOKEN_STORAGE_KEY"],
       refreshTokenKey: jsonMap["REFRESH_TOKEN_STORAGE_KEY"],
       securityKey: jsonMap["SECURITY_KEY"],
-      secondSecurityKey: jsonMap["SECOND_SECURITY_KEY"],
     );
   }
 }

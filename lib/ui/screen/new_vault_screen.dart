@@ -78,17 +78,8 @@ class _NewVaultScreenState extends State<NewVaultScreen> {
         _isLoading = true;
       });
 
-      var mapEncryptMainPassword = HashMap<String, String>();
-      mapEncryptMainPassword['security_key'] = env.securityKey;
-      mapEncryptMainPassword['password'] = _passwordController.text;
-      var hash =
-          await compute(Security.encryptMainPassword, mapEncryptMainPassword);
-
-      var mapSignature = HashMap<String, String>();
-      mapSignature['second_security_key'] = env.secondSecurityKey;
-      mapSignature['hash'] = hash;
-      var signature = await compute(
-          Security.encryptSignature, mapSignature);
+      var hash = await Security.encryptMainPassword( _passwordController.text);
+      var signature = await Security.encryptSignature(hash);
 
       await VaultService.save(
         Vault(

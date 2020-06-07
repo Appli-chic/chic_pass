@@ -1,46 +1,33 @@
-import 'dart:collection';
-
 import 'package:chicpass/utils/constant.dart';
-import 'package:flutter/foundation.dart';
-import 'package:steel_crypt/steel_crypt.dart';
+import 'package:flutter_string_encryption/flutter_string_encryption.dart';
+
+import '../main.dart';
+
+final cryptor = new PlatformStringCryptor();
 
 class Security {
-  static String encryptMainPassword(HashMap<String, String> data) {
-    var passHash = PassCrypt('scrypt');
-    return passHash.hashPass(data['security_key'], data['password'], 24);
+
+  static Future<String> encryptMainPassword(String password) async {
+    return await cryptor.generateKeyFromPassword(password, env.securityKey);
   }
 
-  static String encryptSignature(HashMap<String, String> data) {
-    var streamAES = AesCrypt(data['hash'], 'ctr');
-    return streamAES.encrypt(SIGNATURE, data['second_security_key']);
+  static Future<String> encryptSignature(String key) async {
+    return await cryptor.encrypt(SIGNATURE, key);
   }
 
-  static String decryptSignature(HashMap<String, String> data) {
-    var streamAES = AesCrypt(data['hash'], 'ctr');
-
+  static Future<String> decryptData(String key, String encrypted) async {
     try {
-      return streamAES.decrypt(data['hash_signature'], data['second_security_key']);
-    } catch (e) {
-      return "";
+      return await cryptor.decrypt(encrypted, key);
+    } on MacMismatchException {
+      return null;
     }
   }
 
-  static Future<bool> isSignatureCorrect(HashMap<String, String> data) async {
-    return await compute(decryptSignature, data) == SIGNATURE;
+  static Future<bool> isSignatureCorrect(String key, String encrypted) async {
+    return await decryptData(key, encrypted) == SIGNATURE;
   }
 
-  static String encryptPassword(HashMap<String, String> data) {
-    var streamAES = AesCrypt(data['hash'], 'ctr');
-    return streamAES.encrypt(data['password'], data['second_security_key']);
-  }
-
-  static String decryptPassword(HashMap<String, String> data) {
-    var streamAES = AesCrypt(data['hash'], 'ctr');
-
-    try {
-      return streamAES.decrypt(data['hash_password'], data['second_security_key']);
-    } catch (e) {
-      return "";
-    }
+  static Future<String> encryptPassword(String key, String password) async {
+    return await cryptor.encrypt(password, key);
   }
 }

@@ -13,5 +13,6 @@
   "password_size_error": "Le most de passe doit faire au moins 6 caractères.",
   "passwords_title": "Mots de passe",
   "search_hint": "Rechercher...",
-  "unlock": "Dévérouiller"
+  "unlock": "Dévérouiller",
+  "error_incorrect_password": "Mauvais mot de passe."
 }

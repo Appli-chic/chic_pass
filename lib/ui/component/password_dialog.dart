@@ -25,6 +25,18 @@ class _PasswordDialogState extends State<PasswordDialog> {
   ThemeProvider _themeProvider;
   TextEditingController _passwordController = TextEditingController();
   bool _isPasswordHidden = true;
+  String _error = "";
+
+  Widget _displaysError() {
+    if (_error.isNotEmpty) {
+      return Container(
+        margin: EdgeInsets.only(top: 16),
+        child: Text(_error),
+      );
+    } else {
+      return Container();
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -34,57 +46,72 @@ class _PasswordDialogState extends State<PasswordDialog> {
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.all(Radius.circular(16.0)),
       ),
-      backgroundColor: _themeProvider.backgroundColor,
+      backgroundColor: _themeProvider.secondBackgroundColor,
       title: Text(AppTranslations.of(context).text("unlock")),
-      content: Container(
-        child: TextField(
-          controller: _passwordController,
-          obscureText: _isPasswordHidden,
-          autocorrect: false,
-          decoration: InputDecoration(
-            hintText: AppTranslations.of(context).text("password"),
-            suffixIcon: IconButton(
-              icon: Icon(_isPasswordHidden
-                  ? Icons.visibility
-                  : Icons.visibility_off,
-                  color: _themeProvider.secondTextColor),
-              onPressed: () {
-                setState(() {
-                  _isPasswordHidden = !_isPasswordHidden;
-                });
-              },
-            ),
+      content: Theme(
+          data: ThemeData(
+            primaryColor: _themeProvider.primaryColor,
           ),
-        ),
-      ),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              TextField(
+                controller: _passwordController,
+                obscureText: _isPasswordHidden,
+                autocorrect: false,
+                decoration: InputDecoration(
+                  hintText: AppTranslations.of(context).text("password"),
+                  suffixIcon: IconButton(
+                    icon: Icon(
+                        _isPasswordHidden
+                            ? Icons.visibility
+                            : Icons.visibility_off,
+                        color: _themeProvider.secondTextColor),
+                    onPressed: () {
+                      setState(() {
+                        _isPasswordHidden = !_isPasswordHidden;
+                      });
+                    },
+                  ),
+                ),
+              ),
+              _displaysError(),
+            ],
+          )),
       actions: <Widget>[
         FlatButton(
-          child: Text(AppTranslations.of(context).text("cancel")),
+          child: Text(
+            AppTranslations.of(context).text("cancel"),
+            style: TextStyle(
+              color: _themeProvider.primaryColor,
+            ),
+          ),
           onPressed: () async {
             Navigator.of(context).pop();
           },
         ),
         FlatButton(
-          child: Text(AppTranslations.of(context).text("ok")),
+          child: Text(
+            AppTranslations.of(context).text("ok"),
+            style: TextStyle(
+              color: _themeProvider.primaryColor,
+            ),
+          ),
           onPressed: () async {
-            var mapEncryptMainPassword = HashMap<String, String>();
-            mapEncryptMainPassword['security_key'] = env.securityKey;
-            mapEncryptMainPassword['password'] = _passwordController.text;
             var hash =
-            await compute(Security.encryptMainPassword, mapEncryptMainPassword);
-
-            var mapSignature = HashMap<String, String>();
-            mapSignature['second_security_key'] = env.secondSecurityKey;
-            mapSignature['hash_signature'] = widget.vault.signature;
-            mapSignature['hash'] = hash;
-            var isPasswordCorrect = await compute(
-                Security.isSignatureCorrect, mapSignature);
+                await Security.encryptMainPassword(_passwordController.text);
+            var isPasswordCorrect =
+                await Security.isSignatureCorrect(hash, widget.vault.signature);
 
             if (isPasswordCorrect) {
               Navigator.of(context).pop();
               await Navigator.pushNamed(context, '/main_screen');
             } else {
-
+              setState(() {
+                _error = AppTranslations.of(context)
+                    .text("error_incorrect_password");
+              });
             }
           },
         ),

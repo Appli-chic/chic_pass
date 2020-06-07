@@ -13,5 +13,6 @@
   "password_size_error": "The password must contains at least 6 characters.",
   "passwords_title": "Passwords",
   "search_hint": "Search...",
-  "unlock": "Unlock"
+  "unlock": "Unlock",
+  "error_incorrect_password": "Incorrect password."
 }

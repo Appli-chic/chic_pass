@@ -7,7 +7,10 @@ class LoadingDialog extends StatefulWidget {
   final Widget child;
   final bool isDisplayed;
 
-  LoadingDialog({@required this.child, @required this.isDisplayed});
+  LoadingDialog({
+    @required this.child,
+    @required this.isDisplayed,
+  });
 
   @override
   State<StatefulWidget> createState() => _LoadingDialogState();
@@ -42,8 +45,8 @@ class _LoadingDialogState extends State<LoadingDialog> {
               padding: EdgeInsets.all(16),
               child: Center(
                 child: CircularProgressIndicator(
-                  valueColor:
-                  AlwaysStoppedAnimation<Color>(_themeProvider.primaryColor),
+                  valueColor: AlwaysStoppedAnimation<Color>(
+                      _themeProvider.primaryColor),
                 ),
               ),
             ),
