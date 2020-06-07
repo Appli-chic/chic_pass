@@ -14,5 +14,12 @@
   "passwords_title": "Passwords",
   "search_hint": "Search...",
   "unlock": "Unlock",
-  "error_incorrect_password": "Incorrect password."
+  "error_incorrect_password": "Incorrect password.",
+  "new_password_title": "New password",
+  "title": "Title",
+  "login_email": "Login/Email",
+  "category": "Category",
+  "title_empty_error": "The title must not be empty.",
+  "login_empty_error": "The login must not be empty.",
+  "category_empty_error": "The category must not be empty."
 }

@@ -123,7 +123,9 @@ class _MainScreenState extends State<MainScreen> {
           backgroundColor: Colors.transparent,
           elevation: 0,
           highlightElevation: 0,
-          onPressed: () async {},
+          onPressed: () async {
+            await Navigator.pushNamed(context, '/new_password_screen');
+          },
           child: Container(
             height: 70,
             width: 70,

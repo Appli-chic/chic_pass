@@ -1,3 +1,6 @@
+
+import 'package:chicpass/model/db/category.dart';
+import 'package:chicpass/model/db/entry.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
 
@@ -9,22 +12,22 @@ Database db;
 openChicDatabase() async {
   db = await openDatabase(
     join(await getDatabasesPath(), DATABASE_NAME),
-    version: 4,
+    version: 8,
     onCreate: (db, version) async {
       // Create the structure of the database
       await db.execute(
           "CREATE TABLE ${Vault.tableName}(id INTEGER PRIMARY KEY, name TEXT, signature TEXT, created_at DATETIME, updated_at DATETIME) ");
 
-//      await db.execute(
-//          "CREATE TABLE ${TypeTransaction.tableName}(id INTEGER PRIMARY KEY, title TEXT, color TEXT, icon_name TEXT) ");
-//
-//      await db.execute(
-//          "CREATE TABLE ${t.Transaction.tableName}(id INTEGER PRIMARY KEY, title TEXT, description TEXT, price REAL, date DATETIME, nb_day_repeat INTEGER, index_type_repeat INTEGER, start_subscription_date DATETIME, end_subscription_date DATETIME, is_deactivated INTEGER, bank_id INTEGER, type_transaction_id INTEGER, transaction_id INTEGER, FOREIGN KEY(bank_id) REFERENCES ${Bank.tableName}(id), FOREIGN KEY(type_transaction_id) REFERENCES ${TypeTransaction.tableName}(id), FOREIGN KEY(transaction_id) REFERENCES ${t.Transaction.tableName}(id)) ");
+      await db.execute(
+          "CREATE TABLE ${Category.tableName}(id INTEGER PRIMARY KEY, title TEXT, icon_name TEXT, created_at DATETIME, updated_at DATETIME) ");
+
+      await db.execute(
+          "CREATE TABLE ${Entry.tableName}(id INTEGER PRIMARY KEY, title TEXT, login TEXT, hash TEXT, created_at DATETIME, updated_at DATETIME, vault_id INTEGER, category_id INTEGER, FOREIGN KEY(vault_id) REFERENCES ${Vault.tableName}(id), FOREIGN KEY(category_id) REFERENCES ${Category.tableName}(id)) ");
     },
-//    onUpgrade: (db, oldVersion, newVersion) async {
-//      await db.execute(
-//          "CREATE TABLE ${Vault.tableName}(id INTEGER PRIMARY KEY, name TEXT, signature TEXT, created_at DATETIME, updated_at DATETIME) ");
-//    }
+    onUpgrade: (db, oldVersion, newVersion) async {
+      await db.execute(
+          "INSERT INTO ${Category.tableName}(title, icon_name, created_at, updated_at) VALUES('Test', 'test', '2016-01-01 10:20:05.123', '2016-01-01 10:20:05.123') ");
+    }
   );
 }
 

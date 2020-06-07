@@ -1,6 +1,6 @@
 import 'package:chicpass/localization/app_translations.dart';
 import 'package:chicpass/provider/theme_provider.dart';
-import 'package:chicpass/ui/component/search_input.dart';
+import 'package:chicpass/ui/component/input.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -35,7 +35,11 @@ class _HomeScreenState extends State<HomeScreen> {
         children: <Widget>[
           Padding(
             padding: const EdgeInsets.only(top: 2),
-            child: SearchInput(controller: _searchTextController),
+            child: Input(
+              textController: _searchTextController,
+              hint: AppTranslations.of(context).text("search_hint"),
+              prefixIconData: Icons.search,
+            ),
           ),
         ],
       ),

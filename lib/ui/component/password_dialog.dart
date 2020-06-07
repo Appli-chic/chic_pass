@@ -1,5 +1,3 @@
-import 'dart:collection';
-
 import 'package:chicpass/localization/app_translations.dart';
 import 'package:chicpass/model/db/vault.dart';
 import 'package:chicpass/provider/theme_provider.dart';
@@ -7,8 +5,6 @@ import 'package:chicpass/utils/security.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-
-import '../../main.dart';
 
 class PasswordDialog extends StatefulWidget {
   PasswordDialog({
@@ -60,6 +56,7 @@ class _PasswordDialogState extends State<PasswordDialog> {
                 controller: _passwordController,
                 obscureText: _isPasswordHidden,
                 autocorrect: false,
+                autofocus: true,
                 decoration: InputDecoration(
                   hintText: AppTranslations.of(context).text("password"),
                   suffixIcon: IconButton(

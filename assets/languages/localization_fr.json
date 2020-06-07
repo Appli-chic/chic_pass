@@ -14,5 +14,12 @@
   "passwords_title": "Mots de passe",
   "search_hint": "Rechercher...",
   "unlock": "Dévérouiller",
-  "error_incorrect_password": "Mauvais mot de passe."
+  "error_incorrect_password": "Mauvais mot de passe.",
+  "new_password_title": "Nouveau mot de passe",
+  "title": "Titre",
+  "login_email": "Nom/Courriel",
+  "category": "Catégorie",
+  "title_empty_error": "Le titre ne doit pas être vide.",
+  "login_empty_error": "Le courriel ne doit pas être vide.",
+  "category_empty_error": "La catégorie ne doit pas être vide."
 }

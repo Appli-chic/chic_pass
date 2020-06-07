@@ -1,5 +1,3 @@
-import 'dart:collection';
-
 import 'package:chicpass/localization/app_translations.dart';
 import 'package:chicpass/provider/theme_provider.dart';
 import 'package:chicpass/service/vault_service.dart';
@@ -8,11 +6,9 @@ import 'package:chicpass/ui/component/input.dart';
 import 'package:chicpass/ui/component/loading_dialog.dart';
 import 'package:chicpass/ui/component/rounded_button.dart';
 import 'package:chicpass/utils/security.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../../main.dart';
 import '../../model/db/vault.dart';
 
 class NewVaultScreen extends StatefulWidget {
