@@ -175,6 +175,7 @@ class _NewPasswordScreenState extends State<NewPasswordScreen> {
               child: Column(
                 children: <Widget>[
                   Input(
+                      textCapitalization: TextCapitalization.sentences,
                       textController: _titleController,
                       hint: AppTranslations.of(context).text("title"),
                       margin: EdgeInsets.only(top: 2),

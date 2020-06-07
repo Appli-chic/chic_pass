@@ -131,6 +131,7 @@ class _NewVaultScreenState extends State<NewVaultScreen> {
                     margin: EdgeInsets.only(top: 2),
                     hint: AppTranslations.of(context).text("name"),
                     onSubmitted: _onNameSubmitted,
+                    textCapitalization: TextCapitalization.sentences,
                   ),
                   Input(
                     textController: _passwordController,

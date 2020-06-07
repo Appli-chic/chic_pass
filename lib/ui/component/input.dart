@@ -27,6 +27,7 @@ class Input extends StatefulWidget {
   final Function onSuffixIconClicked;
   final TextInputAction textInputAction;
   final TextInputType inputType;
+  final TextCapitalization textCapitalization;
   final FocusNode focus;
   final Widget suffix;
   final Function(String) onSubmitted;
@@ -46,6 +47,7 @@ class Input extends StatefulWidget {
     this.onSuffixIconClicked,
     this.textInputAction = TextInputAction.next,
     this.inputType = TextInputType.text,
+    this.textCapitalization = TextCapitalization.none,
     this.suffix,
     this.onSubmitted,
     this.fieldType,
@@ -150,6 +152,7 @@ class _InputState extends State<Input> {
           autocorrect: false,
           obscureText: widget.obscureText,
           keyboardType: widget.inputType,
+          textCapitalization: widget.textCapitalization,
           textInputAction: widget.textInputAction,
           onSubmitted: widget.onSubmitted,
           style: TextStyle(

@@ -12,7 +12,7 @@ Database db;
 openChicDatabase() async {
   db = await openDatabase(
     join(await getDatabasesPath(), DATABASE_NAME),
-    version: 8,
+    version: 10,
     onCreate: (db, version) async {
       // Create the structure of the database
       await db.execute(
