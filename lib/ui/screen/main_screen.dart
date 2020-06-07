@@ -1,3 +1,4 @@
+import 'package:chicpass/provider/data_provider.dart';
 import 'package:chicpass/provider/theme_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:preload_page_view/preload_page_view.dart';
@@ -12,6 +13,7 @@ class MainScreen extends StatefulWidget {
 
 class _MainScreenState extends State<MainScreen> {
   ThemeProvider _themeProvider;
+  DataProvider _dataProvider;
   PreloadPageController _pageController = PreloadPageController();
   int _index = 0;
 
@@ -124,7 +126,13 @@ class _MainScreenState extends State<MainScreen> {
           elevation: 0,
           highlightElevation: 0,
           onPressed: () async {
-            await Navigator.pushNamed(context, '/new_password_screen');
+            var entry = await Navigator.pushNamed(context, '/new_password_screen');
+
+            if(entry != null) {
+              var entries = _dataProvider.entries;
+              entries.add(entry);
+              _dataProvider.setEntries(entries);
+            }
           },
           child: Container(
             height: 70,
@@ -143,6 +151,7 @@ class _MainScreenState extends State<MainScreen> {
   @override
   Widget build(BuildContext context) {
     _themeProvider = Provider.of<ThemeProvider>(context, listen: true);
+    _dataProvider = Provider.of<DataProvider>(context, listen: true);
 
     return Scaffold(
       backgroundColor: _themeProvider.backgroundColor,

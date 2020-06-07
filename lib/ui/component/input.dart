@@ -111,7 +111,7 @@ class _InputState extends State<Input> {
           height: 200,
           child: CupertinoPicker(
             scrollController: scrollController,
-            backgroundColor: _themeProvider.backgroundColor,
+            backgroundColor: _themeProvider.secondBackgroundColor,
             itemExtent: 30,
             onSelectedItemChanged: (int index) {
               widget.textController.text = widget.listFields[index];
@@ -122,7 +122,7 @@ class _InputState extends State<Input> {
                 child: Text(
                   widget.listFields[index],
                   style: TextStyle(
-                    color: Colors.white,
+                    color: _themeProvider.textColor,
                   ),
                 ),
               );

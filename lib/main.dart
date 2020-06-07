@@ -1,3 +1,4 @@
+import 'package:chicpass/provider/data_provider.dart';
 import 'package:chicpass/provider/theme_provider.dart';
 import 'package:chicpass/ui/screen/main_screen.dart';
 import 'package:chicpass/ui/screen/new_password_screen.dart';
@@ -57,6 +58,9 @@ class _AppState extends State<App> {
       providers: [
         ChangeNotifierProvider(
           create: (_) => ThemeProvider(),
+        ),
+        ChangeNotifierProvider(
+          create: (_) => DataProvider(),
         ),
       ],
       child: MaterialApp(

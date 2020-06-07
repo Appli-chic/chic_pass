@@ -1,6 +1,7 @@
 import 'package:chicpass/localization/app_translations.dart';
 import 'package:chicpass/model/db/category.dart';
 import 'package:chicpass/model/db/entry.dart';
+import 'package:chicpass/provider/data_provider.dart';
 import 'package:chicpass/provider/theme_provider.dart';
 import 'package:chicpass/service/category_service.dart';
 import 'package:chicpass/service/entry_serice.dart';
@@ -8,6 +9,7 @@ import 'package:chicpass/ui/component/dialog_error.dart';
 import 'package:chicpass/ui/component/input.dart';
 import 'package:chicpass/ui/component/loading_dialog.dart';
 import 'package:chicpass/ui/component/rounded_button.dart';
+import 'package:chicpass/utils/security.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -17,6 +19,7 @@ class NewPasswordScreen extends StatefulWidget {
 }
 
 class _NewPasswordScreenState extends State<NewPasswordScreen> {
+  DataProvider _dataProvider;
   ThemeProvider _themeProvider;
   bool _isPasswordHidden = true;
   bool _isLoading = false;
@@ -86,14 +89,13 @@ class _NewPasswordScreenState extends State<NewPasswordScreen> {
         _isLoading = true;
       });
 
-      var hash = "";
-      var vaultId = 0;
+      var hashedPassword = await Security.encryptPassword(_dataProvider.hash, _passwordController.text);
 
       var entry = Entry(
         title: _titleController.text,
         login: _loginController.text,
-        hash: hash,
-        vaultId: vaultId,
+        hash: hashedPassword,
+        vaultId: _dataProvider.vault.id,
         categoryId: _categories
             .where((c) => c.title == _categoryController.text)
             .toList()[0]
@@ -145,6 +147,7 @@ class _NewPasswordScreenState extends State<NewPasswordScreen> {
 
   @override
   Widget build(BuildContext context) {
+    _dataProvider = Provider.of<DataProvider>(context, listen: true);
     _themeProvider = Provider.of<ThemeProvider>(context, listen: true);
 
     return LoadingDialog(

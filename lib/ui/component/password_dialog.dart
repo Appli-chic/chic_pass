@@ -1,5 +1,6 @@
 import 'package:chicpass/localization/app_translations.dart';
 import 'package:chicpass/model/db/vault.dart';
+import 'package:chicpass/provider/data_provider.dart';
 import 'package:chicpass/provider/theme_provider.dart';
 import 'package:chicpass/utils/security.dart';
 import 'package:flutter/foundation.dart';
@@ -19,6 +20,7 @@ class PasswordDialog extends StatefulWidget {
 
 class _PasswordDialogState extends State<PasswordDialog> {
   ThemeProvider _themeProvider;
+  DataProvider _dataProvider;
   TextEditingController _passwordController = TextEditingController();
   bool _isPasswordHidden = true;
   String _error = "";
@@ -37,6 +39,7 @@ class _PasswordDialogState extends State<PasswordDialog> {
   @override
   Widget build(BuildContext context) {
     _themeProvider = Provider.of<ThemeProvider>(context, listen: true);
+    _dataProvider = Provider.of<DataProvider>(context, listen: true);
 
     return AlertDialog(
       shape: RoundedRectangleBorder(
@@ -102,6 +105,9 @@ class _PasswordDialogState extends State<PasswordDialog> {
                 await Security.isSignatureCorrect(hash, widget.vault.signature);
 
             if (isPasswordCorrect) {
+              _dataProvider.setHash(hash);
+              _dataProvider.setVault(widget.vault);
+
               Navigator.of(context).pop();
               await Navigator.pushNamed(context, '/main_screen');
             } else {

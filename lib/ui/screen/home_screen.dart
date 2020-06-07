@@ -1,5 +1,8 @@
 import 'package:chicpass/localization/app_translations.dart';
+import 'package:chicpass/model/db/entry.dart';
+import 'package:chicpass/provider/data_provider.dart';
 import 'package:chicpass/provider/theme_provider.dart';
+import 'package:chicpass/service/entry_serice.dart';
 import 'package:chicpass/ui/component/input.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -10,8 +13,24 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  DataProvider _dataProvider;
   ThemeProvider _themeProvider;
   TextEditingController _searchTextController = TextEditingController();
+
+  didChangeDependencies() {
+    super.didChangeDependencies();
+
+    if (_dataProvider == null) {
+      _dataProvider =
+          Provider.of<DataProvider>(context, listen: true);
+      _loadEntries();
+    }
+  }
+
+  _loadEntries() async {
+    var entries = await EntryService.getAll();
+    _dataProvider.setEntries(entries);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -41,6 +60,15 @@ class _HomeScreenState extends State<HomeScreen> {
               prefixIconData: Icons.search,
             ),
           ),
+          ListView.builder(
+            padding: EdgeInsets.only(top: 0, bottom: 20),
+            physics: NeverScrollableScrollPhysics(),
+            itemCount: _dataProvider.entries.length,
+            shrinkWrap: true,
+            itemBuilder: (BuildContext context, int index) {
+              return Text(_dataProvider.entries[index].title);
+            },
+          )
         ],
       ),
     );
