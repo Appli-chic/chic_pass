@@ -10,6 +10,7 @@ import 'package:provider/provider.dart';
 import 'localization/app_translations_delegate.dart';
 import 'localization/application.dart';
 import 'model/env.dart';
+import 'ui/screen/new_category_screen.dart';
 import 'ui/screen/vault_screen.dart';
 import 'utils/sqlite.dart';
 
@@ -84,6 +85,7 @@ class _AppState extends State<App> {
           '/new_vault': (context) => NewVaultScreen(),
           '/main_screen': (context) => MainScreen(),
           '/new_password_screen': (context) => NewPasswordScreen(),
+          '/new_category_screen': (context) => NewCategoryScreen(),
         },
       ),
     );

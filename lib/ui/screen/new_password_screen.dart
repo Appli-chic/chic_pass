@@ -65,7 +65,7 @@ class _NewPasswordScreenState extends State<NewPasswordScreen> {
     FocusScope.of(context).requestFocus(_passwordFocus);
   }
 
-  onSave() async {
+  _onSave() async {
     var errors = List<String>();
 
     if (_titleController.text.isEmpty) {
@@ -89,7 +89,8 @@ class _NewPasswordScreenState extends State<NewPasswordScreen> {
         _isLoading = true;
       });
 
-      var hashedPassword = await Security.encryptPassword(_dataProvider.hash, _passwordController.text);
+      var hashedPassword = await Security.encryptPassword(
+          _dataProvider.hash, _passwordController.text);
 
       var entry = Entry(
         title: _titleController.text,
@@ -173,6 +174,7 @@ class _NewPasswordScreenState extends State<NewPasswordScreen> {
           children: <Widget>[
             Expanded(
               child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
                   Input(
                       textCapitalization: TextCapitalization.sentences,
@@ -202,7 +204,7 @@ class _NewPasswordScreenState extends State<NewPasswordScreen> {
                             color: _themeProvider.secondBackgroundColor,
                             child: IconButton(
                               icon: Image.asset('assets/lullaby.png',
-                                  color: _themeProvider.secondTextColor),
+                                  color: _themeProvider.thirdTextColor),
                               onPressed: () {},
                             ),
                           ),
@@ -213,7 +215,7 @@ class _NewPasswordScreenState extends State<NewPasswordScreen> {
                                   _isPasswordHidden
                                       ? Icons.visibility
                                       : Icons.visibility_off,
-                                  color: _themeProvider.secondTextColor),
+                                  color: _themeProvider.thirdTextColor),
                               onPressed: () {
                                 setState(() {
                                   _isPasswordHidden = !_isPasswordHidden;
@@ -237,6 +239,26 @@ class _NewPasswordScreenState extends State<NewPasswordScreen> {
                       setState(() {});
                     },
                   ),
+                  GestureDetector(
+                    onTap: () async {
+                      var category = await Navigator.pushNamed(
+                          context, '/new_category_screen');
+
+                      if (category != null) {
+                        _loadCategories();
+                      }
+                    },
+                    child: Container(
+                      margin: EdgeInsets.only(top: 16, left: 16),
+                      child: Text(
+                        "+ Add a category",
+                        style: TextStyle(
+                          color: _themeProvider.thirdTextColor,
+                          fontSize: 17,
+                        ),
+                      ),
+                    ),
+                  ),
                 ],
               ),
             ),
@@ -245,7 +267,7 @@ class _NewPasswordScreenState extends State<NewPasswordScreen> {
               child: RoundedButton(
                 text: AppTranslations.of(context).text("save"),
                 onClick: () {
-                  onSave();
+                  _onSave();
                 },
               ),
             ),

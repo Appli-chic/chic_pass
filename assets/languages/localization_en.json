@@ -6,6 +6,7 @@
   "password": "Password",
   "new_vaults_password_description": "This password is very important, it will be used to encrypt all the passwords you will store in this vault. Please be sure to keep in mind this password. If you lose it, it will be impossible for us to retrieve your passwords in this vault.",
   "save": "SAVE",
+  "update": "UPDATE",
   "error": "Error",
   "ok": "OK",
   "cancel": "CANCEL",
@@ -21,5 +22,7 @@
   "category": "Category",
   "title_empty_error": "The title must not be empty.",
   "login_empty_error": "The login must not be empty.",
-  "category_empty_error": "The category must not be empty."
+  "category_empty_error": "The category must not be empty.",
+  "new_category_title": "New category",
+  "choose_icon_title": "Choose an icon"
 }

@@ -5,10 +5,18 @@ import 'package:provider/provider.dart';
 class RoundedButton extends StatelessWidget {
   final Function onClick;
   final String text;
+  final double fontSize;
+  final double borderRadius;
+  final double minHeight;
+  final double minWidth;
 
   RoundedButton({
     @required this.onClick,
     @required this.text,
+    this.fontSize = 20,
+    this.borderRadius = 80,
+    this.minHeight = 50,
+    this.minWidth = 88,
   });
 
   @override
@@ -17,23 +25,25 @@ class RoundedButton extends StatelessWidget {
 
     return RaisedButton(
       onPressed: onClick,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(80.0)),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(borderRadius)),
       padding: const EdgeInsets.all(0.0),
-      child: Ink(
-        decoration: BoxDecoration(
-          color: themeProvider.primaryColor,
-          borderRadius: BorderRadius.all(Radius.circular(80.0)),
-        ),
-        child: Container(
-          constraints: const BoxConstraints(minWidth: 88.0, minHeight: 50.0),
-          alignment: Alignment.center,
-          child: Text(
-            text,
-            textAlign: TextAlign.center,
-            style: TextStyle(
-              color: Colors.white,
-              fontSize: 20,
-              fontWeight: FontWeight.bold,
+      child: Container(
+        child: Ink(
+          decoration: BoxDecoration(
+            color: themeProvider.primaryColor,
+            borderRadius: BorderRadius.all(Radius.circular(borderRadius)),
+          ),
+          child: Container(
+            constraints: BoxConstraints(minWidth: minWidth, minHeight: minHeight),
+            alignment: Alignment.center,
+            child: Text(
+              text,
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                color: Colors.white,
+                fontSize: fontSize,
+                fontWeight: FontWeight.bold,
+              ),
             ),
           ),
         ),

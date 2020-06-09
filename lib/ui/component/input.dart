@@ -69,7 +69,7 @@ class _InputState extends State<Input> {
       color: _themeProvider.secondBackgroundColor,
       child: IconButton(
         icon:
-            Icon(widget.suffixIconData, color: _themeProvider.secondTextColor),
+            Icon(widget.suffixIconData, color: _themeProvider.thirdTextColor),
         onPressed: () {
           widget.onSuffixIconClicked();
         },
@@ -83,7 +83,7 @@ class _InputState extends State<Input> {
         color: _themeProvider.secondBackgroundColor,
         child: IconButton(
           icon: Icon(widget.prefixIconData,
-              color: _themeProvider.secondTextColor),
+              color: _themeProvider.thirdTextColor),
           onPressed: () {},
         ),
       );
@@ -173,7 +173,7 @@ class _InputState extends State<Input> {
             filled: true,
             fillColor: _themeProvider.secondBackgroundColor,
             hintStyle: TextStyle(
-              color: _themeProvider.secondTextColor,
+              color: _themeProvider.thirdTextColor,
             ),
             suffixIcon: _displaySuffix(),
             prefixIcon: _displayPrefixIcon(),
