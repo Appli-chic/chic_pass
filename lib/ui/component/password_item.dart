@@ -15,7 +15,9 @@ class PasswordItem extends StatelessWidget {
     var themeProvider = Provider.of<ThemeProvider>(context, listen: true);
 
     return GestureDetector(
-      onTap: () async {},
+      onTap: () async {
+        await Navigator.pushNamed(context, '/entry_details_screen', arguments: entry);
+      },
       child: Container(
         height: 75,
         margin: EdgeInsets.only(left: 16, right: 16, top: 16),

@@ -24,5 +24,6 @@
   "login_empty_error": "Le courriel ne doit pas être vide.",
   "category_empty_error": "La catégorie ne doit pas être vide.",
   "new_category_title": "Nouvelle catégorie",
-  "choose_icon_title": "Choisissez une icône"
+  "choose_icon_title": "Choisissez une icône",
+  "category_title": "Catégories"
 }

@@ -24,5 +24,6 @@
   "login_empty_error": "The login must not be empty.",
   "category_empty_error": "The category must not be empty.",
   "new_category_title": "New category",
-  "choose_icon_title": "Choose an icon"
+  "choose_icon_title": "Choose an icon",
+  "category_title": "Categories"
 }

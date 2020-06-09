@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:preload_page_view/preload_page_view.dart';
 import 'package:provider/provider.dart';
 
+import 'category_screen.dart';
 import 'home_screen.dart';
 
 class MainScreen extends StatefulWidget {
@@ -163,7 +164,7 @@ class _MainScreenState extends State<MainScreen> {
         physics: NeverScrollableScrollPhysics(),
         children: <Widget>[
           HomeScreen(),
-          Container(),
+          CategoryScreen(),
           Container(),
           Container(),
           Container(),

@@ -1,5 +1,6 @@
 import 'package:chicpass/provider/data_provider.dart';
 import 'package:chicpass/provider/theme_provider.dart';
+import 'package:chicpass/ui/screen/category_passwords_screen.dart';
 import 'package:chicpass/ui/screen/main_screen.dart';
 import 'package:chicpass/ui/screen/new_password_screen.dart';
 import 'package:chicpass/ui/screen/new_vault_screen.dart';
@@ -10,6 +11,7 @@ import 'package:provider/provider.dart';
 import 'localization/app_translations_delegate.dart';
 import 'localization/application.dart';
 import 'model/env.dart';
+import 'ui/screen/entry_details_screen.dart';
 import 'ui/screen/new_category_screen.dart';
 import 'ui/screen/vault_screen.dart';
 import 'utils/sqlite.dart';
@@ -86,6 +88,8 @@ class _AppState extends State<App> {
           '/main_screen': (context) => MainScreen(),
           '/new_password_screen': (context) => NewPasswordScreen(),
           '/new_category_screen': (context) => NewCategoryScreen(),
+          '/category_passwords_screen': (context) => CategoryPasswordsScreen(),
+          '/entry_details_screen': (context) => EntryDetailsScreen(),
         },
       ),
     );
