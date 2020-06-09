@@ -101,6 +101,9 @@ class _NewPasswordScreenState extends State<NewPasswordScreen> {
             .where((c) => c.title == _categoryController.text)
             .toList()[0]
             .id,
+        category: _categories
+            .where((c) => c.title == _categoryController.text)
+            .toList()[0],
         updatedAt: DateTime.now(),
         createdAt: DateTime.now(),
       );

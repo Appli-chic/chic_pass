@@ -1,3 +1,4 @@
+import 'package:chicpass/model/db/vault.dart';
 import 'package:intl/intl.dart';
 
 class Category {
@@ -8,6 +9,8 @@ class Category {
   String iconName;
   DateTime createdAt;
   DateTime updatedAt;
+  Category category;
+  Vault vault;
 
   Category({
     this.id,
@@ -15,6 +18,8 @@ class Category {
     this.iconName,
     this.createdAt,
     this.updatedAt,
+    this.category,
+    this.vault,
   });
 
   factory Category.fromJson(Map<String, dynamic> json) {
@@ -24,6 +29,8 @@ class Category {
       iconName: json['icon_name'],
       createdAt: json['created_at'],
       updatedAt: json['updated_at'],
+      category: json['category'],
+      vault: json['vault'],
     );
   }
 
@@ -34,6 +41,8 @@ class Category {
     data['icon_name'] = this.iconName;
     data['created_at'] = this.createdAt;
     data['updated_at'] = this.updatedAt;
+    data['category'] = this.category;
+    data['vault'] = this.vault;
     return data;
   }
 
@@ -45,6 +54,7 @@ class Category {
       id: data['id'],
       title: data['title'],
       iconName: data['icon_name'],
+      category: data['category'],
       createdAt: createdAtString,
       updatedAt: updatedAtString,
     );

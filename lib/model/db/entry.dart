@@ -1,5 +1,7 @@
 import 'package:intl/intl.dart';
 
+import 'category.dart';
+
 class Entry {
   static const tableName = "entries";
 
@@ -11,6 +13,7 @@ class Entry {
   int categoryId;
   DateTime createdAt;
   DateTime updatedAt;
+  Category category;
 
   Entry({
     this.id,
@@ -21,6 +24,7 @@ class Entry {
     this.categoryId,
     this.createdAt,
     this.updatedAt,
+    this.category,
   });
 
   factory Entry.fromJson(Map<String, dynamic> json) {

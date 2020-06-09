@@ -28,7 +28,7 @@ class PasswordItem extends StatelessWidget {
             Container(
               padding: EdgeInsets.only(left: 16),
               child: Image.asset(
-                "assets/category/email.png",
+                "assets/category/${entry.category.iconName}",
                 width: 30,
                 height: 30,
               ),

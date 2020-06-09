@@ -24,10 +24,10 @@ openChicDatabase() async {
       await db.execute(
           "CREATE TABLE ${Entry.tableName}(id INTEGER PRIMARY KEY, title TEXT, login TEXT, hash TEXT, created_at DATETIME, updated_at DATETIME, vault_id INTEGER, category_id INTEGER, FOREIGN KEY(vault_id) REFERENCES ${Vault.tableName}(id), FOREIGN KEY(category_id) REFERENCES ${Category.tableName}(id)) ");
     },
-    onUpgrade: (db, oldVersion, newVersion) async {
-      await db.execute(
-          "INSERT INTO ${Category.tableName}(title, icon_name, created_at, updated_at) VALUES('Test', 'test', '2016-01-01 10:20:05.123', '2016-01-01 10:20:05.123') ");
-    }
+//    onUpgrade: (db, oldVersion, newVersion) async {
+//      await db.execute(
+//          "INSERT INTO ${Category.tableName}(title, icon_name, created_at, updated_at) VALUES('Test', 'test', '2016-01-01 10:20:05.123', '2016-01-01 10:20:05.123') ");
+//    }
   );
 }
 
