@@ -25,5 +25,15 @@
   "category_empty_error": "La catégorie ne doit pas être vide.",
   "new_category_title": "Nouvelle catégorie",
   "choose_icon_title": "Choisissez une icône",
-  "category_title": "Catégories"
+  "category_title": "Catégories",
+  "profile_title": "Profil",
+  "settings_title": "Options",
+  "account": "Compte",
+  "subscriptions": "Abonnements",
+  "data": "Données",
+  "synchronize_now": "Synchroniser",
+  "log_out": "Se déconnecter",
+  "display": "Affichage",
+  "lock_now": "Vérouiller",
+  "terms_of_use": "Contrat d'utilisation"
 }

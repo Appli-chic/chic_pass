@@ -1,5 +1,7 @@
 import 'package:chicpass/provider/data_provider.dart';
 import 'package:chicpass/provider/theme_provider.dart';
+import 'package:chicpass/ui/screen/profile_screen.dart';
+import 'package:chicpass/ui/screen/settings_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:preload_page_view/preload_page_view.dart';
 import 'package:provider/provider.dart';
@@ -166,8 +168,8 @@ class _MainScreenState extends State<MainScreen> {
           HomeScreen(),
           CategoryScreen(),
           Container(),
-          Container(),
-          Container(),
+          ProfileScreen(),
+          SettingsScreen(),
         ],
       ),
     );

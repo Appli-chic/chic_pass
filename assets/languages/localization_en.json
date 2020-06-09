@@ -25,5 +25,15 @@
   "category_empty_error": "The category must not be empty.",
   "new_category_title": "New category",
   "choose_icon_title": "Choose an icon",
-  "category_title": "Categories"
+  "category_title": "Categories",
+  "profile_title": "Profile",
+  "settings_title": "Settings",
+  "account": "Account",
+  "subscriptions": "Subscriptions",
+  "data": "Data",
+  "synchronize_now": "Synchronize now",
+  "log_out": "Log out",
+  "display": "Display",
+  "lock_now": "lock now",
+  "terms_of_use": "Terms of use"
 }
