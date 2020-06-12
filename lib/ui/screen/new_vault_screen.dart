@@ -74,8 +74,7 @@ class _NewVaultScreenState extends State<NewVaultScreen> {
         _isLoading = true;
       });
 
-      var hash = await Security.encryptMainPassword( _passwordController.text);
-      var signature = await Security.encryptSignature(hash);
+      var signature = await Security.encryptSignature(_passwordController.text);
 
       await VaultService.save(
         Vault(

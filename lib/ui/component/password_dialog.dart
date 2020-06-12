@@ -99,8 +99,7 @@ class _PasswordDialogState extends State<PasswordDialog> {
             ),
           ),
           onPressed: () async {
-            var hash =
-                await Security.encryptMainPassword(_passwordController.text);
+            var hash = _passwordController.text;
             var isPasswordCorrect =
                 await Security.isSignatureCorrect(hash, widget.vault.signature);
 
