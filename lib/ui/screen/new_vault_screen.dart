@@ -167,6 +167,7 @@ class _NewVaultScreenState extends State<NewVaultScreen> {
             Container(
               margin: EdgeInsets.only(left: 16, right: 16, bottom: 16),
               child: RoundedButton(
+                key: const Key("save_new_vault"),
                 text: AppTranslations.of(context).text("save"),
                 onClick: () {
                   _save();

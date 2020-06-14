@@ -96,6 +96,7 @@ class _VaultScreenState extends State<VaultScreen> {
         ),
         actions: <Widget>[
           IconButton(
+            key: const Key("add_appbar"),
             icon: Icon(Icons.add, color: _themeProvider.textColor),
             onPressed: _addNewVault,
           ),
@@ -105,6 +106,7 @@ class _VaultScreenState extends State<VaultScreen> {
         backgroundColor: _themeProvider.primaryColor,
         child: Icon(
           Icons.add,
+          key: const Key("add_fab"),
           color: Colors.white,
         ),
         onPressed: _addNewVault,

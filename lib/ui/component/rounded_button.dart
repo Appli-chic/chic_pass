@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class RoundedButton extends StatelessWidget {
+  final Key key;
   final Function onClick;
   final String text;
   final double fontSize;
@@ -11,6 +12,7 @@ class RoundedButton extends StatelessWidget {
   final double minWidth;
 
   RoundedButton({
+    this.key,
     @required this.onClick,
     @required this.text,
     this.fontSize = 20,
@@ -21,11 +23,13 @@ class RoundedButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    ThemeProvider themeProvider = Provider.of<ThemeProvider>(context, listen: true);
+    ThemeProvider themeProvider =
+        Provider.of<ThemeProvider>(context, listen: true);
 
     return RaisedButton(
       onPressed: onClick,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(borderRadius)),
+      shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(borderRadius)),
       padding: const EdgeInsets.all(0.0),
       child: Container(
         child: Ink(
@@ -34,7 +38,8 @@ class RoundedButton extends StatelessWidget {
             borderRadius: BorderRadius.all(Radius.circular(borderRadius)),
           ),
           child: Container(
-            constraints: BoxConstraints(minWidth: minWidth, minHeight: minHeight),
+            constraints:
+                BoxConstraints(minWidth: minWidth, minHeight: minHeight),
             alignment: Alignment.center,
             child: Text(
               text,
