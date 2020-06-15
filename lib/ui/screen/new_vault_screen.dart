@@ -126,6 +126,7 @@ class _NewVaultScreenState extends State<NewVaultScreen> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
                   Input(
+                    key: const Key("input_name"),
                     textController: _nameController,
                     margin: EdgeInsets.only(top: 2),
                     hint: AppTranslations.of(context).text("name"),
@@ -133,6 +134,7 @@ class _NewVaultScreenState extends State<NewVaultScreen> {
                     textCapitalization: TextCapitalization.sentences,
                   ),
                   Input(
+                    key: const Key("input_password"),
                     textController: _passwordController,
                     focus: _passwordFocus,
                     textInputAction: TextInputAction.done,

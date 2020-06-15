@@ -18,6 +18,7 @@ class TextFieldType {
 }
 
 class Input extends StatefulWidget {
+  final Key key;
   final bool obscureText;
   final EdgeInsetsGeometry margin;
   final String hint;
@@ -37,6 +38,7 @@ class Input extends StatefulWidget {
   final int singleSelectDefaultIndex;
 
   Input({
+    this.key,
     this.margin,
     this.focus,
     @required this.hint,
