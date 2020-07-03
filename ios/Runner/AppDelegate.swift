@@ -21,7 +21,6 @@ import RNCryptor
                     let data = dataString.data(using: .utf8)
                     let password = args["password"] as! String
                     let encryptedData = RNCryptor.encrypt(data: data!, withPassword: password)
-                    print("encrypt: " + encryptedData.base64EncodedString())
                     result(encryptedData.base64EncodedString())
                 } else if call.method == "decrypt" {
                     do {
