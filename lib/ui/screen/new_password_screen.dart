@@ -6,6 +6,7 @@ import 'package:chicpass/provider/theme_provider.dart';
 import 'package:chicpass/service/category_service.dart';
 import 'package:chicpass/service/entry_serice.dart';
 import 'package:chicpass/ui/component/dialog_error.dart';
+import 'package:chicpass/ui/component/generate_password_dialog.dart';
 import 'package:chicpass/ui/component/input.dart';
 import 'package:chicpass/ui/component/loading_dialog.dart';
 import 'package:chicpass/ui/component/rounded_button.dart';
@@ -208,7 +209,14 @@ class _NewPasswordScreenState extends State<NewPasswordScreen> {
                             child: IconButton(
                               icon: Image.asset('assets/lullaby.png',
                                   color: _themeProvider.thirdTextColor),
-                              onPressed: () {},
+                              onPressed: () async {
+                                showDialog(
+                                  context: context,
+                                  builder: (_) {
+                                    return GeneratePasswordDialog();
+                                  },
+                                );
+                              },
                             ),
                           ),
                           Material(

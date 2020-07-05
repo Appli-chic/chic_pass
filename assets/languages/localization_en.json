@@ -35,5 +35,9 @@
   "log_out": "Log out",
   "display": "Display",
   "lock_now": "lock now",
-  "terms_of_use": "Terms of use"
+  "terms_of_use": "Terms of use",
+  "generate_password": "Generate password",
+  "length": "Length",
+  "with_numbers": "With numbers",
+  "with_special_characters": "With special characters"
 }

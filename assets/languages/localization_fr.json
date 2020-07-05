@@ -35,5 +35,9 @@
   "log_out": "Se déconnecter",
   "display": "Affichage",
   "lock_now": "Vérouiller",
-  "terms_of_use": "Contrat d'utilisation"
+  "terms_of_use": "Contrat d'utilisation",
+  "generate_password": "Générateur de mot de passe",
+  "length": "Taille",
+  "with_numbers": "Avec des nombres",
+  "with_special_characters": "Avec caractère spécial"
 }
