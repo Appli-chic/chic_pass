@@ -213,7 +213,11 @@ class _NewPasswordScreenState extends State<NewPasswordScreen> {
                                 showDialog(
                                   context: context,
                                   builder: (_) {
-                                    return GeneratePasswordDialog();
+                                    return GeneratePasswordDialog(
+                                      onPasswordValidated: (String password) {
+                                        _passwordController.text = password;
+                                      },
+                                    );
                                   },
                                 );
                               },

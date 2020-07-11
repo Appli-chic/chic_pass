@@ -97,6 +97,12 @@ var specialCharacters = [
 ];
 
 class GeneratePasswordDialog extends StatefulWidget {
+  GeneratePasswordDialog({
+    this.onPasswordValidated,
+  });
+
+  final Function(String) onPasswordValidated;
+
   @override
   _GeneratePasswordDialogState createState() => _GeneratePasswordDialogState();
 }
@@ -258,7 +264,10 @@ class _GeneratePasswordDialogState extends State<GeneratePasswordDialog> {
               color: _themeProvider.primaryColor,
             ),
           ),
-          onPressed: () async {},
+          onPressed: () async {
+            widget.onPasswordValidated(_passwordController.text);
+            Navigator.of(context).pop();
+          },
         ),
       ],
     );
