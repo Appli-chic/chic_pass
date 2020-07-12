@@ -44,7 +44,7 @@ class _HomeScreenState extends State<HomeScreen> {
     _entries = entries;
     _oldEntries = entries;
 
-    if(_searchTextController.text.isNotEmpty) {
+    if (_searchTextController.text.isNotEmpty) {
       _onSearch(_searchTextController.text);
     } else {
       setState(() {});
@@ -87,20 +87,26 @@ class _HomeScreenState extends State<HomeScreen> {
               textController: _searchTextController,
               hint: AppTranslations.of(context).text("search_hint"),
               prefixIconData: Icons.search,
+              suffixIconData:
+                  _searchTextController.text.isNotEmpty ? Icons.close : null,
+              onSuffixIconClicked: () {
+                _searchTextController.clear();
+                _onSearch(_searchTextController.text);
+              },
               onTextChanged: _onSearch,
             ),
           ),
-          ListView.builder(
-            padding: EdgeInsets.only(top: 0, bottom: 20),
-            physics: NeverScrollableScrollPhysics(),
-            itemCount: _entries.length,
-            shrinkWrap: true,
-            itemBuilder: (BuildContext context, int index) {
-              return PasswordItem(
-                entry: _entries[index],
-              );
-            },
-          )
+          Expanded(
+            child: ListView.builder(
+              padding: EdgeInsets.only(top: 0, bottom: 20),
+              itemCount: _entries.length,
+              itemBuilder: (BuildContext context, int index) {
+                return PasswordItem(
+                  entry: _entries[index],
+                );
+              },
+            ),
+          ),
         ],
       ),
     );

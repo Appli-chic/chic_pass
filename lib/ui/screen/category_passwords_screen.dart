@@ -3,13 +3,13 @@ import 'package:chicpass/model/db/category.dart';
 import 'package:chicpass/model/db/entry.dart';
 import 'package:chicpass/provider/data_provider.dart';
 import 'package:chicpass/provider/theme_provider.dart';
+import 'package:chicpass/service/entry_serice.dart';
 import 'package:chicpass/ui/component/input.dart';
 import 'package:chicpass/ui/component/password_item.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class CategoryPasswordsScreen extends StatefulWidget {
-
   @override
   _CategoryPasswordsScreenState createState() =>
       _CategoryPasswordsScreenState();
@@ -18,14 +18,48 @@ class CategoryPasswordsScreen extends StatefulWidget {
 class _CategoryPasswordsScreenState extends State<CategoryPasswordsScreen> {
   Category _category;
   ThemeProvider _themeProvider;
+  DataProvider _dataProvider;
   TextEditingController _searchTextController = TextEditingController();
+  List<Entry> _oldEntries = [];
   List<Entry> _entries = [];
+
+  didChangeDependencies() {
+    super.didChangeDependencies();
+
+    if (_dataProvider == null) {
+      _dataProvider = Provider.of<DataProvider>(context, listen: true);
+      _loadEntries();
+    }
+  }
+
+  _loadEntries() async {
+    Category category = ModalRoute.of(context).settings.arguments;
+    var entries = await EntryService.getAllByVaultIdAndCategoryId(
+        _dataProvider.vault.id, category.id);
+    _entries = entries;
+    _oldEntries = entries;
+
+    if (_searchTextController.text.isNotEmpty) {
+      _onSearch(_searchTextController.text);
+    } else {
+      setState(() {});
+    }
+  }
+
+  _onSearch(String text) {
+    _entries = _oldEntries
+        .where((entry) =>
+            entry.title.toLowerCase().contains(text.toLowerCase()) ||
+            entry.login.toLowerCase().contains(text.toLowerCase()))
+        .toList();
+    setState(() {});
+  }
 
   @override
   Widget build(BuildContext context) {
     _themeProvider = Provider.of<ThemeProvider>(context, listen: true);
+    _dataProvider = Provider.of<DataProvider>(context, listen: true);
     _category = ModalRoute.of(context).settings.arguments;
-//    var entries = _dataProvider.entries.where((e) => e.category.id == _category.id).toList();
 
     return Scaffold(
       backgroundColor: _themeProvider.backgroundColor,
@@ -49,19 +83,26 @@ class _CategoryPasswordsScreenState extends State<CategoryPasswordsScreen> {
               textController: _searchTextController,
               hint: AppTranslations.of(context).text("search_hint"),
               prefixIconData: Icons.search,
+              suffixIconData:
+              _searchTextController.text.isNotEmpty ? Icons.close : null,
+              onSuffixIconClicked: () {
+                _searchTextController.clear();
+                _onSearch(_searchTextController.text);
+              },
+              onTextChanged: _onSearch,
             ),
           ),
-          ListView.builder(
-            padding: EdgeInsets.only(top: 0, bottom: 20),
-            physics: NeverScrollableScrollPhysics(),
-            itemCount: _entries.length,
-            shrinkWrap: true,
-            itemBuilder: (BuildContext context, int index) {
-              return PasswordItem(
-                entry: _entries[index],
-              );
-            },
-          )
+          Expanded(
+            child: ListView.builder(
+              padding: EdgeInsets.only(top: 0, bottom: 20),
+              itemCount: _entries.length,
+              itemBuilder: (BuildContext context, int index) {
+                return PasswordItem(
+                  entry: _entries[index],
+                );
+              },
+            ),
+          ),
         ],
       ),
     );

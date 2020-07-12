@@ -266,7 +266,7 @@ class _NewPasswordScreenState extends State<NewPasswordScreen> {
                     child: Container(
                       margin: EdgeInsets.only(top: 16, left: 16),
                       child: Text(
-                        "+ Add a category",
+                        AppTranslations.of(context).text("add_category"),
                         style: TextStyle(
                           color: _themeProvider.thirdTextColor,
                           fontSize: 17,

@@ -1,4 +1,3 @@
-
 import 'package:chicpass/model/db/category.dart';
 import 'package:chicpass/model/db/entry.dart';
 import 'package:chicpass/utils/sqlite.dart';
@@ -9,7 +8,6 @@ const GENERAL_SELECT = "SELECT e.id, e.title, e.login, e.hash, e.created_at, "
     "left join ${Category.tableName} as c ON c.id = e.category_id ";
 
 class EntryService {
-
   static Future<void> save(Entry category) async {
     await addRow(Entry.tableName, category.toMap());
   }
@@ -28,7 +26,28 @@ class EntryService {
         "where e.vault_id = $vaultId "
             "order by e.title");
 
-    for(var data in result) {
+    for (var data in result) {
+      var entry = Entry.fromMap(data);
+      var category = Category();
+      category.id = data['category_id'];
+      category.title = data['c_title'];
+      category.iconName = data['icon_name'];
+      entry.category = category;
+      entries.add(entry);
+    }
+
+    return entries;
+  }
+
+  static Future<List<Entry>> getAllByVaultIdAndCategoryId(
+      int vaultId, int categoryId) async {
+    var entries = List<Entry>();
+    var result = await sqlQuery(GENERAL_SELECT +
+        "where e.vault_id = $vaultId "
+            "and e.category_id = $categoryId "
+            "order by e.title");
+
+    for (var data in result) {
       var entry = Entry.fromMap(data);
       var category = Category();
       category.id = data['category_id'];

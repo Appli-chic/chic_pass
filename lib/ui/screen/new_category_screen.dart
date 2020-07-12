@@ -36,7 +36,8 @@ class _NewCategoryScreenState extends State<NewCategoryScreen> {
       });
 
       var category = Category(
-        title: _titleController.text,
+        title:
+            "${_titleController.text[0].toUpperCase()}${_titleController.text.substring(1)}",
         iconName: _icon,
         createdAt: DateTime.now(),
         updatedAt: DateTime.now(),

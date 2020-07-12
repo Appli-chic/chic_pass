@@ -62,9 +62,7 @@ class _CategoryScreenState extends State<CategoryScreen> {
       ),
       body: ListView.builder(
         padding: EdgeInsets.only(top: 0, bottom: 20),
-        physics: NeverScrollableScrollPhysics(),
         itemCount: _categories.length,
-        shrinkWrap: true,
         itemBuilder: (BuildContext context, int index) {
           return CategoryItem(
             category: _categories[index],

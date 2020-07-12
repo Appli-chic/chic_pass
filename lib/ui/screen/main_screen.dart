@@ -1,9 +1,8 @@
-import 'package:chicpass/provider/data_provider.dart';
 import 'package:chicpass/provider/theme_provider.dart';
+import 'package:chicpass/ui/component/clipper/half_circle_clipper.dart';
 import 'package:chicpass/ui/screen/profile_screen.dart';
 import 'package:chicpass/ui/screen/settings_screen.dart';
 import 'package:flutter/material.dart';
-import 'package:preload_page_view/preload_page_view.dart';
 import 'package:provider/provider.dart';
 
 import 'category_screen.dart';
@@ -18,7 +17,7 @@ class _MainScreenState extends State<MainScreen> {
   ThemeProvider _themeProvider;
   HomeScreen _homeScreen = HomeScreen();
   CategoryScreen _categoryScreen = CategoryScreen();
-  PreloadPageController _pageController = PreloadPageController();
+  PageController _pageController = PageController();
   int _index = 0;
 
   @override
@@ -115,36 +114,44 @@ class _MainScreenState extends State<MainScreen> {
   }
 
   Widget _displaysFloatingButton() {
-    return Container(
-      height: 86,
-      width: 86,
-      decoration: BoxDecoration(
-        shape: BoxShape.circle,
-        color: _themeProvider.backgroundColor,
-      ),
-      child: SizedBox(
-        height: 70,
-        width: 70,
-        child: FloatingActionButton(
-          backgroundColor: Colors.transparent,
-          elevation: 0,
-          highlightElevation: 0,
-          onPressed: () async {
-            await Navigator.pushNamed(context, '/new_password_screen');
-            _homeScreen.reload();
-            _categoryScreen.reload();
-          },
+    return Stack(
+      alignment: Alignment.center,
+      children: <Widget>[
+        ClipPath(
+          clipper: HalfCircleClipper(),
           child: Container(
-            height: 70,
-            width: 70,
+            height: 86,
+            width: 86,
             decoration: BoxDecoration(
               shape: BoxShape.circle,
-              color: _themeProvider.primaryColor,
+              color: _themeProvider.backgroundColor,
             ),
-            child: Icon(Icons.add, size: 40),
           ),
         ),
-      ),
+        SizedBox(
+          height: 70,
+          width: 70,
+          child: FloatingActionButton(
+            backgroundColor: Colors.transparent,
+            elevation: 0,
+            highlightElevation: 0,
+            onPressed: () async {
+              await Navigator.pushNamed(context, '/new_password_screen');
+              _homeScreen.reload();
+              _categoryScreen.reload();
+            },
+            child: Container(
+              height: 70,
+              width: 70,
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                color: _themeProvider.primaryColor,
+              ),
+              child: Icon(Icons.add, size: 40),
+            ),
+          ),
+        ),
+      ],
     );
   }
 
@@ -156,8 +163,10 @@ class _MainScreenState extends State<MainScreen> {
       backgroundColor: _themeProvider.backgroundColor,
       bottomNavigationBar: _displayBottomBar(),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-      floatingActionButton: _displaysFloatingButton(),
-      body: PreloadPageView(
+      floatingActionButton: MediaQuery.of(context).viewInsets.bottom == 0
+          ? _displaysFloatingButton()
+          : null,
+      body: PageView(
         controller: _pageController,
         physics: NeverScrollableScrollPhysics(),
         children: <Widget>[
