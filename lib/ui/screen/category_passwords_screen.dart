@@ -1,5 +1,6 @@
 import 'package:chicpass/localization/app_translations.dart';
 import 'package:chicpass/model/db/category.dart';
+import 'package:chicpass/model/db/entry.dart';
 import 'package:chicpass/provider/data_provider.dart';
 import 'package:chicpass/provider/theme_provider.dart';
 import 'package:chicpass/ui/component/input.dart';
@@ -16,16 +17,15 @@ class CategoryPasswordsScreen extends StatefulWidget {
 
 class _CategoryPasswordsScreenState extends State<CategoryPasswordsScreen> {
   Category _category;
-  DataProvider _dataProvider;
   ThemeProvider _themeProvider;
   TextEditingController _searchTextController = TextEditingController();
+  List<Entry> _entries = [];
 
   @override
   Widget build(BuildContext context) {
     _themeProvider = Provider.of<ThemeProvider>(context, listen: true);
-    _dataProvider = Provider.of<DataProvider>(context, listen: true);
     _category = ModalRoute.of(context).settings.arguments;
-    var entries = _dataProvider.entries.where((e) => e.category.id == _category.id).toList();
+//    var entries = _dataProvider.entries.where((e) => e.category.id == _category.id).toList();
 
     return Scaffold(
       backgroundColor: _themeProvider.backgroundColor,
@@ -54,11 +54,11 @@ class _CategoryPasswordsScreenState extends State<CategoryPasswordsScreen> {
           ListView.builder(
             padding: EdgeInsets.only(top: 0, bottom: 20),
             physics: NeverScrollableScrollPhysics(),
-            itemCount: entries.length,
+            itemCount: _entries.length,
             shrinkWrap: true,
             itemBuilder: (BuildContext context, int index) {
               return PasswordItem(
-                entry: entries[index],
+                entry: _entries[index],
               );
             },
           )

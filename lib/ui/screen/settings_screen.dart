@@ -37,7 +37,6 @@ class _SettingsScreenState extends State<SettingsScreen> {
             secondaryText: "Light",
           ),
           SettingItem(title: AppTranslations.of(context).text("lock_now")),
-          SettingItem(title: AppTranslations.of(context).text("terms_of_use")),
         ],
       ),
     );

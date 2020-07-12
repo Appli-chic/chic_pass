@@ -37,8 +37,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
             hasArrowIcon: false,
             secondaryText: "applichic@gmail.com",
           ),
-          SettingItem(title: AppTranslations.of(context).text("subscriptions"), secondaryText: "Free"),
-          SettingItem(title: AppTranslations.of(context).text("data")),
           SettingItem(title: AppTranslations.of(context).text("synchronize_now"), iconData: Icons.sync),
           Container(
             margin: EdgeInsets.only(top: 30),

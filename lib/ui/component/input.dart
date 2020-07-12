@@ -32,6 +32,7 @@ class Input extends StatefulWidget {
   final FocusNode focus;
   final Widget suffix;
   final Function(String) onSubmitted;
+  final Function(String) onTextChanged;
   final TextFieldType fieldType;
   final List<String> listFields;
   final Function singleSelectChoose;
@@ -52,6 +53,7 @@ class Input extends StatefulWidget {
     this.textCapitalization = TextCapitalization.none,
     this.suffix,
     this.onSubmitted,
+    this.onTextChanged,
     this.fieldType,
     this.listFields,
     this.singleSelectChoose,
@@ -157,6 +159,7 @@ class _InputState extends State<Input> {
           textCapitalization: widget.textCapitalization,
           textInputAction: widget.textInputAction,
           onSubmitted: widget.onSubmitted,
+          onChanged: widget.onTextChanged,
           style: TextStyle(
             color: _themeProvider.textColor,
           ),

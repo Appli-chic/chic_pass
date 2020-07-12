@@ -1,4 +1,5 @@
 import 'package:chicpass/localization/app_translations.dart';
+import 'package:chicpass/model/db/category.dart';
 import 'package:chicpass/provider/data_provider.dart';
 import 'package:chicpass/provider/theme_provider.dart';
 import 'package:chicpass/service/category_service.dart';
@@ -7,13 +8,20 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class CategoryScreen extends StatefulWidget {
+  final _CategoryScreenState _state = _CategoryScreenState();
+
+  reload() {
+    _state.reload();
+  }
+
   @override
-  _CategoryScreenState createState() => _CategoryScreenState();
+  _CategoryScreenState createState() => _state;
 }
 
 class _CategoryScreenState extends State<CategoryScreen> {
   DataProvider _dataProvider;
   ThemeProvider _themeProvider;
+  List<Category> _categories = [];
 
   didChangeDependencies() {
     super.didChangeDependencies();
@@ -24,9 +32,14 @@ class _CategoryScreenState extends State<CategoryScreen> {
     }
   }
 
+  reload() {
+    _loadEntries();
+  }
+
   _loadEntries() async {
     var categories = await CategoryService.getAll();
-    _dataProvider.setCategories(categories);
+    _categories = categories;
+    setState(() {});
   }
 
   @override
@@ -50,11 +63,11 @@ class _CategoryScreenState extends State<CategoryScreen> {
       body: ListView.builder(
         padding: EdgeInsets.only(top: 0, bottom: 20),
         physics: NeverScrollableScrollPhysics(),
-        itemCount: _dataProvider.categories.length,
+        itemCount: _categories.length,
         shrinkWrap: true,
         itemBuilder: (BuildContext context, int index) {
           return CategoryItem(
-            category: _dataProvider.categories[index],
+            category: _categories[index],
           );
         },
       ),

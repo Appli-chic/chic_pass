@@ -1,4 +1,5 @@
 import 'package:chicpass/localization/app_translations.dart';
+import 'package:chicpass/model/db/entry.dart';
 import 'package:chicpass/provider/data_provider.dart';
 import 'package:chicpass/provider/theme_provider.dart';
 import 'package:chicpass/service/entry_serice.dart';
@@ -8,14 +9,22 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class HomeScreen extends StatefulWidget {
+  final _HomeScreenState _state = _HomeScreenState();
+
+  reload() {
+    _state.reload();
+  }
+
   @override
-  _HomeScreenState createState() => _HomeScreenState();
+  _HomeScreenState createState() => _state;
 }
 
 class _HomeScreenState extends State<HomeScreen> {
   DataProvider _dataProvider;
   ThemeProvider _themeProvider;
   TextEditingController _searchTextController = TextEditingController();
+  List<Entry> _oldEntries = [];
+  List<Entry> _entries = [];
 
   didChangeDependencies() {
     super.didChangeDependencies();
@@ -26,9 +35,30 @@ class _HomeScreenState extends State<HomeScreen> {
     }
   }
 
+  reload() {
+    _loadEntries();
+  }
+
   _loadEntries() async {
     var entries = await EntryService.getAllByVaultId(_dataProvider.vault.id);
-    _dataProvider.setEntries(entries);
+    _entries = entries;
+    _oldEntries = entries;
+
+    if(_searchTextController.text.isNotEmpty) {
+      _onSearch(_searchTextController.text);
+    } else {
+      setState(() {});
+    }
+  }
+
+  _onSearch(String text) {
+    _entries = _oldEntries
+        .where((entry) =>
+            entry.title.toLowerCase().contains(text.toLowerCase()) ||
+            entry.login.toLowerCase().contains(text.toLowerCase()) ||
+            entry.category.title.toLowerCase().contains(text.toLowerCase()))
+        .toList();
+    setState(() {});
   }
 
   @override
@@ -57,16 +87,17 @@ class _HomeScreenState extends State<HomeScreen> {
               textController: _searchTextController,
               hint: AppTranslations.of(context).text("search_hint"),
               prefixIconData: Icons.search,
+              onTextChanged: _onSearch,
             ),
           ),
           ListView.builder(
             padding: EdgeInsets.only(top: 0, bottom: 20),
             physics: NeverScrollableScrollPhysics(),
-            itemCount: _dataProvider.entries.length,
+            itemCount: _entries.length,
             shrinkWrap: true,
             itemBuilder: (BuildContext context, int index) {
               return PasswordItem(
-                entry: _dataProvider.entries[index],
+                entry: _entries[index],
               );
             },
           )

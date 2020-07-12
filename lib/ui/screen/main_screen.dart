@@ -16,7 +16,8 @@ class MainScreen extends StatefulWidget {
 
 class _MainScreenState extends State<MainScreen> {
   ThemeProvider _themeProvider;
-  DataProvider _dataProvider;
+  HomeScreen _homeScreen = HomeScreen();
+  CategoryScreen _categoryScreen = CategoryScreen();
   PreloadPageController _pageController = PreloadPageController();
   int _index = 0;
 
@@ -129,13 +130,9 @@ class _MainScreenState extends State<MainScreen> {
           elevation: 0,
           highlightElevation: 0,
           onPressed: () async {
-            var entry = await Navigator.pushNamed(context, '/new_password_screen');
-
-            if(entry != null) {
-              var entries = _dataProvider.entries;
-              entries.add(entry);
-              _dataProvider.setEntries(entries);
-            }
+            await Navigator.pushNamed(context, '/new_password_screen');
+            _homeScreen.reload();
+            _categoryScreen.reload();
           },
           child: Container(
             height: 70,
@@ -154,7 +151,6 @@ class _MainScreenState extends State<MainScreen> {
   @override
   Widget build(BuildContext context) {
     _themeProvider = Provider.of<ThemeProvider>(context, listen: true);
-    _dataProvider = Provider.of<DataProvider>(context, listen: true);
 
     return Scaffold(
       backgroundColor: _themeProvider.backgroundColor,
@@ -165,8 +161,8 @@ class _MainScreenState extends State<MainScreen> {
         controller: _pageController,
         physics: NeverScrollableScrollPhysics(),
         children: <Widget>[
-          HomeScreen(),
-          CategoryScreen(),
+          _homeScreen,
+          _categoryScreen,
           Container(),
           ProfileScreen(),
           SettingsScreen(),

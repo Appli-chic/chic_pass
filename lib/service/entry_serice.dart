@@ -25,7 +25,8 @@ class EntryService {
   static Future<List<Entry>> getAllByVaultId(int vaultId) async {
     var entries = List<Entry>();
     var result = await sqlQuery(GENERAL_SELECT +
-        "where e.vault_id = $vaultId ");
+        "where e.vault_id = $vaultId "
+            "order by e.title");
 
     for(var data in result) {
       var entry = Entry.fromMap(data);

@@ -11,10 +11,13 @@ class CategoryService {
   }
 
   static Future<List<Category>> getAll() async {
-    var result = await getAllRows(Category.tableName);
+    var data = await getAllRows(Category.tableName);
 
-    return List.generate(result.length, (i) {
-      return Category.fromMap(result[i]);
+    var result =  List.generate(data.length, (i) {
+      return Category.fromMap(data[i]);
     });
+
+    result.sort((a, b) => a.title.compareTo(b.title));
+    return result;
   }
 }
