@@ -1,6 +1,7 @@
 import 'package:chicpass/provider/data_provider.dart';
 import 'package:chicpass/provider/theme_provider.dart';
 import 'package:chicpass/ui/screen/category_passwords_screen.dart';
+import 'package:chicpass/ui/screen/display_screen.dart';
 import 'package:chicpass/ui/screen/main_screen.dart';
 import 'package:chicpass/ui/screen/new_password_screen.dart';
 import 'package:chicpass/ui/screen/new_vault_screen.dart';
@@ -90,6 +91,7 @@ class _AppState extends State<App> {
           '/new_category_screen': (context) => NewCategoryScreen(),
           '/category_passwords_screen': (context) => CategoryPasswordsScreen(),
           '/entry_details_screen': (context) => EntryDetailsScreen(),
+          '/display_screen': (context) => DisplayScreen(),
         },
       ),
     );

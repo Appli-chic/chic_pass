@@ -1,3 +1,4 @@
+import 'package:chicpass/provider/data_provider.dart';
 import 'package:chicpass/provider/theme_provider.dart';
 import 'package:chicpass/ui/component/clipper/half_circle_clipper.dart';
 import 'package:chicpass/ui/screen/profile_screen.dart';
@@ -15,8 +16,7 @@ class MainScreen extends StatefulWidget {
 
 class _MainScreenState extends State<MainScreen> {
   ThemeProvider _themeProvider;
-  HomeScreen _homeScreen = HomeScreen();
-  CategoryScreen _categoryScreen = CategoryScreen();
+  DataProvider _dataProvider;
   PageController _pageController = PageController();
   int _index = 0;
 
@@ -137,8 +137,8 @@ class _MainScreenState extends State<MainScreen> {
             highlightElevation: 0,
             onPressed: () async {
               await Navigator.pushNamed(context, '/new_password_screen');
-              _homeScreen.reload();
-              _categoryScreen.reload();
+              _dataProvider.reloadHome();
+              _dataProvider.reloadCategory();
             },
             child: Container(
               height: 70,
@@ -158,6 +158,7 @@ class _MainScreenState extends State<MainScreen> {
   @override
   Widget build(BuildContext context) {
     _themeProvider = Provider.of<ThemeProvider>(context, listen: true);
+    _dataProvider = Provider.of<DataProvider>(context, listen: true);
 
     return Scaffold(
       backgroundColor: _themeProvider.backgroundColor,
@@ -170,8 +171,8 @@ class _MainScreenState extends State<MainScreen> {
         controller: _pageController,
         physics: NeverScrollableScrollPhysics(),
         children: <Widget>[
-          _homeScreen,
-          _categoryScreen,
+          HomeScreen(),
+          CategoryScreen(),
           Container(),
           ProfileScreen(),
           SettingsScreen(),

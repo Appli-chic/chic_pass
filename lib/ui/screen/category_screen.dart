@@ -8,14 +8,8 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class CategoryScreen extends StatefulWidget {
-  final _CategoryScreenState _state = _CategoryScreenState();
-
-  reload() {
-    _state.reload();
-  }
-
   @override
-  _CategoryScreenState createState() => _state;
+  _CategoryScreenState createState() => _CategoryScreenState();
 }
 
 class _CategoryScreenState extends State<CategoryScreen> {
@@ -45,6 +39,11 @@ class _CategoryScreenState extends State<CategoryScreen> {
   @override
   Widget build(BuildContext context) {
     _themeProvider = Provider.of<ThemeProvider>(context, listen: true);
+
+    if(_dataProvider.isCategoryReloading) {
+      reload();
+      _dataProvider.setCategoryReloaded();
+    }
 
     return Scaffold(
       backgroundColor: _themeProvider.backgroundColor,

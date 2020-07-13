@@ -29,7 +29,19 @@ class ThemeProvider with ChangeNotifier {
       isLight: true,
     );
 
+    ChicTheme _defaultDarkTheme = ChicTheme(
+      id: DEFAULT_THEME_DARK,
+      backgroundColor: Color(0xFF242B39),
+      secondBackgroundColor: Color(0xFF3F4656),
+      primaryColor: Color(0xFFE02020),
+      textColor: Color(0xFFFFFFFF),
+      secondTextColor: Color(0xFFBABABA),
+      thirdTextColor: Color(0xFFBABABA),
+      isLight: false,
+    );
+
     _themeList.add(_defaultLightTheme);
+    _themeList.add(_defaultDarkTheme);
   }
 
   /// Load the [_theme] stored in the secured storage

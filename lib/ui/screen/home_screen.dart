@@ -9,14 +9,9 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class HomeScreen extends StatefulWidget {
-  final _HomeScreenState _state = _HomeScreenState();
-
-  reload() {
-    _state.reload();
-  }
 
   @override
-  _HomeScreenState createState() => _state;
+  _HomeScreenState createState() => _HomeScreenState();
 }
 
 class _HomeScreenState extends State<HomeScreen> {
@@ -64,6 +59,11 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     _themeProvider = Provider.of<ThemeProvider>(context, listen: true);
+
+    if(_dataProvider.isHomeReloading) {
+      reload();
+      _dataProvider.setHomeReloaded();
+    }
 
     return Scaffold(
       backgroundColor: _themeProvider.backgroundColor,

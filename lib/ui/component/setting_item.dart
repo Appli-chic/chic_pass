@@ -7,12 +7,14 @@ class SettingItem extends StatelessWidget {
   final bool hasArrowIcon;
   final IconData iconData;
   final String secondaryText;
+  final Function onClick;
 
   SettingItem({
     @required this.title,
     this.hasArrowIcon = true,
     this.iconData,
     this.secondaryText,
+    this.onClick,
   });
 
   Widget _displaysSecondaryText(ThemeProvider themeProvider) {
@@ -63,7 +65,11 @@ class SettingItem extends StatelessWidget {
     var themeProvider = Provider.of<ThemeProvider>(context, listen: true);
 
     return GestureDetector(
-      onTap: () async {},
+      onTap: () async {
+        if(onClick != null) {
+          onClick();
+        }
+      },
       child: Container(
         height: 56,
         margin: EdgeInsets.only(top: 2),

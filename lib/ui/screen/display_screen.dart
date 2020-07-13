@@ -1,15 +1,14 @@
 import 'package:chicpass/localization/app_translations.dart';
 import 'package:chicpass/provider/theme_provider.dart';
-import 'package:chicpass/ui/component/setting_item.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-class SettingsScreen extends StatefulWidget {
+class DisplayScreen extends StatefulWidget {
   @override
-  _SettingsScreenState createState() => _SettingsScreenState();
+  _DisplayScreenState createState() => _DisplayScreenState();
 }
 
-class _SettingsScreenState extends State<SettingsScreen> {
+class _DisplayScreenState extends State<DisplayScreen> {
   ThemeProvider _themeProvider;
 
   @override
@@ -25,23 +24,12 @@ class _SettingsScreenState extends State<SettingsScreen> {
         brightness: _themeProvider.getBrightness(),
         backgroundColor: _themeProvider.secondBackgroundColor,
         title: Text(
-          AppTranslations.of(context).text("settings_title"),
+          AppTranslations.of(context).text("passwords_title"),
           style: TextStyle(color: _themeProvider.textColor),
         ),
         elevation: 0,
       ),
-      body: Column(
-        children: <Widget>[
-          SettingItem(
-            title: AppTranslations.of(context).text("display"),
-            secondaryText: "Light",
-            onClick: () async {
-              await Navigator.pushNamed(context, '/display_screen');
-            },
-          ),
-          SettingItem(title: AppTranslations.of(context).text("lock_now")),
-        ],
-      ),
+      body: Container(),
     );
   }
 }
