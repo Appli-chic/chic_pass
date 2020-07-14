@@ -1,6 +1,7 @@
 import 'package:chicpass/localization/app_translations.dart';
 import 'package:chicpass/provider/theme_provider.dart';
 import 'package:chicpass/ui/component/setting_item.dart';
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -43,7 +44,13 @@ class _SettingsScreenState extends State<SettingsScreen> {
           ),
           SettingItem(
             title: AppTranslations.of(context).text("import_passwords"),
-            onClick: () {
+            onClick: () async {
+              var file = await FilePicker.getFile(
+                type: FileType.custom,
+                allowedExtensions: ['csv'],
+              );
+
+              String contents = await file.readAsString();
             },
           ),
           SettingItem(
