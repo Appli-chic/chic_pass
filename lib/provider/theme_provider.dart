@@ -60,8 +60,12 @@ class ThemeProvider with ChangeNotifier {
   }
 
   /// Set the new theme using the [id] of the [_theme]
-  setTheme(int id) {
+  setTheme(int id) async {
+    final storage = FlutterSecureStorage();
     _theme = _themeList.where((theme) => theme.id == id).toList()[0];
+
+    await storage.write(key: KEY_THEME, value: id.toString());
+
     notifyListeners();
   }
 
@@ -94,4 +98,6 @@ class ThemeProvider with ChangeNotifier {
 
   /// Retrieve the third text color corresponding to the [_theme]
   Color get thirdTextColor => _theme.thirdTextColor;
+
+  bool get isLight => _theme.isLight;
 }

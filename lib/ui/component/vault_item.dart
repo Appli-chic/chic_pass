@@ -39,6 +39,7 @@ class VaultItem extends StatelessWidget {
                 "assets/vault.png",
                 width: 30,
                 height: 30,
+                color: themeProvider.textColor,
               ),
             ),
             Flexible(

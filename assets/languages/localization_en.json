@@ -37,5 +37,7 @@
   "generate_password": "Generate password",
   "length": "Length",
   "with_numbers": "With numbers",
-  "with_special_characters": "With special characters"
+  "with_special_characters": "With special characters",
+  "light": "Light",
+  "dark": "Dark"
 }

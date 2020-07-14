@@ -46,7 +46,10 @@ class _PasswordDialogState extends State<PasswordDialog> {
         borderRadius: BorderRadius.all(Radius.circular(16.0)),
       ),
       backgroundColor: _themeProvider.secondBackgroundColor,
-      title: Text(AppTranslations.of(context).text("unlock")),
+      title: Text(
+        AppTranslations.of(context).text("unlock"),
+        style: TextStyle(color: _themeProvider.textColor),
+      ),
       content: Theme(
           data: ThemeData(
             primaryColor: _themeProvider.primaryColor,
@@ -60,8 +63,15 @@ class _PasswordDialogState extends State<PasswordDialog> {
                 obscureText: _isPasswordHidden,
                 autocorrect: false,
                 autofocus: true,
+                style: TextStyle(
+                  color: _themeProvider.textColor,
+                ),
                 decoration: InputDecoration(
                   hintText: AppTranslations.of(context).text("password"),
+                  fillColor: _themeProvider.secondBackgroundColor,
+                  hintStyle: TextStyle(
+                    color: _themeProvider.thirdTextColor,
+                  ),
                   suffixIcon: IconButton(
                     icon: Icon(
                         _isPasswordHidden

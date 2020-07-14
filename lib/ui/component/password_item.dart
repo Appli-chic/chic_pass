@@ -33,6 +33,7 @@ class PasswordItem extends StatelessWidget {
                 "assets/category/${entry.category.iconName}",
                 width: 30,
                 height: 30,
+                color: themeProvider.textColor,
               ),
             ),
             Flexible(

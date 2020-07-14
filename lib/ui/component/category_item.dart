@@ -23,7 +23,6 @@ class CategoryItem extends StatelessWidget {
         margin: EdgeInsets.only(top: 2),
         decoration: BoxDecoration(
           color: themeProvider.secondBackgroundColor,
-          borderRadius: BorderRadius.all(Radius.circular(8)),
         ),
         child: Row(
           children: <Widget>[

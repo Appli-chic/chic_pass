@@ -51,9 +51,12 @@ class _IconDialogState extends State<IconDialog> {
         borderRadius: BorderRadius.all(Radius.circular(16.0)),
       ),
       backgroundColor: _themeProvider.secondBackgroundColor,
-      title: Text(AppTranslations.of(context).text("choose_icon_title")),
+      title: Text(
+        AppTranslations.of(context).text("choose_icon_title"),
+        style: TextStyle(color: _themeProvider.textColor),
+      ),
       content: Container(
-        height:  MediaQuery.of(context).size.height / 2,
+        height: MediaQuery.of(context).size.height / 2,
         width: MediaQuery.of(context).size.width * .7,
         color: _themeProvider.secondBackgroundColor,
         child: Theme(

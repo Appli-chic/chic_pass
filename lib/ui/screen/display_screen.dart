@@ -24,12 +24,52 @@ class _DisplayScreenState extends State<DisplayScreen> {
         brightness: _themeProvider.getBrightness(),
         backgroundColor: _themeProvider.secondBackgroundColor,
         title: Text(
-          AppTranslations.of(context).text("passwords_title"),
+          AppTranslations.of(context).text("display"),
           style: TextStyle(color: _themeProvider.textColor),
         ),
         elevation: 0,
       ),
-      body: Container(),
+      body: Container(
+        height: 56,
+        margin: EdgeInsets.only(top: 2),
+        decoration: BoxDecoration(
+          color: _themeProvider.secondBackgroundColor,
+        ),
+        child: Row(
+          children: [
+            Expanded(
+              child: Container(
+                padding: EdgeInsets.only(left: 16, right: 16),
+                child: Text(
+                  AppTranslations.of(context).text("light"),
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: TextStyle(
+                    color: _themeProvider.textColor,
+                    fontSize: 16,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+              ),
+            ),
+            Container(
+              margin: EdgeInsets.only(right: 16),
+              child: Switch(
+                value: _themeProvider.isLight,
+                onChanged: (bool value) {
+                  if(value) {
+                    // Light
+                    _themeProvider.setTheme(0);
+                  } else {
+                    // Dark
+                    _themeProvider.setTheme(1);
+                  }
+                },
+              ),
+            ),
+          ],
+        ),
+      ),
     );
   }
 }

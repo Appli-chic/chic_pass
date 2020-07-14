@@ -34,7 +34,9 @@ class _SettingsScreenState extends State<SettingsScreen> {
         children: <Widget>[
           SettingItem(
             title: AppTranslations.of(context).text("display"),
-            secondaryText: "Light",
+            secondaryText: _themeProvider.isLight
+                ? AppTranslations.of(context).text("light")
+                : AppTranslations.of(context).text("dark"),
             onClick: () async {
               await Navigator.pushNamed(context, '/display_screen');
             },
