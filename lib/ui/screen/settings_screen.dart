@@ -41,7 +41,17 @@ class _SettingsScreenState extends State<SettingsScreen> {
               await Navigator.pushNamed(context, '/display_screen');
             },
           ),
-          SettingItem(title: AppTranslations.of(context).text("lock_now")),
+          SettingItem(
+            title: AppTranslations.of(context).text("import_passwords"),
+            onClick: () {
+            },
+          ),
+          SettingItem(
+            title: AppTranslations.of(context).text("lock_now"),
+            onClick: () {
+              Navigator.pop(context);
+            },
+          ),
         ],
       ),
     );

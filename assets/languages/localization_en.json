@@ -39,5 +39,6 @@
   "with_numbers": "With numbers",
   "with_special_characters": "With special characters",
   "light": "Light",
-  "dark": "Dark"
+  "dark": "Dark",
+  "import_passwords": "Import passwords"
 }

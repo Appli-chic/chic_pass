@@ -39,5 +39,6 @@
   "with_numbers": "Avec des nombres",
   "with_special_characters": "Avec caractère spécial",
   "light": "Clair",
-  "dark": "Sombre"
+  "dark": "Sombre",
+  "import_passwords": "Importer vos mots de passe"
 }
