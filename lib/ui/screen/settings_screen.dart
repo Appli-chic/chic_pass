@@ -1,4 +1,7 @@
 import 'package:chicpass/localization/app_translations.dart';
+import 'package:chicpass/model/db/category.dart';
+import 'package:chicpass/model/db/entry.dart';
+import 'package:chicpass/provider/data_provider.dart';
 import 'package:chicpass/provider/theme_provider.dart';
 import 'package:chicpass/ui/component/setting_item.dart';
 import 'package:file_picker/file_picker.dart';
@@ -12,10 +15,77 @@ class SettingsScreen extends StatefulWidget {
 
 class _SettingsScreenState extends State<SettingsScreen> {
   ThemeProvider _themeProvider;
+  DataProvider _dataProvider;
+
+  _importCSV() async {
+    var file = await FilePicker.getFile(
+      type: FileType.custom,
+      allowedExtensions: ['csv'],
+    );
+
+    var lines = await file.readAsLines();
+    var index = 0;
+    var nbColumns = 0;
+    var categoryList = List<Category>();
+    var entryList = List<Entry>();
+
+    for (var line in lines) {
+      var lineSplit = line.split(",");
+
+      if (index != 0) {
+        var category = Category(
+          id: index,
+          title: lineSplit[1],
+          iconName: "",
+          updatedAt: DateTime.now(),
+          createdAt: DateTime.now(),
+        );
+
+        // Add category to the list
+        if (categoryList
+            .where((c) => c.title == category.title)
+            .isEmpty) {
+          categoryList.add(category);
+        }
+
+        // Add entry
+        var hash = line.substring(
+            line.indexOf(lineSplit[4]),
+            line.indexOf(
+                "," + lineSplit[lineSplit.length - (nbColumns - 5)]));
+        hash = hash.replaceAll("\"\"", "\"");
+
+        if (hash[0] == "\"") {
+          hash = hash.substring(1, hash.length - 1);
+        }
+
+        var entry = Entry(
+          title: lineSplit[2],
+          login: lineSplit[3],
+          hash: hash,
+          categoryId: categoryList
+              .where((c) => c.title == category.title)
+              .toList()[0]
+              .id,
+          vaultId: _dataProvider.vault.id,
+          createdAt: DateTime.now(),
+          updatedAt: DateTime.now(),
+        );
+
+        entryList.add(entry);
+      } else {
+        // Count the columns
+        nbColumns = lineSplit.length;
+      }
+
+      index++;
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     _themeProvider = Provider.of<ThemeProvider>(context, listen: true);
+    _dataProvider = Provider.of<DataProvider>(context, listen: true);
 
     return Scaffold(
       backgroundColor: _themeProvider.backgroundColor,
@@ -45,12 +115,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
           SettingItem(
             title: AppTranslations.of(context).text("import_passwords"),
             onClick: () async {
-              var file = await FilePicker.getFile(
-                type: FileType.custom,
-                allowedExtensions: ['csv'],
-              );
-
-              String contents = await file.readAsString();
+              _importCSV();
             },
           ),
           SettingItem(
