@@ -3,7 +3,10 @@ import 'package:chicpass/model/db/category.dart';
 import 'package:chicpass/model/db/entry.dart';
 import 'package:chicpass/provider/data_provider.dart';
 import 'package:chicpass/provider/theme_provider.dart';
+import 'package:chicpass/service/category_service.dart';
+import 'package:chicpass/service/entry_serice.dart';
 import 'package:chicpass/ui/component/setting_item.dart';
+import 'package:chicpass/utils/security.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -42,17 +45,13 @@ class _SettingsScreenState extends State<SettingsScreen> {
         );
 
         // Add category to the list
-        if (categoryList
-            .where((c) => c.title == category.title)
-            .isEmpty) {
+        if (categoryList.where((c) => c.title == category.title).isEmpty) {
           categoryList.add(category);
         }
 
         // Add entry
-        var hash = line.substring(
-            line.indexOf(lineSplit[4]),
-            line.indexOf(
-                "," + lineSplit[lineSplit.length - (nbColumns - 5)]));
+        var hash = line.substring(line.indexOf(lineSplit[4]),
+            line.indexOf("," + lineSplit[lineSplit.length - (nbColumns - 5)]));
         hash = hash.replaceAll("\"\"", "\"");
 
         if (hash[0] == "\"") {
@@ -79,6 +78,26 @@ class _SettingsScreenState extends State<SettingsScreen> {
       }
 
       index++;
+    }
+
+    _addCategories(categoryList);
+    await _addEntries(entryList);
+
+    _dataProvider.reloadHome();
+    _dataProvider.reloadCategory();
+  }
+
+  _addCategories(List<Category> categories) {
+    for(var category in categories) {
+      CategoryService.save(category);
+    }
+  }
+
+  _addEntries(List<Entry> entries) async {
+    for(var entry in entries) {
+      entry.hash = await Security.encryptPassword(
+          _dataProvider.hash, entry.hash);
+      EntryService.save(entry);
     }
   }
 
