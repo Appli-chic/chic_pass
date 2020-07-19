@@ -1,4 +1,3 @@
-import 'package:chicpass/model/db/vault.dart';
 import 'package:intl/intl.dart';
 
 class Category {

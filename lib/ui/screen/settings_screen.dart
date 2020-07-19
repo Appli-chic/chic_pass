@@ -5,6 +5,7 @@ import 'package:chicpass/provider/data_provider.dart';
 import 'package:chicpass/provider/theme_provider.dart';
 import 'package:chicpass/service/category_service.dart';
 import 'package:chicpass/service/entry_serice.dart';
+import 'package:chicpass/ui/component/loading_dialog.dart';
 import 'package:chicpass/ui/component/setting_item.dart';
 import 'package:chicpass/utils/security.dart';
 import 'package:file_picker/file_picker.dart';
@@ -26,78 +27,86 @@ class _SettingsScreenState extends State<SettingsScreen> {
       allowedExtensions: ['csv'],
     );
 
-    var lines = await file.readAsLines();
-    var index = 0;
-    var nbColumns = 0;
-    var categoryList = List<Category>();
-    var entryList = List<Entry>();
+    if (file != null) {
+      _dataProvider.setLoading(true);
 
-    for (var line in lines) {
-      var lineSplit = line.split(",");
+      // If the file exists then we parse it
+      var lines = await file.readAsLines();
+      var index = 0;
+      var nbColumns = 0;
+      var categoryList = List<Category>();
+      var entryList = List<Entry>();
 
-      if (index != 0) {
-        var category = Category(
-          id: index,
-          title: lineSplit[1],
-          iconName: "",
-          updatedAt: DateTime.now(),
-          createdAt: DateTime.now(),
-        );
+      for (var line in lines) {
+        var lineSplit = line.split(",");
 
-        // Add category to the list
-        if (categoryList.where((c) => c.title == category.title).isEmpty) {
-          categoryList.add(category);
+        if (index != 0) {
+          var category = Category(
+            id: index,
+            title: lineSplit[1],
+            iconName: "",
+            updatedAt: DateTime.now(),
+            createdAt: DateTime.now(),
+          );
+
+          // Add category to the list
+          if (categoryList.where((c) => c.title == category.title).isEmpty) {
+            categoryList.add(category);
+          }
+
+          // Add entry
+          var hash = line.substring(
+              line.indexOf(lineSplit[4]),
+              line.indexOf(
+                  "," + lineSplit[lineSplit.length - (nbColumns - 5)]));
+          hash = hash.replaceAll("\"\"", "\"");
+
+          if (hash[0] == "\"") {
+            hash = hash.substring(1, hash.length - 1);
+          }
+
+          var entry = Entry(
+            title: lineSplit[2],
+            login: lineSplit[3],
+            hash: hash,
+            categoryId: categoryList
+                .where((c) => c.title == category.title)
+                .toList()[0]
+                .id,
+            vaultId: _dataProvider.vault.id,
+            createdAt: DateTime.now(),
+            updatedAt: DateTime.now(),
+          );
+
+          entryList.add(entry);
+        } else {
+          // Count the columns
+          nbColumns = lineSplit.length;
         }
 
-        // Add entry
-        var hash = line.substring(line.indexOf(lineSplit[4]),
-            line.indexOf("," + lineSplit[lineSplit.length - (nbColumns - 5)]));
-        hash = hash.replaceAll("\"\"", "\"");
-
-        if (hash[0] == "\"") {
-          hash = hash.substring(1, hash.length - 1);
-        }
-
-        var entry = Entry(
-          title: lineSplit[2],
-          login: lineSplit[3],
-          hash: hash,
-          categoryId: categoryList
-              .where((c) => c.title == category.title)
-              .toList()[0]
-              .id,
-          vaultId: _dataProvider.vault.id,
-          createdAt: DateTime.now(),
-          updatedAt: DateTime.now(),
-        );
-
-        entryList.add(entry);
-      } else {
-        // Count the columns
-        nbColumns = lineSplit.length;
+        index++;
       }
 
-      index++;
+//      await _addCategories(categoryList);
+//      await _addEntries(entryList);
+
+      _dataProvider.reloadHome();
+      _dataProvider.reloadCategory();
+      _dataProvider.setLoading(false);
     }
-
-    _addCategories(categoryList);
-    await _addEntries(entryList);
-
-    _dataProvider.reloadHome();
-    _dataProvider.reloadCategory();
   }
 
-  _addCategories(List<Category> categories) {
-    for(var category in categories) {
-      CategoryService.save(category);
+  _addCategories(List<Category> categories) async {
+    for (var category in categories) {
+      await CategoryService.save(category);
     }
   }
 
   _addEntries(List<Entry> entries) async {
-    for(var entry in entries) {
-      entry.hash = await Security.encryptPassword(
-          _dataProvider.hash, entry.hash);
-      EntryService.save(entry);
+    for (var entry in entries) {
+      entry.hash =
+          await Security.encryptPassword(_dataProvider.hash, entry.hash);
+      await EntryService.save(entry);
     }
   }
 
@@ -106,44 +115,47 @@ class _SettingsScreenState extends State<SettingsScreen> {
     _themeProvider = Provider.of<ThemeProvider>(context, listen: true);
     _dataProvider = Provider.of<DataProvider>(context, listen: true);
 
-    return Scaffold(
-      backgroundColor: _themeProvider.backgroundColor,
-      appBar: AppBar(
-        leading: BackButton(
-          color: _themeProvider.textColor,
+    return LoadingDialog(
+      isDisplayed: _dataProvider.isLoading,
+      child: Scaffold(
+        backgroundColor: _themeProvider.backgroundColor,
+        appBar: AppBar(
+          leading: BackButton(
+            color: _themeProvider.textColor,
+          ),
+          brightness: _themeProvider.getBrightness(),
+          backgroundColor: _themeProvider.secondBackgroundColor,
+          title: Text(
+            AppTranslations.of(context).text("settings_title"),
+            style: TextStyle(color: _themeProvider.textColor),
+          ),
+          elevation: 0,
         ),
-        brightness: _themeProvider.getBrightness(),
-        backgroundColor: _themeProvider.secondBackgroundColor,
-        title: Text(
-          AppTranslations.of(context).text("settings_title"),
-          style: TextStyle(color: _themeProvider.textColor),
+        body: Column(
+          children: <Widget>[
+            SettingItem(
+              title: AppTranslations.of(context).text("display"),
+              secondaryText: _themeProvider.isLight
+                  ? AppTranslations.of(context).text("light")
+                  : AppTranslations.of(context).text("dark"),
+              onClick: () async {
+                await Navigator.pushNamed(context, '/display_screen');
+              },
+            ),
+            SettingItem(
+              title: AppTranslations.of(context).text("import_passwords"),
+              onClick: () async {
+                _importCSV();
+              },
+            ),
+            SettingItem(
+              title: AppTranslations.of(context).text("lock_now"),
+              onClick: () {
+                Navigator.pop(context);
+              },
+            ),
+          ],
         ),
-        elevation: 0,
-      ),
-      body: Column(
-        children: <Widget>[
-          SettingItem(
-            title: AppTranslations.of(context).text("display"),
-            secondaryText: _themeProvider.isLight
-                ? AppTranslations.of(context).text("light")
-                : AppTranslations.of(context).text("dark"),
-            onClick: () async {
-              await Navigator.pushNamed(context, '/display_screen');
-            },
-          ),
-          SettingItem(
-            title: AppTranslations.of(context).text("import_passwords"),
-            onClick: () async {
-              _importCSV();
-            },
-          ),
-          SettingItem(
-            title: AppTranslations.of(context).text("lock_now"),
-            onClick: () {
-              Navigator.pop(context);
-            },
-          ),
-        ],
       ),
     );
   }

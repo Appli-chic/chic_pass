@@ -8,6 +8,7 @@ class DataProvider with ChangeNotifier {
   Vault _vault;
   bool _isHomeReloading = false;
   bool _isCategoryReloading = false;
+  bool _isLoading = false;
 
   setVault(Vault vault) {
     _vault = vault;
@@ -37,6 +38,11 @@ class DataProvider with ChangeNotifier {
     _isCategoryReloading = false;
   }
 
+  setLoading(bool loading) {
+    _isLoading = loading;
+    notifyListeners();
+  }
+
   String get hash => _hash;
 
   Vault get vault => _vault;
@@ -44,4 +50,6 @@ class DataProvider with ChangeNotifier {
   bool get isHomeReloading => _isHomeReloading;
 
   bool get isCategoryReloading => _isCategoryReloading;
+
+  bool get isLoading => _isLoading;
 }

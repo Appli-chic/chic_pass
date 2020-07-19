@@ -28,12 +28,14 @@ class _MainScreenState extends State<MainScreen> {
 
   /// Changes the displayed tab to the specified [index]
   _onTabClicked(int index) {
-    if (_index != index) {
-      setState(() {
-        _index = index;
-      });
+    if (!_dataProvider.isLoading) {
+      if (_index != index) {
+        setState(() {
+          _index = index;
+        });
 
-      _pageController.jumpToPage(_index);
+        _pageController.jumpToPage(_index);
+      }
     }
   }
 
@@ -136,9 +138,11 @@ class _MainScreenState extends State<MainScreen> {
             elevation: 0,
             highlightElevation: 0,
             onPressed: () async {
-              await Navigator.pushNamed(context, '/new_password_screen');
-              _dataProvider.reloadHome();
-              _dataProvider.reloadCategory();
+              if (!_dataProvider.isLoading) {
+                await Navigator.pushNamed(context, '/new_password_screen');
+                _dataProvider.reloadHome();
+                _dataProvider.reloadCategory();
+              }
             },
             child: Container(
               height: 70,
