@@ -1,3 +1,5 @@
+import 'dart:collection';
+
 import 'package:chicpass/localization/app_translations.dart';
 import 'package:chicpass/model/db/category.dart';
 import 'package:chicpass/model/db/entry.dart';
@@ -28,71 +30,80 @@ class _SettingsScreenState extends State<SettingsScreen> {
     );
 
     if (file != null) {
-      _dataProvider.setLoading(true);
+      try {
+        _dataProvider.setLoading(true);
 
-      // If the file exists then we parse it
-      var lines = await file.readAsLines();
-      var index = 0;
-      var nbColumns = 0;
-      var categoryList = List<Category>();
-      var entryList = List<Entry>();
+        // If the file exists then we parse it
+        var lines = await file.readAsLines();
+        var index = 0;
+        var nbColumns = 0;
+        var categoryList = List<Category>();
+        var entryList = List<Entry>();
 
-      for (var line in lines) {
-        var lineSplit = line.split(",");
+        for (var line in lines) {
+          var lineSplit = line.split(",");
 
-        if (index != 0) {
-          var category = Category(
-            id: index,
-            title: lineSplit[1],
-            iconName: "",
-            updatedAt: DateTime.now(),
-            createdAt: DateTime.now(),
-          );
+          if (index != 0) {
+            var category = Category(
+              id: index,
+              title: lineSplit[1],
+              iconName: "",
+              updatedAt: DateTime.now(),
+              createdAt: DateTime.now(),
+            );
 
-          // Add category to the list
-          if (categoryList.where((c) => c.title == category.title).isEmpty) {
-            categoryList.add(category);
+            // Add category to the list
+            if (categoryList.where((c) => c.title == category.title).isEmpty) {
+              categoryList.add(category);
+            }
+
+            // Add entry
+            var hash = line.substring(
+                line.indexOf(lineSplit[4]),
+                line.indexOf(
+                    "," + lineSplit[lineSplit.length - (nbColumns - 5)]));
+            hash = hash.replaceAll("\"\"", "\"");
+
+            if (hash[0] == "\"") {
+              hash = hash.substring(1, hash.length - 1);
+            }
+
+            var entry = Entry(
+              title: lineSplit[2],
+              login: lineSplit[3],
+              hash: hash,
+              categoryId: categoryList
+                  .where((c) => c.title == category.title)
+                  .toList()[0]
+                  .id,
+              vaultId: _dataProvider.vault.id,
+              createdAt: DateTime.now(),
+              updatedAt: DateTime.now(),
+            );
+
+            entryList.add(entry);
+          } else {
+            // Count the columns
+            nbColumns = lineSplit.length;
           }
 
-          // Add entry
-          var hash = line.substring(
-              line.indexOf(lineSplit[4]),
-              line.indexOf(
-                  "," + lineSplit[lineSplit.length - (nbColumns - 5)]));
-          hash = hash.replaceAll("\"\"", "\"");
-
-          if (hash[0] == "\"") {
-            hash = hash.substring(1, hash.length - 1);
-          }
-
-          var entry = Entry(
-            title: lineSplit[2],
-            login: lineSplit[3],
-            hash: hash,
-            categoryId: categoryList
-                .where((c) => c.title == category.title)
-                .toList()[0]
-                .id,
-            vaultId: _dataProvider.vault.id,
-            createdAt: DateTime.now(),
-            updatedAt: DateTime.now(),
-          );
-
-          entryList.add(entry);
-        } else {
-          // Count the columns
-          nbColumns = lineSplit.length;
+          index++;
         }
 
-        index++;
-      }
+        var newCategoryList = await Navigator.pushNamed(
+            context, '/import_category_screen',
+            arguments: categoryList);
 
-//      await _addCategories(categoryList);
+        //      await _addCategories(categoryList);
 //      await _addEntries(entryList);
 
-      _dataProvider.reloadHome();
-      _dataProvider.reloadCategory();
-      _dataProvider.setLoading(false);
+        _dataProvider.reloadHome();
+        _dataProvider.reloadCategory();
+        _dataProvider.setLoading(false);
+      } catch (e) {
+        print(e);
+        _dataProvider.setLoading(false);
+      }
     }
   }
 

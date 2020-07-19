@@ -40,5 +40,9 @@
   "with_special_characters": "With special characters",
   "light": "Light",
   "dark": "Dark",
-  "import_passwords": "Import passwords"
+  "import_passwords": "Import passwords",
+  "import_categories": "Import categories",
+  "category_to_import": "Category to import",
+  "category_used": "Category to use",
+  "empty_category_error": "You must should choose a category"
 }

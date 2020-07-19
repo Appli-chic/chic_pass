@@ -20,6 +20,7 @@ class TextFieldType {
 class Input extends StatefulWidget {
   final Key key;
   final bool obscureText;
+  final bool readOnly;
   final EdgeInsetsGeometry margin;
   final String hint;
   final IconData suffixIconData;
@@ -44,6 +45,7 @@ class Input extends StatefulWidget {
     this.focus,
     @required this.hint,
     this.obscureText = false,
+    this.readOnly = false,
     this.suffixIconData,
     this.prefixIconData,
     this.textController,
@@ -72,8 +74,7 @@ class _InputState extends State<Input> {
     return Material(
       color: _themeProvider.secondBackgroundColor,
       child: IconButton(
-        icon:
-            Icon(widget.suffixIconData, color: _themeProvider.thirdTextColor),
+        icon: Icon(widget.suffixIconData, color: _themeProvider.thirdTextColor),
         onPressed: () {
           widget.onSuffixIconClicked();
         },
@@ -86,8 +87,8 @@ class _InputState extends State<Input> {
       return Material(
         color: _themeProvider.secondBackgroundColor,
         child: IconButton(
-          icon: Icon(widget.prefixIconData,
-              color: _themeProvider.thirdTextColor),
+          icon:
+              Icon(widget.prefixIconData, color: _themeProvider.thirdTextColor),
           onPressed: () {},
         ),
       );
@@ -141,6 +142,18 @@ class _InputState extends State<Input> {
     widget.singleSelectChoose();
   }
 
+  bool _isReadOnly() {
+    if (widget.readOnly) {
+      return true;
+    } else {
+      return widget.fieldType == TextFieldType.date ||
+              widget.fieldType == TextFieldType.select ||
+              widget.fieldType == TextFieldType.multipleSelect
+          ? true
+          : false;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     _themeProvider = Provider.of<ThemeProvider>(context, listen: true);
@@ -163,11 +176,7 @@ class _InputState extends State<Input> {
           style: TextStyle(
             color: _themeProvider.textColor,
           ),
-          readOnly: widget.fieldType == TextFieldType.date ||
-                  widget.fieldType == TextFieldType.select ||
-                  widget.fieldType == TextFieldType.multipleSelect
-              ? true
-              : false,
+          readOnly: _isReadOnly(),
           onTap: () {
             if (widget.fieldType == TextFieldType.select) {
               _onSelectInputClicked();
