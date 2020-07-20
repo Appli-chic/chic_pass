@@ -94,8 +94,18 @@ class _SettingsScreenState extends State<SettingsScreen> {
             context, '/import_category_screen',
             arguments: categoryList);
 
-        //      await _addCategories(categoryList);
-//      await _addEntries(entryList);
+        for (var i = 0; i < (newCategoryList as List<Category>).length; i++) {
+          var oldCategoryId = categoryList[i];
+
+          for(var entry in entryList)  {
+            if(entry.categoryId == oldCategoryId.id) {
+              entry.categoryId = (newCategoryList as List<Category>)[i].id;
+            }
+          }
+        }
+
+        await _addCategories(newCategoryList);
+        await _addEntries(entryList);
 
         _dataProvider.reloadHome();
         _dataProvider.reloadCategory();
