@@ -52,14 +52,14 @@ class _ImportCategoryScreenState extends State<ImportCategoryScreen> {
           .where((c) => c.title == _categoryController.text)
           .toList()[0]);
 
-      setState(() {
-        _index++;
-      });
+      _index++;
 
       if (_index >= _categoriesToImport.length) {
         // Return values
         Navigator.pop(context, _newCategories);
       }
+
+      setState(() {});
     } else {
       _displaysErrorDialog();
     }
