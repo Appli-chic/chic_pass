@@ -36,4 +36,5 @@ const categoryList = [
   "cloud.png",
   "car.png",
   "home.png",
+  "trash.png",
 ];
