@@ -59,9 +59,9 @@ class _SettingsScreenState extends State<SettingsScreen> {
 
             // Add entry
             var hash = line.substring(
-                line.indexOf(lineSplit[4]),
-                line.indexOf(
-                    "," + lineSplit[lineSplit.length - (nbColumns - 5)]));
+              line.indexOf(lineSplit[4]),
+              line.indexOf("," + lineSplit[lineSplit.length - (nbColumns - 5)]),
+            );
             hash = hash.replaceAll("\"\"", "\"");
 
             if (hash[0] == "\"") {
@@ -90,20 +90,23 @@ class _SettingsScreenState extends State<SettingsScreen> {
           index++;
         }
 
+        // Select the categories for the importation
         var newCategoryList = await Navigator.pushNamed(
             context, '/import_category_screen',
             arguments: categoryList);
 
+        // Change the category ID for each entry
         for (var i = 0; i < (newCategoryList as List<Category>).length; i++) {
           var oldCategoryId = categoryList[i];
 
-          for(var entry in entryList)  {
-            if(entry.categoryId == oldCategoryId.id) {
+          for (var entry in entryList) {
+            if (entry.categoryId == oldCategoryId.id) {
               entry.categoryId = (newCategoryList as List<Category>)[i].id;
             }
           }
         }
 
+        // Save in the local database
         await _addCategories(newCategoryList);
         await _addEntries(entryList);
 
@@ -165,8 +168,14 @@ class _SettingsScreenState extends State<SettingsScreen> {
             ),
             SettingItem(
               title: AppTranslations.of(context).text("import_passwords"),
-              onClick: () async {
+              onClick: () {
                 _importCSV();
+              },
+            ),
+            SettingItem(
+              title: AppTranslations.of(context).text("biometry"),
+              onClick: () async {
+                await Navigator.pushNamed(context, '/biometry_settings_screen');
               },
             ),
             SettingItem(

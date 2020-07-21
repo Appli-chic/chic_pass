@@ -13,7 +13,7 @@ const categoryList = [
   "food.png",
   "game.png",
   "health.png",
-  "informatic.png",
+  "computer_science.png",
   "science.png",
   "sport.png",
   "tv.png",

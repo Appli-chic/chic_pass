@@ -44,5 +44,7 @@
   "import_categories": "Importez vos catégories",
   "category_to_import": "La catégorie à importer",
   "category_used": "Catégorie utilisée",
-  "empty_category_error": "Vous devez choisir une catégorie"
+  "empty_category_error": "Vous devez choisir une catégorie",
+  "biometry": "Biométrie",
+  "fingerprint": "Empreinte digitale"
 }
