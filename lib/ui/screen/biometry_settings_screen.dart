@@ -1,6 +1,14 @@
+import 'dart:collection';
+import 'dart:convert';
+
 import 'package:chicpass/localization/app_translations.dart';
+import 'package:chicpass/main.dart';
+import 'package:chicpass/provider/data_provider.dart';
 import 'package:chicpass/provider/theme_provider.dart';
+import 'package:chicpass/ui/component/password_dialog.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:local_auth/local_auth.dart';
 import 'package:provider/provider.dart';
 
 class BiometrySettingsScreen extends StatefulWidget {
@@ -10,16 +18,67 @@ class BiometrySettingsScreen extends StatefulWidget {
 
 class _BiometrySettingsScreenState extends State<BiometrySettingsScreen> {
   ThemeProvider _themeProvider;
+  DataProvider _dataProvider;
+  final LocalAuthentication auth = LocalAuthentication();
+  final storage = FlutterSecureStorage();
   bool _isFingerPrintActivated = false;
 
-  @override
-  void initState() {
-    _loadBiometryPreferences();
-    super.initState();
+  didChangeDependencies() {
+    super.didChangeDependencies();
+
+    if (_dataProvider == null) {
+      _dataProvider = Provider.of<DataProvider>(context, listen: true);
+      _loadBiometryPreferences();
+    }
   }
 
   _loadBiometryPreferences() async {
+    String fingerPrintDataString = await storage.read(key: env.fingerprintKey);
 
+    if (fingerPrintDataString != null &&
+        fingerPrintDataString.isNotEmpty &&
+        fingerPrintDataString != "{}") {
+      dynamic fingerPrintData = json.decode(fingerPrintDataString);
+
+      // If it is not null then the finger print is activated and the password is stored in it
+      if (fingerPrintData[_dataProvider.vault.id.toString()] != null) {
+        setState(() {
+          _isFingerPrintActivated = true;
+        });
+      }
+    }
+  }
+
+  _askPassword() {
+    showDialog(
+      context: context,
+      builder: (_) {
+        return PasswordDialog(
+          vault: _dataProvider.vault,
+          onSubmit: _onSubmitPassword,
+        );
+      },
+    );
+  }
+
+  _onSubmitPassword(String password) async {
+    String fingerPrintDataString = await storage.read(key: env.fingerprintKey);
+    dynamic fingerPrintData = HashMap();
+
+    if (fingerPrintDataString != null &&
+        fingerPrintDataString.isNotEmpty &&
+        fingerPrintDataString != "{}") {
+      fingerPrintData = json.decode(fingerPrintDataString);
+    }
+
+    fingerPrintData[_dataProvider.vault.id.toString()] = password;
+
+    await storage.write(
+        key: env.fingerprintKey, value: json.encode(fingerPrintData));
+
+    setState(() {
+      _isFingerPrintActivated = true;
+    });
   }
 
   @override
@@ -68,9 +127,36 @@ class _BiometrySettingsScreenState extends State<BiometrySettingsScreen> {
                 Container(
                   margin: EdgeInsets.only(right: 16),
                   child: Switch(
-                    value: _themeProvider.isLight,
-                    onChanged: (bool value) {
+                    value: _isFingerPrintActivated,
+                    onChanged: (bool value) async {
+                      if (value) {
+                        List<BiometricType> availableBiometrics =
+                            await auth.getAvailableBiometrics();
 
+                        if (availableBiometrics
+                            .contains(BiometricType.fingerprint)) {
+                          _askPassword();
+                        }
+                      } else {
+                        String fingerPrintDataString =
+                            await storage.read(key: env.fingerprintKey);
+
+                        if (fingerPrintDataString != null &&
+                            fingerPrintDataString.isNotEmpty) {
+                          dynamic fingerPrintData =
+                              json.decode(fingerPrintDataString);
+                          fingerPrintData
+                              .remove(_dataProvider.vault.id.toString());
+
+                          await storage.write(
+                              key: env.fingerprintKey,
+                              value: json.encode(fingerPrintData));
+                        }
+
+                        setState(() {
+                          _isFingerPrintActivated = value;
+                        });
+                      }
                     },
                   ),
                 ),

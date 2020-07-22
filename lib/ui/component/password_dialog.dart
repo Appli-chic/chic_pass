@@ -8,11 +8,13 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class PasswordDialog extends StatefulWidget {
+  final Vault vault;
+  final Function(String) onSubmit;
+
   PasswordDialog({
     @required this.vault,
+    this.onSubmit,
   });
-
-  final Vault vault;
 
   @override
   _PasswordDialogState createState() => _PasswordDialogState();
@@ -33,6 +35,30 @@ class _PasswordDialogState extends State<PasswordDialog> {
       );
     } else {
       return Container();
+    }
+  }
+
+  _onSubmit() async {
+    try {
+      var hash = _passwordController.text;
+      var isPasswordCorrect =
+          await Security.isSignatureCorrect(hash, widget.vault.signature);
+
+      if (isPasswordCorrect) {
+        _dataProvider.setHash(hash);
+        _dataProvider.setVault(widget.vault);
+
+        Navigator.of(context).pop();
+        await Navigator.pushNamed(context, '/main_screen');
+      } else {
+        setState(() {
+          _error = AppTranslations.of(context).text("error_incorrect_password");
+        });
+      }
+    } catch (e) {
+      setState(() {
+        _error = AppTranslations.of(context).text("error_incorrect_password");
+      });
     }
   }
 
@@ -109,21 +135,23 @@ class _PasswordDialogState extends State<PasswordDialog> {
             ),
           ),
           onPressed: () async {
-            var hash = _passwordController.text;
-            var isPasswordCorrect =
-                await Security.isSignatureCorrect(hash, widget.vault.signature);
+            if (widget.onSubmit != null) {
+              try {
+                var isPasswordCorrect = await Security.isSignatureCorrect(
+                    _passwordController.text, _dataProvider.vault.signature);
 
-            if (isPasswordCorrect) {
-              _dataProvider.setHash(hash);
-              _dataProvider.setVault(widget.vault);
-
-              Navigator.of(context).pop();
-              await Navigator.pushNamed(context, '/main_screen');
+                if (isPasswordCorrect) {
+                  widget.onSubmit(_passwordController.text);
+                  Navigator.of(context).pop();
+                }
+              } catch (e) {
+                setState(() {
+                  _error = AppTranslations.of(context)
+                      .text("error_incorrect_password");
+                });
+              }
             } else {
-              setState(() {
-                _error = AppTranslations.of(context)
-                    .text("error_incorrect_password");
-              });
+              _onSubmit();
             }
           },
         ),
