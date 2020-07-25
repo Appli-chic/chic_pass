@@ -90,7 +90,10 @@ class _ImportCategoryScreenState extends State<ImportCategoryScreen> {
   Widget build(BuildContext context) {
     _themeProvider = Provider.of<ThemeProvider>(context, listen: true);
     _categoriesToImport = ModalRoute.of(context).settings.arguments;
-    _categoryTitleController.text = _categoriesToImport[_index].title;
+
+    if (_index < _categoriesToImport.length) {
+      _categoryTitleController.text = _categoriesToImport[_index].title;
+    }
 
     return Scaffold(
       appBar: AppBar(
@@ -160,7 +163,9 @@ class _ImportCategoryScreenState extends State<ImportCategoryScreen> {
                         context, '/new_category_screen');
 
                     if (category != null) {
-                      _loadCategories();
+                      await _loadCategories();
+                      _categoryController.text = (category as Category).title;
+                      setState(() {});
                     }
                   },
                   child: Container(

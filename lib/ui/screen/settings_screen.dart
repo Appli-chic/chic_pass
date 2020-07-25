@@ -9,8 +9,10 @@ import 'package:chicpass/service/category_service.dart';
 import 'package:chicpass/service/entry_serice.dart';
 import 'package:chicpass/ui/component/loading_dialog.dart';
 import 'package:chicpass/ui/component/setting_item.dart';
+import 'package:chicpass/utils/imports.dart';
 import 'package:chicpass/utils/security.dart';
 import 'package:file_picker/file_picker.dart';
+import 'package:flutter/foundation.dart' as f;
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -35,84 +37,40 @@ class _SettingsScreenState extends State<SettingsScreen> {
 
         // If the file exists then we parse it
         var lines = await file.readAsLines();
-        var index = 0;
-        var nbColumns = 0;
-        var categoryList = List<Category>();
-        var entryList = List<Entry>();
-
-        for (var line in lines) {
-          var lineSplit = line.split(",");
-
-          if (index != 0) {
-            var category = Category(
-              id: index,
-              title: lineSplit[1],
-              iconName: "",
-              updatedAt: DateTime.now(),
-              createdAt: DateTime.now(),
-            );
-
-            // Add category to the list
-            if (categoryList.where((c) => c.title == category.title).isEmpty) {
-              categoryList.add(category);
-            }
-
-            // Add entry
-            var hash = line.substring(
-              line.indexOf(lineSplit[4]),
-              line.indexOf("," + lineSplit[lineSplit.length - (nbColumns - 5)]),
-            );
-            hash = hash.replaceAll("\"\"", "\"");
-
-            if (hash[0] == "\"") {
-              hash = hash.substring(1, hash.length - 1);
-            }
-
-            var entry = Entry(
-              title: lineSplit[2],
-              login: lineSplit[3],
-              hash: hash,
-              categoryId: categoryList
-                  .where((c) => c.title == category.title)
-                  .toList()[0]
-                  .id,
-              vaultId: _dataProvider.vault.id,
-              createdAt: DateTime.now(),
-              updatedAt: DateTime.now(),
-            );
-
-            entryList.add(entry);
-          } else {
-            // Count the columns
-            nbColumns = lineSplit.length;
-          }
-
-          index++;
-        }
+        var tupleData = importButtercup(lines, _dataProvider.vault.id);
+        var categoryList = tupleData.item1;
+        var entryList = tupleData.item2;
 
         // Select the categories for the importation
         var newCategoryList = await Navigator.pushNamed(
             context, '/import_category_screen',
             arguments: categoryList);
 
-        // Change the category ID for each entry
-        for (var i = 0; i < (newCategoryList as List<Category>).length; i++) {
-          var oldCategoryId = categoryList[i];
+        if ((newCategoryList as List<Category>).length == categoryList.length) {
+          // Change the category ID for each entry
+          for (var i = 0; i < (newCategoryList as List<Category>).length; i++) {
+            var oldCategoryId = categoryList[i];
 
-          for (var entry in entryList) {
-            if (entry.categoryId == oldCategoryId.id) {
-              entry.categoryId = (newCategoryList as List<Category>)[i].id;
+            for (var entry in entryList) {
+              if (entry.categoryId == oldCategoryId.id) {
+                entry.categoryId = (newCategoryList as List<Category>)[i].id;
+              }
             }
           }
+
+          // Save in the local database using a different thread
+          HashMap<String, dynamic> mapCategory = HashMap();
+          mapCategory["categories"] = newCategoryList;
+          await f.compute(_addCategories, mapCategory);
+
+          HashMap<String, dynamic> mapEntries = HashMap();
+          mapEntries["entries"] = entryList;
+          await f.compute(_addEntries, mapEntries);
+
+          _dataProvider.reloadHome();
+          _dataProvider.reloadCategory();
+          _dataProvider.setLoading(false);
         }
-
-        // Save in the local database
-        await _addCategories(newCategoryList);
-        await _addEntries(entryList);
-
-        _dataProvider.reloadHome();
-        _dataProvider.reloadCategory();
-        _dataProvider.setLoading(false);
       } catch (e) {
         print(e);
         _dataProvider.setLoading(false);
@@ -120,14 +78,14 @@ class _SettingsScreenState extends State<SettingsScreen> {
     }
   }
 
-  _addCategories(List<Category> categories) async {
-    for (var category in categories) {
+  _addCategories(HashMap<String, dynamic> mapCategory) async {
+    for (var category in (mapCategory["categories"] as List<Category>)) {
       await CategoryService.save(category);
     }
   }
 
-  _addEntries(List<Entry> entries) async {
-    for (var entry in entries) {
+  _addEntries(HashMap<String, dynamic> mapEntries) async {
+    for (var entry in (mapEntries["entries"] as List<Entry>)) {
       entry.hash =
           await Security.encryptPassword(_dataProvider.hash, entry.hash);
       await EntryService.save(entry);

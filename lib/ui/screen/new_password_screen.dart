@@ -260,7 +260,9 @@ class _NewPasswordScreenState extends State<NewPasswordScreen> {
                           context, '/new_category_screen');
 
                       if (category != null) {
-                        _loadCategories();
+                        await _loadCategories();
+                        _categoryController.text = (category as Category).title;
+                        setState(() {});
                       }
                     },
                     child: Container(
