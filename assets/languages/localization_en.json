@@ -46,5 +46,6 @@
   "category_used": "Category to use",
   "empty_category_error": "You must choose a category",
   "biometry": "Biometry",
-  "fingerprint": "Fingerprint"
+  "fingerprint": "Fingerprint",
+  "face_unlock": "Face unlock"
 }

@@ -50,7 +50,36 @@ class VaultItem extends StatelessWidget {
             await storage.read(key: env.fingerprintKey);
         dynamic fingerPrintData = json.decode(fingerPrintDataString);
 
-        dataProvider.setHash(fingerPrintData[dataProvider.vault.uid]);
+        dataProvider.setHash(fingerPrintData[vault.uid]);
+        dataProvider.setVault(vault);
+
+        await Navigator.pushNamed(context, '/main_screen');
+      }
+    }
+  }
+
+  _askFaceRecognition(BuildContext context, DataProvider dataProvider) async {
+    bool canCheckBiometrics;
+    try {
+      canCheckBiometrics = await auth.canCheckBiometrics;
+    } on PlatformException catch (e) {
+      print(e);
+    }
+
+    if (canCheckBiometrics) {
+      var authenticated = await auth.authenticateWithBiometrics(
+        localizedReason: 'Scan your face to authenticate',
+        useErrorDialogs: true,
+        stickyAuth: true,
+      );
+
+      if (authenticated) {
+        String faceRecognitionDataString =
+            await storage.read(key: env.faceRecognitionKey);
+        dynamic faceRecognitionPrintData =
+            json.decode(faceRecognitionDataString);
+
+        dataProvider.setHash(faceRecognitionPrintData[vault.uid]);
         dataProvider.setVault(vault);
 
         await Navigator.pushNamed(context, '/main_screen');
@@ -68,6 +97,9 @@ class VaultItem extends StatelessWidget {
         String fingerPrintDataString =
             await storage.read(key: env.fingerprintKey);
 
+        String faceRecognitionDataString =
+            await storage.read(key: env.faceRecognitionKey);
+
         if (fingerPrintDataString != null &&
             fingerPrintDataString.isNotEmpty &&
             fingerPrintDataString != "{}") {
@@ -75,6 +107,16 @@ class VaultItem extends StatelessWidget {
 
           if (fingerPrintData[vault.uid] != null) {
             _askFingerPrint(context, dataProvider);
+          } else {
+            _askPassword(context);
+          }
+        } else if (faceRecognitionDataString != null &&
+            faceRecognitionDataString.isNotEmpty &&
+            faceRecognitionDataString != "{}") {
+          dynamic faceRecognitionData = json.decode(faceRecognitionDataString);
+
+          if (faceRecognitionData[vault.uid] != null) {
+            _askFaceRecognition(context, dataProvider);
           } else {
             _askPassword(context);
           }

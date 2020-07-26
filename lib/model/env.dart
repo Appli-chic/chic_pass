@@ -16,12 +16,14 @@ class Env {
   final String accessTokenKey;
   final String refreshTokenKey;
   final String fingerprintKey;
+  final String faceRecognitionKey;
 
   Env({
     this.apiUrl,
     this.accessTokenKey,
     this.refreshTokenKey,
     this.fingerprintKey,
+    this.faceRecognitionKey,
   });
 
   factory Env.fromJson(Map<String, dynamic> jsonMap) {
@@ -30,6 +32,7 @@ class Env {
       accessTokenKey: jsonMap["ACCESS_TOKEN_STORAGE_KEY"],
       refreshTokenKey: jsonMap["REFRESH_TOKEN_STORAGE_KEY"],
       fingerprintKey: jsonMap["FINGERPRINT_STORAGE_KEY"],
+      faceRecognitionKey: jsonMap["FACE_RECOGNITION_STORAGE_KEY"],
     );
   }
 }
