@@ -84,7 +84,7 @@ class _CategoryPasswordsScreenState extends State<CategoryPasswordsScreen> {
               hint: AppTranslations.of(context).text("search_hint"),
               prefixIconData: Icons.search,
               suffixIconData:
-              _searchTextController.text.isNotEmpty ? Icons.close : null,
+                  _searchTextController.text.isNotEmpty ? Icons.close : null,
               onSuffixIconClicked: () {
                 _searchTextController.clear();
                 _onSearch(_searchTextController.text);
@@ -93,14 +93,19 @@ class _CategoryPasswordsScreenState extends State<CategoryPasswordsScreen> {
             ),
           ),
           Expanded(
-            child: ListView.builder(
-              padding: EdgeInsets.only(top: 0, bottom: 20),
-              itemCount: _entries.length,
-              itemBuilder: (BuildContext context, int index) {
-                return PasswordItem(
-                  entry: _entries[index],
-                );
-              },
+            child: Container(
+              margin: EdgeInsets.only(top: 4, bottom: 4),
+              child: Scrollbar(
+                child: ListView.builder(
+                  padding: EdgeInsets.only(top: 0, bottom: 20),
+                  itemCount: _entries.length,
+                  itemBuilder: (BuildContext context, int index) {
+                    return PasswordItem(
+                      entry: _entries[index],
+                    );
+                  },
+                ),
+              ),
             ),
           ),
         ],

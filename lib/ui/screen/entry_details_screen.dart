@@ -4,7 +4,9 @@ import 'package:chicpass/provider/data_provider.dart';
 import 'package:chicpass/provider/theme_provider.dart';
 import 'package:chicpass/ui/component/input.dart';
 import 'package:chicpass/utils/security.dart';
+import 'package:flushbar/flushbar.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 
 class EntryDetailsScreen extends StatefulWidget {
@@ -23,8 +25,8 @@ class _EntryDetailsScreenState extends State<EntryDetailsScreen> {
   String _passwordDecrypted = "";
 
   _init() async {
-    _passwordDecrypted = await Security.decryptData(
-        _dataProvider.hash, _entry.hash);
+    _passwordDecrypted =
+        await Security.decryptData(_dataProvider.hash, _entry.hash);
 
     _loginController.text = _entry.login;
     _passwordController.text = _passwordDecrypted;
@@ -34,13 +36,26 @@ class _EntryDetailsScreenState extends State<EntryDetailsScreen> {
     });
   }
 
+  _copyInputText(String text) async {
+    await Clipboard.setData(ClipboardData(text: text));
+
+    Flushbar(
+      message: AppTranslations.of(context).text("text_copied"),
+      duration: Duration(seconds: 3),
+      flushbarPosition: FlushbarPosition.BOTTOM,
+      flushbarStyle: FlushbarStyle.FLOATING,
+      borderRadius: 8,
+      margin: EdgeInsets.all(8),
+    )..show(context);
+  }
+
   @override
   Widget build(BuildContext context) {
     _dataProvider = Provider.of<DataProvider>(context, listen: true);
     _themeProvider = Provider.of<ThemeProvider>(context, listen: true);
     _entry = ModalRoute.of(context).settings.arguments;
 
-    if(!_isInit) {
+    if (!_isInit) {
       _init();
     }
 
@@ -64,13 +79,17 @@ class _EntryDetailsScreenState extends State<EntryDetailsScreen> {
             textController: _loginController,
             hint: AppTranslations.of(context).text("login_email"),
             margin: EdgeInsets.only(top: 2),
+            readOnly: true,
+            onClick: _copyInputText,
           ),
           Input(
             textController: _passwordController,
             hint: AppTranslations.of(context).text("password"),
             obscureText: _isPasswordHidden,
+            readOnly: true,
             margin: EdgeInsets.only(top: 2),
             textInputAction: TextInputAction.done,
+            onClick: _copyInputText,
             suffix: Container(
               margin: EdgeInsets.only(right: 16),
               child: Row(

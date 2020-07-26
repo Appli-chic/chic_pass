@@ -47,5 +47,6 @@
   "empty_category_error": "You must choose a category",
   "biometry": "Biometry",
   "fingerprint": "Fingerprint",
-  "face_unlock": "Face unlock"
+  "face_unlock": "Face unlock",
+  "text_copied": "Text copied"
 }

@@ -47,5 +47,6 @@
   "empty_category_error": "Vous devez choisir une catégorie",
   "biometry": "Biométrie",
   "fingerprint": "Empreinte digitale",
-  "face_unlock": "Reconnaissance faciale"
+  "face_unlock": "Reconnaissance faciale",
+  "text_copied": "Texte copié"
 }

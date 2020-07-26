@@ -38,6 +38,7 @@ class Input extends StatefulWidget {
   final List<String> listFields;
   final Function singleSelectChoose;
   final int singleSelectDefaultIndex;
+  final Function(String) onClick;
 
   Input({
     this.key,
@@ -56,10 +57,11 @@ class Input extends StatefulWidget {
     this.suffix,
     this.onSubmitted,
     this.onTextChanged,
-    this.fieldType,
+    this.fieldType = TextFieldType.text,
     this.listFields,
     this.singleSelectChoose,
     this.singleSelectDefaultIndex,
+    this.onClick,
   });
 
   @override
@@ -180,6 +182,9 @@ class _InputState extends State<Input> {
           onTap: () {
             if (widget.fieldType == TextFieldType.select) {
               _onSelectInputClicked();
+            } else if (widget.fieldType == TextFieldType.text &&
+                widget.onClick != null) {
+              widget.onClick(widget.textController.text);
             }
           },
           decoration: InputDecoration(

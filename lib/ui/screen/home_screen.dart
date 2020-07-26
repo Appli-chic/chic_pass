@@ -97,14 +97,19 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
           ),
           Expanded(
-            child: ListView.builder(
-              padding: EdgeInsets.only(top: 0, bottom: 20),
-              itemCount: _entries.length,
-              itemBuilder: (BuildContext context, int index) {
-                return PasswordItem(
-                  entry: _entries[index],
-                );
-              },
+            child: Container(
+              margin: EdgeInsets.only(top: 4, bottom: 4),
+              child: Scrollbar(
+                child: ListView.builder(
+                  padding: EdgeInsets.only(top: 0, bottom: 20),
+                  itemCount: _entries.length,
+                  itemBuilder: (BuildContext context, int index) {
+                    return PasswordItem(
+                      entry: _entries[index],
+                    );
+                  },
+                ),
+              ),
             ),
           ),
         ],
