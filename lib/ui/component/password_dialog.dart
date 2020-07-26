@@ -138,7 +138,7 @@ class _PasswordDialogState extends State<PasswordDialog> {
             if (widget.onSubmit != null) {
               try {
                 var isPasswordCorrect = await Security.isSignatureCorrect(
-                    _passwordController.text, _dataProvider.vault.signature);
+                    _passwordController.text, widget.vault.signature);
 
                 if (isPasswordCorrect) {
                   widget.onSubmit(_passwordController.text);

@@ -82,55 +82,54 @@ Tuple<List<Category>, List<Entry>> importButtercupV2(
   var categoryList = List<Category>();
   var entryList = List<Entry>();
 
-//  for (var line in lines) {
-//    var lineSplit = line.split(",");
-//
-//    if (index != 0) {
-//      // Add category
-//      if (lineSplit[0] == "group") {
-//        var category = Category(
-//          id: index,
-//          title: lineSplit[2],
-//          iconName: "",
-//          updatedAt: DateTime.now(),
-//          createdAt: DateTime.now(),
-//        );
-//
-//        categoryList.add(category);
-//      }
-//
-//      // Add entry
-//      var hash = line.substring(
-//        line.indexOf(lineSplit[4]),
-//        line.indexOf("," + lineSplit[lineSplit.length - (nbColumns - 5)]),
-//      );
-//      hash = hash.replaceAll("\"\"", "\"");
-//
-//      if (hash[0] == "\"") {
-//        hash = hash.substring(1, hash.length - 1);
-//      }
-//
-//      var entry = Entry(
-//        title: lineSplit[2],
-//        login: lineSplit[3],
-//        hash: hash,
-//        categoryId: categoryList
-//            .where((c) => c.title == category.title)
-//            .toList()[0]
-//            .id,
-//        vaultId: vaultId,
-//        createdAt: DateTime.now(),
-//        updatedAt: DateTime.now(),
-//      );
-//
-//      entryList.add(entry);
-//    } else {
-//      // Count the columns
-//      nbColumns = lineSplit.length;
-//    }
-//
-//    index++;
-//  }
+  for (var line in lines) {
+    var lineSplit = line.split(",");
+
+    if (index != 0) {
+      // Add category
+      if (lineSplit[0] == "group") {
+        var category = Category(
+          uid: lineSplit[1],
+          title: lineSplit[2],
+          iconName: "",
+          updatedAt: DateTime.now(),
+          createdAt: DateTime.now(),
+          vaultUid: vaultUid,
+        );
+
+        categoryList.add(category);
+      } else {
+        // Add entry
+        var hash = line.substring(
+          line.indexOf(lineSplit[6]),
+          line.indexOf("," + lineSplit[lineSplit.length - (nbColumns - 7)]),
+        );
+        hash = hash.replaceAll("\"\"", "\"");
+
+        if (hash[0] == "\"") {
+          hash = hash.substring(1, hash.length - 1);
+        }
+
+        var entry = Entry(
+          title: lineSplit[4],
+          login: lineSplit[5],
+          hash: hash,
+          categoryUid:
+          categoryList.where((c) => c.uid == lineSplit[1]).toList()[0].uid,
+          vaultUid: vaultUid,
+          createdAt: DateTime.now(),
+          updatedAt: DateTime.now(),
+        );
+
+        entryList.add(entry);
+      }
+    } else {
+      // Count the columns
+      nbColumns = lineSplit.length;
+    }
+
+    index++;
+  }
 
   return Tuple(item1: categoryList, item2: entryList);
 }

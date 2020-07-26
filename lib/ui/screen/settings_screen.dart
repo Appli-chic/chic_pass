@@ -47,6 +47,17 @@ class _SettingsScreenState extends State<SettingsScreen> {
             arguments: categoryList);
 
         if ((newCategoryList as List<Category>).length == categoryList.length) {
+          // Change the entries with the right UID
+          for (var i = 0; i < (newCategoryList as List<Category>).length; i++) {
+            var oldCategoryId = categoryList[i];
+
+            for(var entry in entryList)  {
+              if(entry.categoryUid == oldCategoryId.uid) {
+                entry.categoryUid = (newCategoryList as List<Category>)[i].uid;
+              }
+            }
+          }
+
           // Save in the local database using a different thread
           await _addCategories(newCategoryList);
           await _addEntries(entryList);
@@ -65,6 +76,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
   _addCategories(List<Category> categories) async {
     for (var category in categories) {
       try {
+        category.vaultUid = _dataProvider.vault.uid;
         await CategoryService.saveWithUidDefined(category);
       } catch (e) {
         print(e);
