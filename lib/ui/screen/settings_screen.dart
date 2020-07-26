@@ -37,7 +37,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
 
         // If the file exists then we parse it
         var lines = await file.readAsLines();
-        var tupleData = importButtercup(lines, _dataProvider.vault.id);
+        var tupleData = importButtercup(lines, _dataProvider.vault.uid);
         var categoryList = tupleData.item1;
         var entryList = tupleData.item2;
 
@@ -47,25 +47,9 @@ class _SettingsScreenState extends State<SettingsScreen> {
             arguments: categoryList);
 
         if ((newCategoryList as List<Category>).length == categoryList.length) {
-          // Change the category ID for each entry
-          for (var i = 0; i < (newCategoryList as List<Category>).length; i++) {
-            var oldCategoryId = categoryList[i];
-
-            for (var entry in entryList) {
-              if (entry.categoryId == oldCategoryId.id) {
-                entry.categoryId = (newCategoryList as List<Category>)[i].id;
-              }
-            }
-          }
-
           // Save in the local database using a different thread
-          HashMap<String, dynamic> mapCategory = HashMap();
-          mapCategory["categories"] = newCategoryList;
-          await f.compute(_addCategories, mapCategory);
-
-          HashMap<String, dynamic> mapEntries = HashMap();
-          mapEntries["entries"] = entryList;
-          await f.compute(_addEntries, mapEntries);
+          await _addCategories(newCategoryList);
+          await _addEntries(entryList);
 
           _dataProvider.reloadHome();
           _dataProvider.reloadCategory();
@@ -78,17 +62,25 @@ class _SettingsScreenState extends State<SettingsScreen> {
     }
   }
 
-  _addCategories(HashMap<String, dynamic> mapCategory) async {
-    for (var category in (mapCategory["categories"] as List<Category>)) {
-      await CategoryService.save(category);
+  _addCategories(List<Category> categories) async {
+    for (var category in categories) {
+      try {
+        await CategoryService.saveWithUidDefined(category);
+      } catch (e) {
+        print(e);
+      }
     }
   }
 
-  _addEntries(HashMap<String, dynamic> mapEntries) async {
-    for (var entry in (mapEntries["entries"] as List<Entry>)) {
-      entry.hash =
-          await Security.encryptPassword(_dataProvider.hash, entry.hash);
-      await EntryService.save(entry);
+  _addEntries(List<Entry> entries) async {
+    for (var entry in entries) {
+      try {
+        entry.hash =
+            await Security.encryptPassword(_dataProvider.hash, entry.hash);
+        await EntryService.save(entry);
+      } catch (e) {
+        print(e);
+      }
     }
   }
 

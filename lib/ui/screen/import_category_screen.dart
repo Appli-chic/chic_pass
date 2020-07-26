@@ -1,5 +1,6 @@
 import 'package:chicpass/localization/app_translations.dart';
 import 'package:chicpass/model/db/category.dart';
+import 'package:chicpass/provider/data_provider.dart';
 import 'package:chicpass/provider/theme_provider.dart';
 import 'package:chicpass/service/category_service.dart';
 import 'package:chicpass/ui/component/dialog_error.dart';
@@ -14,6 +15,7 @@ class ImportCategoryScreen extends StatefulWidget {
 }
 
 class _ImportCategoryScreenState extends State<ImportCategoryScreen> {
+  DataProvider _dataProvider;
   ThemeProvider _themeProvider;
   List<String> _categoryTextList = [];
   List<Category> _categories = [];
@@ -23,14 +25,17 @@ class _ImportCategoryScreenState extends State<ImportCategoryScreen> {
   TextEditingController _categoryController = TextEditingController();
   TextEditingController _categoryTitleController = TextEditingController();
 
-  @override
-  void initState() {
-    _loadCategories();
-    super.initState();
+  didChangeDependencies() {
+    super.didChangeDependencies();
+
+    if (_dataProvider == null) {
+      _dataProvider = Provider.of<DataProvider>(context, listen: true);
+      _loadCategories();
+    }
   }
 
   _loadCategories() async {
-    _categories = await CategoryService.getAll();
+    _categories = await CategoryService.getAll(_dataProvider.vault.uid);
 
     List<String> categoryStringList = [];
     _categories.forEach((c) {

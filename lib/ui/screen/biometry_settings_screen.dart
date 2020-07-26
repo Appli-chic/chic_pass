@@ -41,7 +41,7 @@ class _BiometrySettingsScreenState extends State<BiometrySettingsScreen> {
       dynamic fingerPrintData = json.decode(fingerPrintDataString);
 
       // If it is not null then the finger print is activated and the password is stored in it
-      if (fingerPrintData[_dataProvider.vault.id.toString()] != null) {
+      if (fingerPrintData[_dataProvider.vault.uid] != null) {
         setState(() {
           _isFingerPrintActivated = true;
         });
@@ -71,7 +71,7 @@ class _BiometrySettingsScreenState extends State<BiometrySettingsScreen> {
       fingerPrintData = json.decode(fingerPrintDataString);
     }
 
-    fingerPrintData[_dataProvider.vault.id.toString()] = password;
+    fingerPrintData[_dataProvider.vault.uid] = password;
 
     await storage.write(
         key: env.fingerprintKey, value: json.encode(fingerPrintData));
@@ -146,7 +146,7 @@ class _BiometrySettingsScreenState extends State<BiometrySettingsScreen> {
                           dynamic fingerPrintData =
                               json.decode(fingerPrintDataString);
                           fingerPrintData
-                              .remove(_dataProvider.vault.id.toString());
+                              .remove(_dataProvider.vault.uid);
 
                           await storage.write(
                               key: env.fingerprintKey,

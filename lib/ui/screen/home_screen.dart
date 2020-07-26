@@ -35,7 +35,7 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   _loadEntries() async {
-    var entries = await EntryService.getAllByVaultId(_dataProvider.vault.id);
+    var entries = await EntryService.getAllByVaultId(_dataProvider.vault.uid);
     _entries = entries;
     _oldEntries = entries;
 

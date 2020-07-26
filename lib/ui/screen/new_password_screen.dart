@@ -35,14 +35,17 @@ class _NewPasswordScreenState extends State<NewPasswordScreen> {
   final _loginFocus = FocusNode();
   final _passwordFocus = FocusNode();
 
-  @override
-  void initState() {
-    _loadCategories();
-    super.initState();
+  didChangeDependencies() {
+    super.didChangeDependencies();
+
+    if (_dataProvider == null) {
+      _dataProvider = Provider.of<DataProvider>(context, listen: true);
+      _loadCategories();
+    }
   }
 
   _loadCategories() async {
-    _categories = await CategoryService.getAll();
+    _categories = await CategoryService.getAll(_dataProvider.vault.uid);
 
     List<String> categoryStringList = [];
     _categories.forEach((c) {
@@ -97,11 +100,11 @@ class _NewPasswordScreenState extends State<NewPasswordScreen> {
         title: _titleController.text,
         login: _loginController.text,
         hash: hashedPassword,
-        vaultId: _dataProvider.vault.id,
-        categoryId: _categories
+        vaultUid: _dataProvider.vault.uid,
+        categoryUid: _categories
             .where((c) => c.title == _categoryController.text)
             .toList()[0]
-            .id,
+            .uid,
         category: _categories
             .where((c) => c.title == _categoryController.text)
             .toList()[0],
@@ -152,7 +155,6 @@ class _NewPasswordScreenState extends State<NewPasswordScreen> {
 
   @override
   Widget build(BuildContext context) {
-    _dataProvider = Provider.of<DataProvider>(context, listen: true);
     _themeProvider = Provider.of<ThemeProvider>(context, listen: true);
 
     return LoadingDialog(

@@ -1,9 +1,12 @@
 import 'package:chicpass/utils/sqlite.dart';
+import 'package:uuid/uuid.dart';
 
 import '../model/db/vault.dart';
 
 class VaultService {
   static Future<void> save(Vault vault) async {
+    var uuid = Uuid();
+    vault.uid = uuid.v4();
     await addRow(Vault.tableName, vault.toMap());
   }
 

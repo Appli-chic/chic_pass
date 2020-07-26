@@ -1,15 +1,18 @@
 import 'package:chicpass/model/db/category.dart';
 import 'package:chicpass/model/db/entry.dart';
 import 'package:chicpass/utils/sqlite.dart';
+import 'package:uuid/uuid.dart';
 
-const GENERAL_SELECT = "SELECT e.id, e.title, e.login, e.hash, e.created_at, "
-    "e.updated_at, e.vault_id, e.category_id, c.title as c_title, c.icon_name "
+const GENERAL_SELECT = "SELECT e.uid, e.title, e.login, e.hash, e.created_at, "
+    "e.updated_at, e.vault_uid, e.category_uid, c.title as c_title, c.icon_name "
     "FROM ${Entry.tableName} as e "
-    "left join ${Category.tableName} as c ON c.id = e.category_id ";
+    "left join ${Category.tableName} as c ON c.uid = e.category_uid ";
 
 class EntryService {
-  static Future<void> save(Entry category) async {
-    await addRow(Entry.tableName, category.toMap());
+  static Future<void> save(Entry entry) async {
+    var uuid = Uuid();
+    entry.uid = uuid.v4();
+    await addRow(Entry.tableName, entry.toMap());
   }
 
   static Future<List<Entry>> getAll() async {
@@ -20,16 +23,16 @@ class EntryService {
     });
   }
 
-  static Future<List<Entry>> getAllByVaultId(int vaultId) async {
+  static Future<List<Entry>> getAllByVaultId(String vaultUid) async {
     var entries = List<Entry>();
     var result = await sqlQuery(GENERAL_SELECT +
-        "where e.vault_id = $vaultId "
+        "where e.vault_uid = '$vaultUid' "
             "order by e.title");
 
     for (var data in result) {
       var entry = Entry.fromMap(data);
       var category = Category();
-      category.id = data['category_id'];
+      category.uid = data['category_uid'];
       category.title = data['c_title'];
       category.iconName = data['icon_name'];
       entry.category = category;
@@ -40,17 +43,17 @@ class EntryService {
   }
 
   static Future<List<Entry>> getAllByVaultIdAndCategoryId(
-      int vaultId, int categoryId) async {
+      String vaultUid, String categoryUid) async {
     var entries = List<Entry>();
     var result = await sqlQuery(GENERAL_SELECT +
-        "where e.vault_id = $vaultId "
-            "and e.category_id = $categoryId "
+        "where e.vault_uid = '$vaultUid' "
+            "and e.category_uid = '$categoryUid' "
             "order by e.title");
 
     for (var data in result) {
       var entry = Entry.fromMap(data);
       var category = Category();
-      category.id = data['category_id'];
+      category.uid = data['category_uid'];
       category.title = data['c_title'];
       category.iconName = data['icon_name'];
       entry.category = category;

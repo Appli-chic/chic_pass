@@ -1,5 +1,6 @@
 import 'package:chicpass/localization/app_translations.dart';
 import 'package:chicpass/model/db/category.dart';
+import 'package:chicpass/provider/data_provider.dart';
 import 'package:chicpass/provider/theme_provider.dart';
 import 'package:chicpass/service/category_service.dart';
 import 'package:chicpass/ui/component/dialog_error.dart';
@@ -18,6 +19,7 @@ class NewCategoryScreen extends StatefulWidget {
 }
 
 class _NewCategoryScreenState extends State<NewCategoryScreen> {
+  DataProvider _dataProvider;
   TextEditingController _titleController = TextEditingController();
   String _icon = categoryList[0];
   ThemeProvider _themeProvider;
@@ -41,6 +43,7 @@ class _NewCategoryScreenState extends State<NewCategoryScreen> {
         iconName: _icon,
         createdAt: DateTime.now(),
         updatedAt: DateTime.now(),
+        vaultUid: _dataProvider.vault.uid,
       );
 
       await CategoryService.save(category);
@@ -87,6 +90,7 @@ class _NewCategoryScreenState extends State<NewCategoryScreen> {
   @override
   Widget build(BuildContext context) {
     _themeProvider = Provider.of<ThemeProvider>(context, listen: true);
+    _dataProvider = Provider.of<DataProvider>(context, listen: true);
 
     return LoadingDialog(
       isDisplayed: _isLoading,

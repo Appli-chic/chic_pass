@@ -16,18 +16,14 @@ openChicDatabase() async {
     onCreate: (db, version) async {
       // Create the structure of the database
       await db.execute(
-          "CREATE TABLE ${Vault.tableName}(id INTEGER PRIMARY KEY, name TEXT, signature TEXT, created_at DATETIME, updated_at DATETIME) ");
+          "CREATE TABLE ${Vault.tableName}(uid TEXT PRIMARY KEY, name TEXT, signature TEXT, created_at DATETIME, updated_at DATETIME) ");
 
       await db.execute(
-          "CREATE TABLE ${Category.tableName}(id INTEGER PRIMARY KEY, title TEXT, icon_name TEXT, created_at DATETIME, updated_at DATETIME) ");
+          "CREATE TABLE ${Category.tableName}(uid TEXT PRIMARY KEY, title TEXT, icon_name TEXT, created_at DATETIME, updated_at DATETIME, vault_uid TEXT, FOREIGN KEY(vault_uid) REFERENCES ${Vault.tableName}(uid)) ");
 
       await db.execute(
-          "CREATE TABLE ${Entry.tableName}(id INTEGER PRIMARY KEY, title TEXT, login TEXT, hash TEXT, created_at DATETIME, updated_at DATETIME, vault_id INTEGER, category_id INTEGER, FOREIGN KEY(vault_id) REFERENCES ${Vault.tableName}(id), FOREIGN KEY(category_id) REFERENCES ${Category.tableName}(id)) ");
+          "CREATE TABLE ${Entry.tableName}(uid TEXT PRIMARY KEY, title TEXT, login TEXT, hash TEXT, created_at DATETIME, updated_at DATETIME, vault_uid TEXT, category_uid TEXT, FOREIGN KEY(vault_uid) REFERENCES ${Vault.tableName}(uid), FOREIGN KEY(category_uid) REFERENCES ${Category.tableName}(uid)) ");
     },
-//    onUpgrade: (db, oldVersion, newVersion) async {
-//      await db.execute(
-//          "INSERT INTO ${Category.tableName}(title, icon_name, created_at, updated_at) VALUES('Test', 'test', '2016-01-01 10:20:05.123', '2016-01-01 10:20:05.123') ");
-//    }
   );
 }
 

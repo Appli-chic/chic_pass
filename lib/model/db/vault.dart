@@ -3,14 +3,14 @@ import 'package:intl/intl.dart';
 class Vault {
   static const tableName = "vaults";
 
-  int id;
+  String uid;
   String name;
   String signature;
   DateTime createdAt;
   DateTime updatedAt;
 
   Vault({
-    this.id,
+    this.uid,
     this.name,
     this.signature,
     this.createdAt,
@@ -19,7 +19,7 @@ class Vault {
 
   factory Vault.fromJson(Map<String, dynamic> json) {
     return Vault(
-      id: json['id'],
+      uid: json['uid'],
       name: json['name'],
       signature: json['signature'],
       createdAt: json['created_at'],
@@ -29,7 +29,7 @@ class Vault {
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['id'] = this.id;
+    data['uid'] = this.uid;
     data['name'] = this.name;
     data['signature'] = this.signature;
     data['created_at'] = this.createdAt;
@@ -42,7 +42,7 @@ class Vault {
     var updatedAtString = DateTime.parse(data['updated_at']);
 
     return Vault(
-      id: data['id'],
+      uid: data['uid'],
       name: data['name'],
       signature: data['signature'],
       createdAt: createdAtString,
@@ -56,7 +56,7 @@ class Vault {
     String updatedAtString = dateFormatter.format(this.updatedAt);
 
     return {
-      'id': this.id,
+      'uid': this.uid,
       'name': this.name,
       'signature': this.signature,
       'created_at': createdAtString,

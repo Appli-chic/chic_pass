@@ -50,7 +50,7 @@ class VaultItem extends StatelessWidget {
             await storage.read(key: env.fingerprintKey);
         dynamic fingerPrintData = json.decode(fingerPrintDataString);
 
-        dataProvider.setHash(fingerPrintData[dataProvider.vault.id.toString()]);
+        dataProvider.setHash(fingerPrintData[dataProvider.vault.uid]);
         dataProvider.setVault(vault);
 
         await Navigator.pushNamed(context, '/main_screen');
@@ -73,7 +73,7 @@ class VaultItem extends StatelessWidget {
             fingerPrintDataString != "{}") {
           dynamic fingerPrintData = json.decode(fingerPrintDataString);
 
-          if (fingerPrintData[vault.id.toString()] != null) {
+          if (fingerPrintData[vault.uid] != null) {
             _askFingerPrint(context, dataProvider);
           } else {
             _askPassword(context);

@@ -35,7 +35,7 @@ class _CategoryPasswordsScreenState extends State<CategoryPasswordsScreen> {
   _loadEntries() async {
     Category category = ModalRoute.of(context).settings.arguments;
     var entries = await EntryService.getAllByVaultIdAndCategoryId(
-        _dataProvider.vault.id, category.id);
+        _dataProvider.vault.uid, category.uid);
     _entries = entries;
     _oldEntries = entries;
 

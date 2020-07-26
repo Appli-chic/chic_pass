@@ -31,7 +31,7 @@ class _CategoryScreenState extends State<CategoryScreen> {
   }
 
   _loadEntries() async {
-    var categories = await CategoryService.getAll();
+    var categories = await CategoryService.getAll(_dataProvider.vault.uid);
     _categories = categories;
     setState(() {});
   }
