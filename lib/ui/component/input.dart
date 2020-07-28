@@ -105,7 +105,7 @@ class _InputState extends State<Input> {
     } else if (widget.suffixIconData != null) {
       return _displaySuffixIcon();
     } else {
-      return null;
+      return Container();
     }
   }
 
@@ -163,47 +163,58 @@ class _InputState extends State<Input> {
     return Container(
       height: 56,
       margin: widget.margin,
-      color: _themeProvider.secondBackgroundColor,
-      child: Center(
-        child: TextField(
-          controller: widget.textController,
-          focusNode: widget.focus,
-          autocorrect: false,
-          obscureText: widget.obscureText,
-          keyboardType: widget.inputType,
-          textCapitalization: widget.textCapitalization,
-          textInputAction: widget.textInputAction,
-          onSubmitted: widget.onSubmitted,
-          onChanged: widget.onTextChanged,
-          style: TextStyle(
-            color: _themeProvider.textColor,
-          ),
-          readOnly: _isReadOnly(),
-          onTap: () {
-            if (widget.fieldType == TextFieldType.select) {
-              _onSelectInputClicked();
-            } else if (widget.fieldType == TextFieldType.text &&
-                widget.onClick != null) {
-              widget.onClick(widget.textController.text);
-            }
-          },
-          decoration: InputDecoration(
-            hintText: widget.hint,
-            filled: true,
-            fillColor: _themeProvider.secondBackgroundColor,
-            hintStyle: TextStyle(
-              color: _themeProvider.thirdTextColor,
+      child: Material(
+        color: _themeProvider.secondBackgroundColor,
+        child: InkWell(
+          onTap: () {},
+          child: Center(
+            child: Row(
+              children: <Widget>[
+                Expanded(
+                  child: TextField(
+                    controller: widget.textController,
+                    focusNode: widget.focus,
+                    autocorrect: false,
+                    obscureText: widget.obscureText,
+                    keyboardType: widget.inputType,
+                    textCapitalization: widget.textCapitalization,
+                    textInputAction: widget.textInputAction,
+                    onSubmitted: widget.onSubmitted,
+                    onChanged: widget.onTextChanged,
+                    style: TextStyle(
+                      color: _themeProvider.textColor,
+                    ),
+                    readOnly: _isReadOnly(),
+                    onTap: () {
+                      if (widget.fieldType == TextFieldType.select) {
+                        _onSelectInputClicked();
+                      } else if (widget.fieldType == TextFieldType.text &&
+                          widget.onClick != null) {
+                        widget.onClick(widget.textController.text);
+                      }
+                    },
+                    decoration: InputDecoration(
+                      hintText: widget.hint,
+//                    filled: true,
+//                    fillColor: _themeProvider.secondBackgroundColor,
+                      hintStyle: TextStyle(
+                        color: _themeProvider.thirdTextColor,
+                      ),
+                      prefixIcon: _displayPrefixIcon(),
+                      contentPadding: EdgeInsets.only(
+                          left: 18, top: 16, bottom: 16, right: 16),
+                      border: InputBorder.none,
+                      disabledBorder: InputBorder.none,
+                      enabledBorder: InputBorder.none,
+                      errorBorder: InputBorder.none,
+                      focusedBorder: InputBorder.none,
+                      focusedErrorBorder: InputBorder.none,
+                    ),
+                  ),
+                ),
+                _displaySuffix(),
+              ],
             ),
-            suffixIcon: _displaySuffix(),
-            prefixIcon: _displayPrefixIcon(),
-            contentPadding:
-                EdgeInsets.only(left: 18, top: 16, bottom: 16, right: 16),
-            border: InputBorder.none,
-            disabledBorder: InputBorder.none,
-            enabledBorder: InputBorder.none,
-            errorBorder: InputBorder.none,
-            focusedBorder: InputBorder.none,
-            focusedErrorBorder: InputBorder.none,
           ),
         ),
       ),
