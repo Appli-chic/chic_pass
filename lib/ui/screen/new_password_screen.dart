@@ -160,6 +160,7 @@ class _NewPasswordScreenState extends State<NewPasswordScreen> {
     return LoadingDialog(
       isDisplayed: _isLoading,
       child: Scaffold(
+        resizeToAvoidBottomInset: false,
         backgroundColor: _themeProvider.backgroundColor,
         appBar: AppBar(
           brightness: _themeProvider.getBrightness(),
@@ -183,17 +184,19 @@ class _NewPasswordScreenState extends State<NewPasswordScreen> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
                   Input(
-                      textCapitalization: TextCapitalization.sentences,
-                      textController: _titleController,
-                      hint: AppTranslations.of(context).text("title"),
-                      margin: EdgeInsets.only(top: 2),
-                      onSubmitted: _onTitleSubmitted),
+                    textCapitalization: TextCapitalization.sentences,
+                    textController: _titleController,
+                    hint: AppTranslations.of(context).text("title"),
+                    margin: EdgeInsets.only(top: 2),
+                    onSubmitted: _onTitleSubmitted,
+                  ),
                   Input(
-                      textController: _loginController,
-                      hint: AppTranslations.of(context).text("login_email"),
-                      margin: EdgeInsets.only(top: 2),
-                      focus: _loginFocus,
-                      onSubmitted: _onLoginSubmitted),
+                    textController: _loginController,
+                    hint: AppTranslations.of(context).text("login_email"),
+                    margin: EdgeInsets.only(top: 2),
+                    focus: _loginFocus,
+                    onSubmitted: _onLoginSubmitted,
+                  ),
                   Input(
                     textController: _passwordController,
                     hint: AppTranslations.of(context).text("password"),

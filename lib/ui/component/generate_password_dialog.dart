@@ -160,93 +160,95 @@ class _GeneratePasswordDialogState extends State<GeneratePasswordDialog> {
       ),
       backgroundColor: _themeProvider.secondBackgroundColor,
       title: Text(AppTranslations.of(context).text("generate_password")),
-      content: Container(
-        width: width,
-        child: Theme(
-          data: ThemeData(
-            primaryColor: _themeProvider.primaryColor,
-          ),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-              TextField(
-                controller: _passwordController,
-                obscureText: _isPasswordHidden,
-                autocorrect: false,
-                autofocus: true,
-                decoration: InputDecoration(
-                  hintText: AppTranslations.of(context).text("password"),
-                  suffixIcon: IconButton(
-                    icon: Icon(
-                        _isPasswordHidden
-                            ? Icons.visibility
-                            : Icons.visibility_off,
-                        color: _themeProvider.secondTextColor),
-                    onPressed: () {
-                      setState(() {
-                        _isPasswordHidden = !_isPasswordHidden;
-                      });
-                    },
+      content: SingleChildScrollView(
+        child: Container(
+          width: width,
+          child: Theme(
+            data: ThemeData(
+              primaryColor: _themeProvider.primaryColor,
+            ),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                TextField(
+                  controller: _passwordController,
+                  obscureText: _isPasswordHidden,
+                  autocorrect: false,
+                  autofocus: true,
+                  decoration: InputDecoration(
+                    hintText: AppTranslations.of(context).text("password"),
+                    suffixIcon: IconButton(
+                      icon: Icon(
+                          _isPasswordHidden
+                              ? Icons.visibility
+                              : Icons.visibility_off,
+                          color: _themeProvider.secondTextColor),
+                      onPressed: () {
+                        setState(() {
+                          _isPasswordHidden = !_isPasswordHidden;
+                        });
+                      },
+                    ),
                   ),
                 ),
-              ),
-              Container(
-                margin: EdgeInsets.only(top: 16),
-                child: Row(
-                  children: <Widget>[
-                    Text(AppTranslations.of(context).text("length")),
-                    Flexible(
-                      child: Slider(
-                        value: _nbCharacters,
-                        min: 6,
-                        max: 50,
+                Container(
+                  margin: EdgeInsets.only(top: 16),
+                  child: Row(
+                    children: <Widget>[
+                      Text(AppTranslations.of(context).text("length")),
+                      Flexible(
+                        child: Slider(
+                          value: _nbCharacters,
+                          min: 6,
+                          max: 50,
+                          activeColor: _themeProvider.primaryColor,
+                          onChanged: (double value) {
+                            _nbCharacters = value;
+                            _generatePassword();
+                            setState(() {});
+                          },
+                        ),
+                      ),
+                      Text("${_nbCharacters.toInt()}"),
+                    ],
+                  ),
+                ),
+                Container(
+                  child: Row(
+                    children: <Widget>[
+                      Text(AppTranslations.of(context).text("with_numbers")),
+                      Checkbox(
+                        value: _hasNumbers,
                         activeColor: _themeProvider.primaryColor,
-                        onChanged: (double value) {
-                          _nbCharacters = value;
+                        onChanged: (bool value) {
+                          _hasNumbers = value;
                           _generatePassword();
                           setState(() {});
                         },
                       ),
-                    ),
-                    Text("${_nbCharacters.toInt()}"),
-                  ],
+                    ],
+                  ),
                 ),
-              ),
-              Container(
-                child: Row(
-                  children: <Widget>[
-                    Text(AppTranslations.of(context).text("with_numbers")),
-                    Checkbox(
-                      value: _hasNumbers,
-                      activeColor: _themeProvider.primaryColor,
-                      onChanged: (bool value) {
-                        _hasNumbers = value;
-                        _generatePassword();
-                        setState(() {});
-                      },
-                    ),
-                  ],
+                Container(
+                  child: Row(
+                    children: <Widget>[
+                      Text(AppTranslations.of(context)
+                          .text("with_special_characters")),
+                      Checkbox(
+                        value: _hasSpecialCharacters,
+                        activeColor: _themeProvider.primaryColor,
+                        onChanged: (bool value) {
+                          _hasSpecialCharacters = value;
+                          _generatePassword();
+                          setState(() {});
+                        },
+                      ),
+                    ],
+                  ),
                 ),
-              ),
-              Container(
-                child: Row(
-                  children: <Widget>[
-                    Text(AppTranslations.of(context)
-                        .text("with_special_characters")),
-                    Checkbox(
-                      value: _hasSpecialCharacters,
-                      activeColor: _themeProvider.primaryColor,
-                      onChanged: (bool value) {
-                        _hasSpecialCharacters = value;
-                        _generatePassword();
-                        setState(() {});
-                      },
-                    ),
-                  ],
-                ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),

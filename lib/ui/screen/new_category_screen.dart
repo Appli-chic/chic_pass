@@ -96,6 +96,7 @@ class _NewCategoryScreenState extends State<NewCategoryScreen> {
       isDisplayed: _isLoading,
       child: Scaffold(
         backgroundColor: _themeProvider.backgroundColor,
+        resizeToAvoidBottomInset: false,
         appBar: AppBar(
           brightness: _themeProvider.getBrightness(),
           centerTitle: true,
