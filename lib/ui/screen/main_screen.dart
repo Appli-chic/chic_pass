@@ -50,7 +50,7 @@ class _MainScreenState extends State<MainScreen> {
         BottomNavigationBarItem(
           icon: Image.asset(
             'assets/list.png',
-            color: _themeProvider.thirdTextColor,
+            color: _themeProvider.navigationIconColor,
             width: 30,
             height: 30,
           ),
@@ -65,7 +65,7 @@ class _MainScreenState extends State<MainScreen> {
         BottomNavigationBarItem(
           icon: Image.asset(
             'assets/folder.png',
-            color: _themeProvider.thirdTextColor,
+            color: _themeProvider.navigationIconColor,
             width: 30,
             height: 30,
           ),
@@ -84,7 +84,7 @@ class _MainScreenState extends State<MainScreen> {
         BottomNavigationBarItem(
           icon: Image.asset(
             'assets/user.png',
-            color: _themeProvider.thirdTextColor,
+            color: _themeProvider.navigationIconColor,
             width: 30,
             height: 30,
           ),
@@ -99,7 +99,7 @@ class _MainScreenState extends State<MainScreen> {
         BottomNavigationBarItem(
           icon: Image.asset(
             'assets/settings.png',
-            color: _themeProvider.thirdTextColor,
+            color: _themeProvider.navigationIconColor,
             width: 30,
             height: 30,
           ),

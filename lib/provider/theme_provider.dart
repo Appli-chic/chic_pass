@@ -26,17 +26,19 @@ class ThemeProvider with ChangeNotifier {
       textColor: Color(0xFF2D2D2D),
       secondTextColor: Color(0xFF575757),
       thirdTextColor: Color(0xFF7F7F7F),
+      navigationIconColor: Color(0xFF7F7F7F),
       isLight: true,
     );
 
     ChicTheme _defaultDarkTheme = ChicTheme(
       id: DEFAULT_THEME_DARK,
-      backgroundColor: Color(0xFF242B39),
-      secondBackgroundColor: Color(0xFF3F4656),
+      backgroundColor: Color(0xFF282C34),
+      secondBackgroundColor: Color(0xFF383E48),
       primaryColor: Color(0xFFE02020),
       textColor: Color(0xFFFFFFFF),
       secondTextColor: Color(0xFFBABABA),
       thirdTextColor: Color(0xFFBABABA),
+      navigationIconColor: Color(0xFFFFFFFF),
       isLight: false,
     );
 
@@ -98,6 +100,9 @@ class ThemeProvider with ChangeNotifier {
 
   /// Retrieve the third text color corresponding to the [_theme]
   Color get thirdTextColor => _theme.thirdTextColor;
+
+  /// Retrieve the navigation icon color corresponding to the [_theme]
+  Color get navigationIconColor => _theme.navigationIconColor;
 
   bool get isLight => _theme.isLight;
 }

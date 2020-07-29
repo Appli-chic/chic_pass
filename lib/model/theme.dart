@@ -8,6 +8,7 @@ class ChicTheme {
   final Color textColor;
   final Color secondTextColor;
   final Color thirdTextColor;
+  final Color navigationIconColor;
   final bool isLight;
 
   ChicTheme({
@@ -18,6 +19,7 @@ class ChicTheme {
     @required this.textColor,
     @required this.secondTextColor,
     @required this.thirdTextColor,
+    @required this.navigationIconColor,
     @required this.isLight,
   });
 }

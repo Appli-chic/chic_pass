@@ -195,8 +195,6 @@ class _InputState extends State<Input> {
                     },
                     decoration: InputDecoration(
                       hintText: widget.hint,
-//                    filled: true,
-//                    fillColor: _themeProvider.secondBackgroundColor,
                       hintStyle: TextStyle(
                         color: _themeProvider.thirdTextColor,
                       ),
