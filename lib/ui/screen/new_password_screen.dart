@@ -160,7 +160,6 @@ class _NewPasswordScreenState extends State<NewPasswordScreen> {
     return LoadingDialog(
       isDisplayed: _isLoading,
       child: Scaffold(
-        resizeToAvoidBottomInset: false,
         backgroundColor: _themeProvider.backgroundColor,
         appBar: AppBar(
           brightness: _themeProvider.getBrightness(),
