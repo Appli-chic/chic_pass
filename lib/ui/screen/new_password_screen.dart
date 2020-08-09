@@ -9,6 +9,7 @@ import 'package:chicpass/ui/component/dialog_error.dart';
 import 'package:chicpass/ui/component/generate_password_dialog.dart';
 import 'package:chicpass/ui/component/input.dart';
 import 'package:chicpass/ui/component/loading_dialog.dart';
+import 'package:chicpass/ui/component/rounded_button.dart';
 import 'package:chicpass/utils/security.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
