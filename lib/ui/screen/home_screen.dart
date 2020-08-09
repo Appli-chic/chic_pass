@@ -9,7 +9,6 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class HomeScreen extends StatefulWidget {
-
   @override
   _HomeScreenState createState() => _HomeScreenState();
 }
@@ -56,11 +55,21 @@ class _HomeScreenState extends State<HomeScreen> {
     setState(() {});
   }
 
+  _onDismiss(Entry entry) {
+    try {
+      _entries.remove(_entries.where((e) => e.uid == entry.uid).toList()[0]);
+      _oldEntries
+          .remove(_oldEntries.where((e) => e.uid == entry.uid).toList()[0]);
+    } catch (e) {
+      print(e);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     _themeProvider = Provider.of<ThemeProvider>(context, listen: true);
 
-    if(_dataProvider.isHomeReloading) {
+    if (_dataProvider.isHomeReloading) {
       reload();
       _dataProvider.setHomeReloaded();
     }
@@ -106,6 +115,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   itemBuilder: (BuildContext context, int index) {
                     return PasswordItem(
                       entry: _entries[index],
+                      onDismiss: _onDismiss,
                     );
                   },
                 ),

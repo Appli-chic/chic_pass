@@ -55,6 +55,16 @@ class _CategoryPasswordsScreenState extends State<CategoryPasswordsScreen> {
     setState(() {});
   }
 
+  _onDismiss(Entry entry) {
+    try {
+      _entries.remove(_entries.where((e) => e.uid == entry.uid).toList()[0]);
+      _oldEntries
+          .remove(_oldEntries.where((e) => e.uid == entry.uid).toList()[0]);
+    } catch (e) {
+      print(e);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     _themeProvider = Provider.of<ThemeProvider>(context, listen: true);
@@ -102,6 +112,7 @@ class _CategoryPasswordsScreenState extends State<CategoryPasswordsScreen> {
                   itemBuilder: (BuildContext context, int index) {
                     return PasswordItem(
                       entry: _entries[index],
+                      onDismiss: _onDismiss,
                     );
                   },
                 ),

@@ -159,7 +159,12 @@ class _GeneratePasswordDialogState extends State<GeneratePasswordDialog> {
         borderRadius: BorderRadius.all(Radius.circular(16.0)),
       ),
       backgroundColor: _themeProvider.secondBackgroundColor,
-      title: Text(AppTranslations.of(context).text("generate_password")),
+      title: Text(
+        AppTranslations.of(context).text("generate_password"),
+        style: TextStyle(
+          color: _themeProvider.textColor,
+        ),
+      ),
       content: SingleChildScrollView(
         child: Container(
           width: width,
@@ -176,8 +181,14 @@ class _GeneratePasswordDialogState extends State<GeneratePasswordDialog> {
                   obscureText: _isPasswordHidden,
                   autocorrect: false,
                   autofocus: true,
+                  style: TextStyle(
+                    color: _themeProvider.textColor,
+                  ),
                   decoration: InputDecoration(
                     hintText: AppTranslations.of(context).text("password"),
+                    hintStyle: TextStyle(
+                      color: _themeProvider.secondTextColor,
+                    ),
                     suffixIcon: IconButton(
                       icon: Icon(
                           _isPasswordHidden
@@ -196,7 +207,12 @@ class _GeneratePasswordDialogState extends State<GeneratePasswordDialog> {
                   margin: EdgeInsets.only(top: 16),
                   child: Row(
                     children: <Widget>[
-                      Text(AppTranslations.of(context).text("length")),
+                      Text(
+                        AppTranslations.of(context).text("length"),
+                        style: TextStyle(
+                          color: _themeProvider.textColor,
+                        ),
+                      ),
                       Flexible(
                         child: Slider(
                           value: _nbCharacters,
@@ -210,14 +226,24 @@ class _GeneratePasswordDialogState extends State<GeneratePasswordDialog> {
                           },
                         ),
                       ),
-                      Text("${_nbCharacters.toInt()}"),
+                      Text(
+                        "${_nbCharacters.toInt()}",
+                        style: TextStyle(
+                          color: _themeProvider.textColor,
+                        ),
+                      ),
                     ],
                   ),
                 ),
                 Container(
                   child: Row(
                     children: <Widget>[
-                      Text(AppTranslations.of(context).text("with_numbers")),
+                      Text(
+                        AppTranslations.of(context).text("with_numbers"),
+                        style: TextStyle(
+                          color: _themeProvider.textColor,
+                        ),
+                      ),
                       Checkbox(
                         value: _hasNumbers,
                         activeColor: _themeProvider.primaryColor,
@@ -233,8 +259,13 @@ class _GeneratePasswordDialogState extends State<GeneratePasswordDialog> {
                 Container(
                   child: Row(
                     children: <Widget>[
-                      Text(AppTranslations.of(context)
-                          .text("with_special_characters")),
+                      Text(
+                        AppTranslations.of(context)
+                            .text("with_special_characters"),
+                        style: TextStyle(
+                          color: _themeProvider.textColor,
+                        ),
+                      ),
                       Checkbox(
                         value: _hasSpecialCharacters,
                         activeColor: _themeProvider.primaryColor,

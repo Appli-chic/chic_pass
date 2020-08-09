@@ -32,8 +32,8 @@ class ThemeProvider with ChangeNotifier {
 
     ChicTheme _defaultDarkTheme = ChicTheme(
       id: DEFAULT_THEME_DARK,
-      backgroundColor: Color(0xFF282C34),
-      secondBackgroundColor: Color(0xFF383E48),
+      backgroundColor: Color(0xFF000000),
+      secondBackgroundColor: Color(0xFF1D1D20),
       primaryColor: Color(0xFFE02020),
       textColor: Color(0xFFFFFFFF),
       secondTextColor: Color(0xFFBABABA),

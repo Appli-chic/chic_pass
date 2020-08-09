@@ -9,6 +9,11 @@ const GENERAL_SELECT = "SELECT e.uid, e.title, e.login, e.hash, e.created_at, "
     "left join ${Category.tableName} as c ON c.uid = e.category_uid ";
 
 class EntryService {
+  static Future<void> delete(Entry entry) async {
+    await sqlQuery(
+        "DELETE FROM ${Entry.tableName} WHERE ${Entry.tableName}.uid = '${entry.uid}'");
+  }
+
   static Future<void> save(Entry entry) async {
     var uuid = Uuid();
     entry.uid = uuid.v4();

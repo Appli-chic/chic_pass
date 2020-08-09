@@ -41,6 +41,7 @@ class _EntryDetailsScreenState extends State<EntryDetailsScreen> {
     final snackBar = SnackBar(
       content: Text(AppTranslations.of(context).text("text_copied")),
     );
+    Scaffold.of(context).removeCurrentSnackBar(reason: SnackBarClosedReason.dismiss);
     Scaffold.of(context).showSnackBar(snackBar);
   }
 
