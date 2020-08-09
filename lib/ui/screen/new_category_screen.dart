@@ -110,64 +110,62 @@ class _NewCategoryScreenState extends State<NewCategoryScreen> {
           leading: BackButton(
             color: _themeProvider.textColor,
           ),
+          actions: <Widget>[
+            IconButton(
+              icon: Icon(
+                Icons.check,
+                color: _themeProvider.textColor,
+              ),
+              onPressed: () {
+                _onSave();
+              },
+            ),
+          ],
         ),
-        body: Column(
-          children: <Widget>[
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
+        body: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              Input(
+                textCapitalization: TextCapitalization.sentences,
+                textController: _titleController,
+                hint: AppTranslations.of(context).text("title"),
+                margin: EdgeInsets.only(top: 2),
+              ),
+              Row(
                 children: <Widget>[
-                  Input(
-                    textCapitalization: TextCapitalization.sentences,
-                    textController: _titleController,
-                    hint: AppTranslations.of(context).text("title"),
-                    margin: EdgeInsets.only(top: 2),
+                  Container(
+                    margin: EdgeInsets.only(left: 16),
+                    child: IconSelector(iconName: _icon),
                   ),
-                  Row(
-                    children: <Widget>[
-                      Container(
-                        margin: EdgeInsets.only(left: 16),
-                        child: IconSelector(iconName: _icon),
-                      ),
-                      Container(
-                        margin: EdgeInsets.only(
-                            left: 16, right: 16, bottom: 16, top: 16),
-                        child: RoundedButton(
-                          text: AppTranslations.of(context).text("update"),
-                          fontSize: 16,
-                          borderRadius: 8,
-                          minHeight: 35,
-                          onClick: () {
-                            showDialog(
-                              context: context,
-                              builder: (_) {
-                                return IconDialog(
-                                  onIconTapped: (icon) {
-                                    setState(() {
-                                      _icon = icon;
-                                    });
-                                  },
-                                );
+                  Container(
+                    margin: EdgeInsets.only(
+                        left: 16, right: 16, bottom: 16, top: 16),
+                    child: RoundedButton(
+                      text: AppTranslations.of(context).text("update"),
+                      fontSize: 16,
+                      borderRadius: 8,
+                      minHeight: 35,
+                      onClick: () {
+                        showDialog(
+                          context: context,
+                          builder: (_) {
+                            return IconDialog(
+                              onIconTapped: (icon) {
+                                setState(() {
+                                  _icon = icon;
+                                });
                               },
                             );
                           },
-                        ),
-                      ),
-                    ],
+                        );
+                      },
+                    ),
                   ),
                 ],
               ),
-            ),
-            Container(
-              margin: EdgeInsets.only(left: 16, right: 16, bottom: 16),
-              child: RoundedButton(
-                text: AppTranslations.of(context).text("save"),
-                onClick: () {
-                  _onSave();
-                },
-              ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
