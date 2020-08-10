@@ -3,7 +3,7 @@ import 'package:chicpass/model/db/category.dart';
 import 'package:chicpass/provider/data_provider.dart';
 import 'package:chicpass/provider/theme_provider.dart';
 import 'package:chicpass/service/category_service.dart';
-import 'package:chicpass/ui/component/dialog_error.dart';
+import 'package:chicpass/ui/component/dialog_message.dart';
 import 'package:chicpass/ui/component/input.dart';
 import 'package:chicpass/ui/component/rounded_button.dart';
 import 'package:flutter/material.dart';
@@ -71,8 +71,9 @@ class _ImportCategoryScreenState extends State<ImportCategoryScreen> {
   }
 
   _displaysErrorDialog() {
-    DialogError.display(
+    DialogMessage.display(
       context,
+      _themeProvider,
       body: SingleChildScrollView(
         child: ListBody(
           children: [

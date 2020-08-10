@@ -1,6 +1,8 @@
+import 'package:chicpass/localization/app_translations.dart';
 import 'package:chicpass/model/db/entry.dart';
 import 'package:chicpass/provider/theme_provider.dart';
 import 'package:chicpass/service/entry_serice.dart';
+import 'package:chicpass/ui/component/dialog_message.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -13,7 +15,43 @@ class PasswordItem extends StatelessWidget {
     @required this.onDismiss,
   });
 
-  _onDismiss() async {
+  Future<bool> _onConfirmDismiss(DismissDirection direction,
+      BuildContext context, ThemeProvider themeProvider) async {
+    return await DialogMessage.display(
+      context,
+      themeProvider,
+      title: AppTranslations.of(context).text("warning"),
+      body: SingleChildScrollView(
+        child: ListBody(
+          children: [
+            Text(
+              AppTranslations.of(context).text("entry_sure_to_delete"),
+              style: TextStyle(color: themeProvider.textColor),
+            ),
+          ],
+        ),
+      ),
+      actions: <Widget>[
+        FlatButton(
+          child: Text(AppTranslations.of(context).text("no")),
+          onPressed: () {
+            Navigator.of(context).pop(false);
+          },
+        ),
+        FlatButton(
+          child: Text(
+            AppTranslations.of(context).text("yes"),
+            style: TextStyle(color: themeProvider.primaryColor),
+          ),
+          onPressed: () async {
+            Navigator.of(context).pop(true);
+          },
+        ),
+      ],
+    );
+  }
+
+  _onDismiss(BuildContext context, ThemeProvider themeProvider) async {
     await EntryService.delete(entry);
     onDismiss(entry);
   }
@@ -24,19 +62,28 @@ class PasswordItem extends StatelessWidget {
 
     return Dismissible(
       key: Key("password_item${entry.uid}"),
-      background: Container(color: Colors.red),
+      background: Container(
+        decoration: BoxDecoration(
+          color: Colors.red,
+        ),
+      ),
       direction: DismissDirection.endToStart,
+      confirmDismiss: (direction) {
+        return _onConfirmDismiss(direction, context, themeProvider);
+      },
       onDismissed: (direction) {
-        _onDismiss();
+        _onDismiss(context, themeProvider);
       },
       secondaryBackground: Container(
         alignment: Alignment.centerRight,
         padding: EdgeInsets.only(right: 20.0),
-        color: Colors.red,
+        decoration: BoxDecoration(
+          color: Colors.red,
+        ),
         child: Icon(
           Icons.delete,
           color: Colors.white,
-          size: 40,
+          size: 30,
         ),
       ),
       child: GestureDetector(

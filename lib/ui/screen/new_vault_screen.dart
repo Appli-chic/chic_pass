@@ -1,7 +1,7 @@
 import 'package:chicpass/localization/app_translations.dart';
 import 'package:chicpass/provider/theme_provider.dart';
 import 'package:chicpass/service/vault_service.dart';
-import 'package:chicpass/ui/component/dialog_error.dart';
+import 'package:chicpass/ui/component/dialog_message.dart';
 import 'package:chicpass/ui/component/input.dart';
 import 'package:chicpass/ui/component/loading_dialog.dart';
 import 'package:chicpass/ui/component/rounded_button.dart';
@@ -40,8 +40,9 @@ class _NewVaultScreenState extends State<NewVaultScreen> {
       );
     }
 
-    DialogError.display(
+    DialogMessage.display(
       context,
+      _themeProvider,
       body: SingleChildScrollView(
         child: ListBody(
           children: errorWidgets,

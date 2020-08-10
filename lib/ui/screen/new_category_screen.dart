@@ -3,7 +3,7 @@ import 'package:chicpass/model/db/category.dart';
 import 'package:chicpass/provider/data_provider.dart';
 import 'package:chicpass/provider/theme_provider.dart';
 import 'package:chicpass/service/category_service.dart';
-import 'package:chicpass/ui/component/dialog_error.dart';
+import 'package:chicpass/ui/component/dialog_message.dart';
 import 'package:chicpass/ui/component/icon_dialog.dart';
 import 'package:chicpass/ui/component/icon_selector.dart';
 import 'package:chicpass/ui/component/input.dart';
@@ -69,8 +69,9 @@ class _NewCategoryScreenState extends State<NewCategoryScreen> {
       );
     }
 
-    DialogError.display(
+    DialogMessage.display(
       context,
+      _themeProvider,
       body: SingleChildScrollView(
         child: ListBody(
           children: errorWidgets,

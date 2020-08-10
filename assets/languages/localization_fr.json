@@ -48,5 +48,9 @@
   "biometry": "Biométrie",
   "fingerprint": "Empreinte digitale",
   "face_unlock": "Reconnaissance faciale",
-  "text_copied": "Texte copié"
+  "text_copied": "Texte copié",
+  "yes": "OUI",
+  "no": "NON",
+  "warning": "Attention",
+  "entry_sure_to_delete": "Êtes-vous sûr de vouloir supprimer ce mot de passe?"
 }

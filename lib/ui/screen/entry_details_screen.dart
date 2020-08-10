@@ -2,6 +2,8 @@ import 'package:chicpass/localization/app_translations.dart';
 import 'package:chicpass/model/db/entry.dart';
 import 'package:chicpass/provider/data_provider.dart';
 import 'package:chicpass/provider/theme_provider.dart';
+import 'package:chicpass/service/entry_serice.dart';
+import 'package:chicpass/ui/component/dialog_message.dart';
 import 'package:chicpass/ui/component/input.dart';
 import 'package:chicpass/utils/security.dart';
 import 'package:flutter/material.dart';
@@ -41,8 +43,54 @@ class _EntryDetailsScreenState extends State<EntryDetailsScreen> {
     final snackBar = SnackBar(
       content: Text(AppTranslations.of(context).text("text_copied")),
     );
-    Scaffold.of(context).removeCurrentSnackBar(reason: SnackBarClosedReason.dismiss);
+    Scaffold.of(context)
+        .removeCurrentSnackBar(reason: SnackBarClosedReason.dismiss);
     Scaffold.of(context).showSnackBar(snackBar);
+  }
+
+  _onDelete() {
+    DialogMessage.display(
+      context,
+      _themeProvider,
+      title: AppTranslations.of(context).text("warning"),
+      body: SingleChildScrollView(
+        child: ListBody(
+          children: [
+            Text(
+              AppTranslations.of(context).text("entry_sure_to_delete"),
+              style: TextStyle(color: _themeProvider.textColor),
+            ),
+          ],
+        ),
+      ),
+      actions: <Widget>[
+        FlatButton(
+          child: Text(AppTranslations.of(context).text("no")),
+          onPressed: () {
+            Navigator.of(context).pop();
+          },
+        ),
+        FlatButton(
+          child: Text(
+            AppTranslations.of(context).text("yes"),
+            style: TextStyle(color: _themeProvider.primaryColor),
+          ),
+          onPressed: () async {
+            Navigator.of(context).pop();
+
+            try {
+              await EntryService.delete(_entry);
+            } catch (e) {
+              print(e);
+            }
+
+            _dataProvider.reloadHome();
+            _dataProvider.reloadCategory();
+            Navigator.of(context).pop();
+          },
+        ),
+      ],
+    );
   }
 
   @override
@@ -68,6 +116,24 @@ class _EntryDetailsScreenState extends State<EntryDetailsScreen> {
           style: TextStyle(color: _themeProvider.textColor),
         ),
         elevation: 0,
+        actions: <Widget>[
+          IconButton(
+            icon: Icon(
+              Icons.delete,
+              color: _themeProvider.textColor,
+            ),
+            onPressed: () {
+              _onDelete();
+            },
+          ),
+          IconButton(
+            icon: Icon(
+              Icons.edit,
+              color: _themeProvider.textColor,
+            ),
+            onPressed: () {},
+          ),
+        ],
       ),
       body: Builder(
         builder: (scaffoldContext) => Column(

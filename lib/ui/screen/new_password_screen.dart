@@ -5,7 +5,7 @@ import 'package:chicpass/provider/data_provider.dart';
 import 'package:chicpass/provider/theme_provider.dart';
 import 'package:chicpass/service/category_service.dart';
 import 'package:chicpass/service/entry_serice.dart';
-import 'package:chicpass/ui/component/dialog_error.dart';
+import 'package:chicpass/ui/component/dialog_message.dart';
 import 'package:chicpass/ui/component/generate_password_dialog.dart';
 import 'package:chicpass/ui/component/input.dart';
 import 'package:chicpass/ui/component/loading_dialog.dart';
@@ -130,13 +130,17 @@ class _NewPasswordScreenState extends State<NewPasswordScreen> {
       errorWidgets.add(
         Container(
           margin: EdgeInsets.only(top: 8),
-          child: Text(error),
+          child: Text(
+            error,
+            style: TextStyle(color: _themeProvider.textColor),
+          ),
         ),
       );
     }
 
-    DialogError.display(
+    DialogMessage.display(
       context,
+      _themeProvider,
       body: SingleChildScrollView(
         child: ListBody(
           children: errorWidgets,

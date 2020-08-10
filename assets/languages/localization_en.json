@@ -48,5 +48,9 @@
   "biometry": "Biometry",
   "fingerprint": "Fingerprint",
   "face_unlock": "Face unlock",
-  "text_copied": "Text copied"
+  "text_copied": "Text copied",
+  "yes": "YES",
+  "no": "NO",
+  "warning": "Warning",
+  "entry_sure_to_delete": "Do you really want to delete this password?"
 }
