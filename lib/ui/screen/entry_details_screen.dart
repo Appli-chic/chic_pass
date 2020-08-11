@@ -22,6 +22,7 @@ class _EntryDetailsScreenState extends State<EntryDetailsScreen> {
   DataProvider _dataProvider;
   bool _isPasswordHidden = true;
   bool _isInit = false;
+  bool _isEditing = false;
   Entry _entry;
   String _passwordDecrypted = "";
 
@@ -93,6 +94,155 @@ class _EntryDetailsScreenState extends State<EntryDetailsScreen> {
     );
   }
 
+  List<Widget> _displaysAppbarIcons() {
+    if (_isEditing) {
+      return <Widget>[
+        IconButton(
+          icon: Icon(
+            Icons.delete,
+            color: _themeProvider.textColor,
+          ),
+          onPressed: () {
+            _onDelete();
+          },
+        ),
+        IconButton(
+          icon: Icon(
+            Icons.check,
+            color: _themeProvider.textColor,
+          ),
+          onPressed: () {
+//            setState(() {
+//              _isEditing = false;
+//            });
+          },
+        ),
+      ];
+    } else {
+      return <Widget>[
+        IconButton(
+          icon: Icon(
+            Icons.delete,
+            color: _themeProvider.textColor,
+          ),
+          onPressed: () {
+            _onDelete();
+          },
+        ),
+      ];
+    }
+  }
+
+  Widget _displaysEntryDetails() {
+    return Builder(
+      builder: (scaffoldContext) => Column(
+        children: <Widget>[
+          Input(
+            textController: _loginController,
+            hint: AppTranslations.of(context).text("login_email"),
+            margin: EdgeInsets.only(top: 2),
+            readOnly: true,
+            onClick: (String text) {
+              _copyInputText(scaffoldContext, text);
+            },
+          ),
+          Input(
+            textController: _passwordController,
+            hint: AppTranslations.of(context).text("password"),
+            obscureText: _isPasswordHidden,
+            readOnly: true,
+            margin: EdgeInsets.only(top: 2),
+            textInputAction: TextInputAction.done,
+            onClick: (String text) {
+              _copyInputText(scaffoldContext, text);
+            },
+            suffix: Container(
+              margin: EdgeInsets.only(right: 16),
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: <Widget>[
+                  Material(
+                    color: _themeProvider.secondBackgroundColor,
+                    child: IconButton(
+                      icon: Icon(
+                          _isPasswordHidden
+                              ? Icons.visibility
+                              : Icons.visibility_off,
+                          color: _themeProvider.thirdTextColor),
+                      onPressed: () {
+                        setState(() {
+                          _isPasswordHidden = !_isPasswordHidden;
+                        });
+                      },
+                    ),
+                  )
+                ],
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _displaysEditBody() {
+    return Column(
+      children: <Widget>[
+//        Input(
+//          textController: _loginController,
+//          hint: AppTranslations.of(context).text("login_email"),
+//          margin: EdgeInsets.only(top: 2),
+//          readOnly: true,
+//          onClick: (String text) {
+//            _copyInputText(scaffoldContext, text);
+//          },
+//        ),
+//        Input(
+//          textController: _passwordController,
+//          hint: AppTranslations.of(context).text("password"),
+//          obscureText: _isPasswordHidden,
+//          readOnly: true,
+//          margin: EdgeInsets.only(top: 2),
+//          textInputAction: TextInputAction.done,
+//          onClick: (String text) {
+//            _copyInputText(scaffoldContext, text);
+//          },
+//          suffix: Container(
+//            margin: EdgeInsets.only(right: 16),
+//            child: Row(
+//              mainAxisSize: MainAxisSize.min,
+//              children: <Widget>[
+//                Material(
+//                  color: _themeProvider.secondBackgroundColor,
+//                  child: IconButton(
+//                    icon: Icon(
+//                        _isPasswordHidden
+//                            ? Icons.visibility
+//                            : Icons.visibility_off,
+//                        color: _themeProvider.thirdTextColor),
+//                    onPressed: () {
+//                      setState(() {
+//                        _isPasswordHidden = !_isPasswordHidden;
+//                      });
+//                    },
+//                  ),
+//                )
+//              ],
+//            ),
+//          ),
+//        ),
+      ],
+    );
+  }
+
+  Widget _displaysBody() {
+    if (_isEditing) {
+      return _displaysEditBody();
+    } else {
+      return _displaysEntryDetails();
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     _dataProvider = Provider.of<DataProvider>(context, listen: true);
@@ -116,74 +266,9 @@ class _EntryDetailsScreenState extends State<EntryDetailsScreen> {
           style: TextStyle(color: _themeProvider.textColor),
         ),
         elevation: 0,
-        actions: <Widget>[
-          IconButton(
-            icon: Icon(
-              Icons.delete,
-              color: _themeProvider.textColor,
-            ),
-            onPressed: () {
-              _onDelete();
-            },
-          ),
-          IconButton(
-            icon: Icon(
-              Icons.edit,
-              color: _themeProvider.textColor,
-            ),
-            onPressed: () {},
-          ),
-        ],
+        actions: _displaysAppbarIcons(),
       ),
-      body: Builder(
-        builder: (scaffoldContext) => Column(
-          children: <Widget>[
-            Input(
-              textController: _loginController,
-              hint: AppTranslations.of(context).text("login_email"),
-              margin: EdgeInsets.only(top: 2),
-              readOnly: true,
-              onClick: (String text) {
-                _copyInputText(scaffoldContext, text);
-              },
-            ),
-            Input(
-              textController: _passwordController,
-              hint: AppTranslations.of(context).text("password"),
-              obscureText: _isPasswordHidden,
-              readOnly: true,
-              margin: EdgeInsets.only(top: 2),
-              textInputAction: TextInputAction.done,
-              onClick: (String text) {
-                _copyInputText(scaffoldContext, text);
-              },
-              suffix: Container(
-                margin: EdgeInsets.only(right: 16),
-                child: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: <Widget>[
-                    Material(
-                      color: _themeProvider.secondBackgroundColor,
-                      child: IconButton(
-                        icon: Icon(
-                            _isPasswordHidden
-                                ? Icons.visibility
-                                : Icons.visibility_off,
-                            color: _themeProvider.thirdTextColor),
-                        onPressed: () {
-                          setState(() {
-                            _isPasswordHidden = !_isPasswordHidden;
-                          });
-                        },
-                      ),
-                    )
-                  ],
-                ),
-              ),
-            ),
-          ],
-        ),
-      ),
+      body: _displaysBody(),
     );
   }
 }
