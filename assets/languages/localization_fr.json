@@ -7,6 +7,7 @@
   "new_vaults_password_description": "Ce mot de passe est très important, il sera utilisé pour encrypter les données de ce coffre. S'il vous plaît, gardez ce mot de passe à l'esprit. Si vous le perdez, il sera impossible pour nous de vous donner accès à vos mots de passe contenu dans ce coffre.",
   "save": "SAUVEGARDER",
   "update": "MODIFIER",
+  "update_entry": "Modifier le mot de passe",
   "error": "Erreur",
   "ok": "OK",
   "cancel": "ANNULER",

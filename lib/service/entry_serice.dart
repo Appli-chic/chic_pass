@@ -1,6 +1,7 @@
 import 'package:chicpass/model/db/category.dart';
 import 'package:chicpass/model/db/entry.dart';
 import 'package:chicpass/utils/sqlite.dart';
+import 'package:intl/intl.dart';
 import 'package:uuid/uuid.dart';
 
 const GENERAL_SELECT = "SELECT e.uid, e.title, e.login, e.hash, e.created_at, "
@@ -12,6 +13,18 @@ class EntryService {
   static Future<void> delete(Entry entry) async {
     await sqlQuery(
         "DELETE FROM ${Entry.tableName} WHERE ${Entry.tableName}.uid = '${entry.uid}'");
+  }
+
+  static Future<void> update(Entry entry) async {
+    var dateFormatter = new DateFormat('yyyy-MM-dd HH:mm:ss');
+    String createdAtString = dateFormatter.format(entry.createdAt);
+    String updatedAtString = dateFormatter.format(entry.updatedAt);
+
+    await sqlQuery("UPDATE ${Entry.tableName} "
+        "SET title = '${entry.title}', login = '${entry.login}', "
+        "hash = '${entry.hash}', created_at = '$createdAtString', "
+        "updated_at = '$updatedAtString', category_uid = '${entry.categoryUid}' "
+        "WHERE ${Entry.tableName}.uid = '${entry.uid}' ");
   }
 
   static Future<void> save(Entry entry) async {

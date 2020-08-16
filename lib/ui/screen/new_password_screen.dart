@@ -121,42 +121,8 @@ class _NewPasswordScreenState extends State<NewPasswordScreen> {
         _isLoading = false;
       });
 
-      _displaysErrorDialog(errors);
+      DialogMessage.displaysErrorListDialog(errors, _themeProvider, context);
     }
-  }
-
-  _displaysErrorDialog(List<String> errors) {
-    var errorWidgets = List<Widget>();
-
-    for (var error in errors) {
-      errorWidgets.add(
-        Container(
-          margin: EdgeInsets.only(top: 8),
-          child: Text(
-            error,
-            style: TextStyle(color: _themeProvider.textColor),
-          ),
-        ),
-      );
-    }
-
-    DialogMessage.display(
-      context,
-      _themeProvider,
-      body: SingleChildScrollView(
-        child: ListBody(
-          children: errorWidgets,
-        ),
-      ),
-      actions: <Widget>[
-        FlatButton(
-          child: Text(AppTranslations.of(context).text("ok")),
-          onPressed: () {
-            Navigator.of(context).pop();
-          },
-        ),
-      ],
-    );
   }
 
   @override

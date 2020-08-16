@@ -32,4 +32,39 @@ class DialogMessage {
       },
     );
   }
+
+  static displaysErrorListDialog(
+      List<String> errors, ThemeProvider themeProvider, BuildContext context) {
+    var errorWidgets = List<Widget>();
+
+    for (var error in errors) {
+      errorWidgets.add(
+        Container(
+          margin: EdgeInsets.only(top: 8),
+          child: Text(
+            error,
+            style: TextStyle(color: themeProvider.textColor),
+          ),
+        ),
+      );
+    }
+
+    DialogMessage.display(
+      context,
+      themeProvider,
+      body: SingleChildScrollView(
+        child: ListBody(
+          children: errorWidgets,
+        ),
+      ),
+      actions: <Widget>[
+        FlatButton(
+          child: Text(AppTranslations.of(context).text("ok")),
+          onPressed: () {
+            Navigator.of(context).pop();
+          },
+        ),
+      ],
+    );
+  }
 }

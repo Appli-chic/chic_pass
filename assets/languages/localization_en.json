@@ -7,6 +7,7 @@
   "new_vaults_password_description": "This password is very important, it will be used to encrypt all the passwords you will store in this vault. Please be sure to keep in mind this password. If you lose it, it will be impossible for us to retrieve your passwords in this vault.",
   "save": "SAVE",
   "update": "UPDATE",
+  "update_entry": "Update password",
   "error": "Error",
   "ok": "OK",
   "cancel": "CANCEL",
