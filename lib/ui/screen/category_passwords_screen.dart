@@ -69,7 +69,10 @@ class _CategoryPasswordsScreenState extends State<CategoryPasswordsScreen> {
   Widget build(BuildContext context) {
     _themeProvider = Provider.of<ThemeProvider>(context, listen: true);
     _dataProvider = Provider.of<DataProvider>(context, listen: true);
-    _category = ModalRoute.of(context).settings.arguments;
+
+    if (_category == null) {
+      _category = ModalRoute.of(context).settings.arguments;
+    }
 
     return Scaffold(
       backgroundColor: _themeProvider.backgroundColor,
@@ -84,6 +87,22 @@ class _CategoryPasswordsScreenState extends State<CategoryPasswordsScreen> {
           style: TextStyle(color: _themeProvider.textColor),
         ),
         elevation: 0,
+        actions: [
+          IconButton(
+            icon: Icon(
+              Icons.edit,
+              color: _themeProvider.textColor,
+            ),
+            onPressed: () async {
+              var category = await Navigator.pushNamed(
+                  context, '/new_category_screen',
+                  arguments: _category);
+
+              _category = category;
+              _loadEntries();
+            },
+          ),
+        ],
       ),
       body: Column(
         children: <Widget>[

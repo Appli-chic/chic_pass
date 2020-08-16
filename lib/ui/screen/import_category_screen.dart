@@ -167,7 +167,8 @@ class _ImportCategoryScreenState extends State<ImportCategoryScreen> {
                 GestureDetector(
                   onTap: () async {
                     var category = await Navigator.pushNamed(
-                        context, '/new_category_screen');
+                        context, '/new_category_screen',
+                        arguments: _categoryTitleController.text);
 
                     if (category != null) {
                       await _loadCategories();

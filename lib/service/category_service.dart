@@ -1,5 +1,6 @@
 import 'package:chicpass/model/db/category.dart';
 import 'package:chicpass/utils/sqlite.dart';
+import 'package:intl/intl.dart';
 import 'package:uuid/uuid.dart';
 
 const GENERAL_SELECT =
@@ -7,6 +8,18 @@ const GENERAL_SELECT =
     "FROM ${Category.tableName} as c ";
 
 class CategoryService {
+  static Future<void> update(Category category) async {
+    var dateFormatter = new DateFormat('yyyy-MM-dd HH:mm:ss');
+    String createdAtString = dateFormatter.format(category.createdAt);
+    String updatedAtString = dateFormatter.format(category.updatedAt);
+
+    await sqlQuery("UPDATE ${Category.tableName} "
+        "SET title = '${category.title}', icon_name = '${category.iconName}', "
+        "created_at = '$createdAtString', updated_at = '$updatedAtString', "
+        "vault_uid = '${category.vaultUid}' "
+        "WHERE ${Category.tableName}.uid = '${category.uid}' ");
+  }
+
   static Future<void> save(Category category) async {
     var uuid = Uuid();
     category.uid = uuid.v4();

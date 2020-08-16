@@ -24,6 +24,8 @@ class _NewCategoryScreenState extends State<NewCategoryScreen> {
   String _icon = categoryList[0];
   ThemeProvider _themeProvider;
   bool _isLoading = false;
+  bool _isInit = false;
+  Category _category;
 
   _onSave() async {
     var errors = List<String>();
@@ -57,10 +59,67 @@ class _NewCategoryScreenState extends State<NewCategoryScreen> {
     }
   }
 
+  _onUpdate() async {
+    var errors = List<String>();
+
+    if (_titleController.text.isEmpty) {
+      errors.add(AppTranslations.of(context).text("title_empty_error"));
+    }
+
+    if (errors.isEmpty) {
+      setState(() {
+        _isLoading = true;
+      });
+
+      var category = Category(
+        uid: _category.uid,
+        title:
+            "${_titleController.text[0].toUpperCase()}${_titleController.text.substring(1)}",
+        iconName: _icon,
+        createdAt: DateTime.now(),
+        updatedAt: DateTime.now(),
+        vaultUid: _dataProvider.vault.uid,
+      );
+
+      await CategoryService.update(category);
+      _dataProvider.reloadHome();
+      _dataProvider.reloadCategory();
+
+      Navigator.pop(context, category);
+    } else {
+      setState(() {
+        _isLoading = false;
+      });
+
+      DialogMessage.displaysErrorListDialog(errors, _themeProvider, context);
+    }
+  }
+
+  _init(dynamic data) {
+    if (data != null) {
+      if (data is Category) {
+        _category = data;
+        _titleController.text = _category.title;
+        _icon = _category.iconName;
+      } else if (data is String) {
+        _titleController.text = data;
+      }
+    }
+
+    setState(() {
+      _isInit = true;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     _themeProvider = Provider.of<ThemeProvider>(context, listen: true);
     _dataProvider = Provider.of<DataProvider>(context, listen: true);
+    var data = ModalRoute.of(context).settings.arguments;
+
+    if (!_isInit) {
+      _init(data);
+    }
 
     return LoadingDialog(
       isDisplayed: _isLoading,
@@ -134,9 +193,15 @@ class _NewCategoryScreenState extends State<NewCategoryScreen> {
               margin: EdgeInsets.all(16),
               child: RoundedButton(
                 onClick: () {
-                  _onSave();
+                  if (_category != null) {
+                    _onUpdate();
+                  } else {
+                    _onSave();
+                  }
                 },
-                text: AppTranslations.of(context).text("save"),
+                text: _category != null
+                    ? AppTranslations.of(context).text("update")
+                    : AppTranslations.of(context).text("save"),
               ),
             ),
           ],

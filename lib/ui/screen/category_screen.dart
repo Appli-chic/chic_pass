@@ -40,7 +40,7 @@ class _CategoryScreenState extends State<CategoryScreen> {
   Widget build(BuildContext context) {
     _themeProvider = Provider.of<ThemeProvider>(context, listen: true);
 
-    if(_dataProvider.isCategoryReloading) {
+    if (_dataProvider.isCategoryReloading) {
       reload();
       _dataProvider.setCategoryReloaded();
     }
