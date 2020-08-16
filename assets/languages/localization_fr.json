@@ -53,5 +53,7 @@
   "yes": "OUI",
   "no": "NON",
   "warning": "Attention",
-  "entry_sure_to_delete": "Êtes-vous sûr de vouloir supprimer ce mot de passe?"
+  "entry_sure_to_delete": "Êtes-vous sûr de vouloir supprimer ce mot de passe?",
+  "category_sure_to_delete": "Êtes-vous sûr de vouloir supprimer cette catégorie?",
+  "category_not_empty_error": "Cette catégorie contient encore des mots de passe et ne peut être supprimé."
 }

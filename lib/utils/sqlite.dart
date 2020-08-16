@@ -1,4 +1,3 @@
-
 import 'package:chicpass/model/db/category.dart';
 import 'package:chicpass/model/db/entry.dart';
 import 'package:sqflite/sqflite.dart';

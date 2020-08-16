@@ -8,6 +8,11 @@ const GENERAL_SELECT =
     "FROM ${Category.tableName} as c ";
 
 class CategoryService {
+  static Future<void> delete(Category category) async {
+    await sqlQuery(
+        "DELETE FROM ${Category.tableName} WHERE ${Category.tableName}.uid = '${category.uid}'");
+  }
+
   static Future<void> update(Category category) async {
     var dateFormatter = new DateFormat('yyyy-MM-dd HH:mm:ss');
     String createdAtString = dateFormatter.format(category.createdAt);

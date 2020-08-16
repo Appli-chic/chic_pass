@@ -3,7 +3,9 @@ import 'package:chicpass/model/db/category.dart';
 import 'package:chicpass/model/db/entry.dart';
 import 'package:chicpass/provider/data_provider.dart';
 import 'package:chicpass/provider/theme_provider.dart';
+import 'package:chicpass/service/category_service.dart';
 import 'package:chicpass/service/entry_serice.dart';
+import 'package:chicpass/ui/component/dialog_message.dart';
 import 'package:chicpass/ui/component/input.dart';
 import 'package:chicpass/ui/component/password_item.dart';
 import 'package:flutter/material.dart';
@@ -65,6 +67,55 @@ class _CategoryPasswordsScreenState extends State<CategoryPasswordsScreen> {
     }
   }
 
+  _onCategoryNotEmpty() {
+    var errors = [AppTranslations.of(context).text("category_not_empty_error")];
+
+    DialogMessage.displaysErrorListDialog(errors, _themeProvider, context);
+  }
+
+  Future<bool> _onConfirmDismiss() async {
+    var entries = await EntryService.getAllByVaultIdAndCategoryId(
+        _dataProvider.vault.uid, _category.uid);
+
+    if (entries.isNotEmpty) {
+      _onCategoryNotEmpty();
+      return false;
+    } else {
+      return await DialogMessage.display(
+        context,
+        _themeProvider,
+        title: AppTranslations.of(context).text("warning"),
+        body: SingleChildScrollView(
+          child: ListBody(
+            children: [
+              Text(
+                AppTranslations.of(context).text("category_sure_to_delete"),
+                style: TextStyle(color: _themeProvider.textColor),
+              ),
+            ],
+          ),
+        ),
+        actions: <Widget>[
+          FlatButton(
+            child: Text(AppTranslations.of(context).text("no")),
+            onPressed: () {
+              Navigator.of(context).pop(false);
+            },
+          ),
+          FlatButton(
+            child: Text(
+              AppTranslations.of(context).text("yes"),
+              style: TextStyle(color: _themeProvider.primaryColor),
+            ),
+            onPressed: () async {
+              Navigator.of(context).pop(true);
+            },
+          ),
+        ],
+      );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     _themeProvider = Provider.of<ThemeProvider>(context, listen: true);
@@ -88,6 +139,21 @@ class _CategoryPasswordsScreenState extends State<CategoryPasswordsScreen> {
         ),
         elevation: 0,
         actions: [
+          IconButton(
+            icon: Icon(
+              Icons.delete,
+              color: _themeProvider.textColor,
+            ),
+            onPressed: () async {
+              if (await _onConfirmDismiss()) {
+                await CategoryService.delete(_category);
+                _dataProvider.reloadHome();
+                _dataProvider.reloadCategory();
+
+                Navigator.pop(context);
+              }
+            },
+          ),
           IconButton(
             icon: Icon(
               Icons.edit,

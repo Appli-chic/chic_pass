@@ -36,6 +36,15 @@ class _CategoryScreenState extends State<CategoryScreen> {
     setState(() {});
   }
 
+  _onDismiss(Category category) {
+    try {
+      _categories
+          .remove(_categories.where((e) => e.uid == category.uid).toList()[0]);
+    } catch (e) {
+      print(e);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     _themeProvider = Provider.of<ThemeProvider>(context, listen: true);
@@ -68,6 +77,7 @@ class _CategoryScreenState extends State<CategoryScreen> {
             itemBuilder: (BuildContext context, int index) {
               return CategoryItem(
                 category: _categories[index],
+                onDismiss: _onDismiss,
               );
             },
           ),
