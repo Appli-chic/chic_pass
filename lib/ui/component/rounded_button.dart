@@ -29,7 +29,11 @@ class RoundedButton extends StatelessWidget {
     return RaisedButton(
       onPressed: onClick,
       shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(borderRadius)),
+        borderRadius: BorderRadius.circular(borderRadius),
+        side: themeProvider.isLight
+            ? BorderSide.none
+            : BorderSide(width: 1, color: themeProvider.backgroundColor),
+      ),
       padding: const EdgeInsets.all(0.0),
       child: Container(
         child: Ink(

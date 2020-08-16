@@ -14,6 +14,8 @@ import 'package:chicpass/utils/security.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../component/rounded_button.dart';
+
 class NewPasswordScreen extends StatefulWidget {
   @override
   _NewPasswordScreenState createState() => _NewPasswordScreenState();
@@ -179,122 +181,127 @@ class _NewPasswordScreenState extends State<NewPasswordScreen> {
           leading: BackButton(
             color: _themeProvider.textColor,
           ),
-          actions: <Widget>[
-            IconButton(
-              icon: Icon(
-                Icons.check,
-                color: _themeProvider.textColor,
-              ),
-              onPressed: () {
-                _onSave();
-              },
-            ),
-          ],
         ),
-        body: SingleChildScrollView(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-              Input(
-                textCapitalization: TextCapitalization.sentences,
-                textController: _titleController,
-                hint: AppTranslations.of(context).text("title"),
-                margin: EdgeInsets.only(top: 2),
-                onSubmitted: _onTitleSubmitted,
-              ),
-              Input(
-                textController: _loginController,
-                hint: AppTranslations.of(context).text("login_email"),
-                margin: EdgeInsets.only(top: 2),
-                focus: _loginFocus,
-                onSubmitted: _onLoginSubmitted,
-              ),
-              Input(
-                textController: _passwordController,
-                hint: AppTranslations.of(context).text("password"),
-                obscureText: _isPasswordHidden,
-                focus: _passwordFocus,
-                margin: EdgeInsets.only(top: 2),
-                textInputAction: TextInputAction.done,
-                suffix: Container(
-                  margin: EdgeInsets.only(right: 16),
-                  child: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: <Widget>[
-                      Material(
-                        color: _themeProvider.secondBackgroundColor,
-                        child: IconButton(
-                          icon: Image.asset('assets/lullaby.png',
-                              color: _themeProvider.thirdTextColor),
-                          onPressed: () async {
-                            showDialog(
-                              context: context,
-                              builder: (_) {
-                                return GeneratePasswordDialog(
-                                  onPasswordValidated: (String password) {
-                                    _passwordController.text = password;
-                                  },
-                                );
-                              },
-                            );
-                          },
+        body: Column(
+          children: [
+            Expanded(
+              child: SingleChildScrollView(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    Input(
+                      textCapitalization: TextCapitalization.sentences,
+                      textController: _titleController,
+                      hint: AppTranslations.of(context).text("title"),
+                      margin: EdgeInsets.only(top: 2),
+                      onSubmitted: _onTitleSubmitted,
+                    ),
+                    Input(
+                      textController: _loginController,
+                      hint: AppTranslations.of(context).text("login_email"),
+                      margin: EdgeInsets.only(top: 2),
+                      focus: _loginFocus,
+                      onSubmitted: _onLoginSubmitted,
+                    ),
+                    Input(
+                      textController: _passwordController,
+                      hint: AppTranslations.of(context).text("password"),
+                      obscureText: _isPasswordHidden,
+                      focus: _passwordFocus,
+                      margin: EdgeInsets.only(top: 2),
+                      textInputAction: TextInputAction.done,
+                      suffix: Container(
+                        margin: EdgeInsets.only(right: 16),
+                        child: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: <Widget>[
+                            Material(
+                              color: _themeProvider.secondBackgroundColor,
+                              child: IconButton(
+                                icon: Image.asset('assets/lullaby.png',
+                                    color: _themeProvider.thirdTextColor),
+                                onPressed: () async {
+                                  showDialog(
+                                    context: context,
+                                    builder: (_) {
+                                      return GeneratePasswordDialog(
+                                        onPasswordValidated: (String password) {
+                                          _passwordController.text = password;
+                                        },
+                                      );
+                                    },
+                                  );
+                                },
+                              ),
+                            ),
+                            Material(
+                              color: _themeProvider.secondBackgroundColor,
+                              child: IconButton(
+                                icon: Icon(
+                                    _isPasswordHidden
+                                        ? Icons.visibility
+                                        : Icons.visibility_off,
+                                    color: _themeProvider.thirdTextColor),
+                                onPressed: () {
+                                  setState(() {
+                                    _isPasswordHidden = !_isPasswordHidden;
+                                  });
+                                },
+                              ),
+                            )
+                          ],
                         ),
                       ),
-                      Material(
-                        color: _themeProvider.secondBackgroundColor,
-                        child: IconButton(
-                          icon: Icon(
-                              _isPasswordHidden
-                                  ? Icons.visibility
-                                  : Icons.visibility_off,
-                              color: _themeProvider.thirdTextColor),
-                          onPressed: () {
-                            setState(() {
-                              _isPasswordHidden = !_isPasswordHidden;
-                            });
-                          },
-                        ),
-                      )
-                    ],
-                  ),
-                ),
-              ),
-              Input(
-                textController: _categoryController,
-                hint: AppTranslations.of(context).text("category"),
-                margin: EdgeInsets.only(top: 2),
-                fieldType: TextFieldType.select,
-                listFields: _categoryTextList,
-                singleSelectDefaultIndex:
-                    _categoryTextList.indexOf(_categoryController.text),
-                singleSelectChoose: () {
-                  setState(() {});
-                },
-              ),
-              GestureDetector(
-                onTap: () async {
-                  var category = await Navigator.pushNamed(
-                      context, '/new_category_screen');
-
-                  if (category != null) {
-                    await _loadCategories();
-                    _categoryController.text = (category as Category).title;
-                    setState(() {});
-                  }
-                },
-                child: Container(
-                  margin: EdgeInsets.only(top: 16, left: 16),
-                  child: Text(
-                    AppTranslations.of(context).text("add_category"),
-                    style: TextStyle(
-                      color: _themeProvider.thirdTextColor,
-                      fontSize: 17,
                     ),
-                  ),
+                    Input(
+                      textController: _categoryController,
+                      hint: AppTranslations.of(context).text("category"),
+                      margin: EdgeInsets.only(top: 2),
+                      fieldType: TextFieldType.select,
+                      listFields: _categoryTextList,
+                      singleSelectDefaultIndex:
+                          _categoryTextList.indexOf(_categoryController.text),
+                      singleSelectChoose: () {
+                        setState(() {});
+                      },
+                    ),
+                    GestureDetector(
+                      onTap: () async {
+                        var category = await Navigator.pushNamed(
+                            context, '/new_category_screen');
+
+                        if (category != null) {
+                          await _loadCategories();
+                          _categoryController.text =
+                              (category as Category).title;
+                          setState(() {});
+                        }
+                      },
+                      child: Container(
+                        margin: EdgeInsets.only(top: 16, left: 16),
+                        child: Text(
+                          AppTranslations.of(context).text("add_category"),
+                          style: TextStyle(
+                            color: _themeProvider.thirdTextColor,
+                            fontSize: 17,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
               ),
-            ],
-          ),
+            ),
+            Container(
+              margin: EdgeInsets.all(16),
+              child: RoundedButton(
+                onClick: () {
+                  _onSave();
+                },
+                text: AppTranslations.of(context).text("save"),
+              ),
+            ),
+          ],
         ),
       ),
     );

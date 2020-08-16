@@ -102,6 +102,7 @@ class _ImportCategoryScreenState extends State<ImportCategoryScreen> {
     }
 
     return Scaffold(
+      backgroundColor: _themeProvider.backgroundColor,
       appBar: AppBar(
         brightness: _themeProvider.getBrightness(),
         centerTitle: true,
