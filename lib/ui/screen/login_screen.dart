@@ -1,7 +1,6 @@
 import 'package:chicpass/localization/app_translations.dart';
 import 'package:chicpass/provider/theme_provider.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_auth_buttons/flutter_auth_buttons.dart';
 import 'package:provider/provider.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -34,16 +33,6 @@ class _LoginScreenState extends State<LoginScreen> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            GoogleSignInButton(
-              onPressed: () {},
-              darkMode: !_themeProvider.isLight,
-            ),
-            AppleSignInButton(
-              onPressed: () {},
-              style: _themeProvider.isLight
-                  ? AppleButtonStyle.black
-                  : AppleButtonStyle.white,
-            ),
           ],
         ),
       ),
