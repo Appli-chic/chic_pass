@@ -1,5 +1,3 @@
-import 'package:chicpass/model/db/category.dart';
-import 'package:chicpass/model/db/entry.dart';
 import 'package:chicpass/model/db/vault.dart';
 import 'package:flutter/material.dart';
 

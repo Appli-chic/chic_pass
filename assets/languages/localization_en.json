@@ -55,5 +55,6 @@
   "warning": "Warning",
   "entry_sure_to_delete": "Do you really want to delete this password?",
   "category_sure_to_delete": "Do you really want to delete this category?",
-  "category_not_empty_error": "This category still contains passwords and then can't be deleted."
+  "category_not_empty_error": "This category still contains passwords and then can't be deleted.",
+  "login": "Login"
 }

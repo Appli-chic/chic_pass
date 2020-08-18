@@ -1,9 +1,39 @@
+import 'package:chicpass/main.dart';
 import 'package:chicpass/utils/constant.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 const MethodChannel _platform = MethodChannel('applichic.com/chicpass');
 
 class Security {
+  static Future<bool> isConnected() async {
+    final storage = FlutterSecureStorage();
+    String refreshToken = await storage.read(key: env.refreshTokenKey);
+
+    return refreshToken != null && refreshToken.isNotEmpty;
+  }
+
+  static Future<String> getRefreshToken() async {
+    final storage = FlutterSecureStorage();
+    return await storage.read(key: env.refreshTokenKey);
+  }
+
+  static Future<void> setRefreshToken(String refreshToken) async {
+    final storage = FlutterSecureStorage();
+    storage.write(key: env.refreshTokenKey, value: refreshToken);
+  }
+
+  static Future<String> getAccessTokenToken() async {
+    final storage = FlutterSecureStorage();
+    return await storage.read(key: env.accessTokenKey);
+  }
+
+  static Future<void> setAccessTokenToken(String refreshToken) async {
+    final storage = FlutterSecureStorage();
+    storage.write(key: env.accessTokenKey, value: refreshToken);
+  }
+
+  // Encryption
 
   static Future<String> encryptSignature(String hash) async {
     var map = Map();

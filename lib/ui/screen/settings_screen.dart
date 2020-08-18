@@ -1,5 +1,3 @@
-import 'dart:collection';
-
 import 'package:chicpass/localization/app_translations.dart';
 import 'package:chicpass/model/db/category.dart';
 import 'package:chicpass/model/db/entry.dart';
@@ -12,7 +10,6 @@ import 'package:chicpass/ui/component/setting_item.dart';
 import 'package:chicpass/utils/imports.dart';
 import 'package:chicpass/utils/security.dart';
 import 'package:file_picker/file_picker.dart';
-import 'package:flutter/foundation.dart' as f;
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 

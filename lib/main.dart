@@ -4,6 +4,7 @@ import 'package:chicpass/ui/screen/biometry_settings_screen.dart';
 import 'package:chicpass/ui/screen/category_passwords_screen.dart';
 import 'package:chicpass/ui/screen/display_screen.dart';
 import 'package:chicpass/ui/screen/import_category_screen.dart';
+import 'package:chicpass/ui/screen/login_screen.dart';
 import 'package:chicpass/ui/screen/main_screen.dart';
 import 'package:chicpass/ui/screen/new_password_screen.dart';
 import 'package:chicpass/ui/screen/new_vault_screen.dart';
@@ -96,6 +97,7 @@ class _AppState extends State<App> {
           '/display_screen': (context) => DisplayScreen(),
           '/import_category_screen': (context) => ImportCategoryScreen(),
           '/biometry_settings_screen': (context) => BiometrySettingsScreen(),
+          '/login_screen': (context) => LoginScreen(),
         },
       ),
     );
