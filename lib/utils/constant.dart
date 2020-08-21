@@ -38,3 +38,6 @@ const categoryList = [
   "home.png",
   "trash.png",
 ];
+
+// CODE ERRORS
+const String ERROR_SERVER = "CODE_ERROR_SERVER";
