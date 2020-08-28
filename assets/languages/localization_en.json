@@ -58,5 +58,6 @@
   "category_not_empty_error": "This category still contains passwords and then can't be deleted.",
   "login": "Login",
   "login_button": "LOGIN",
-  "email": "Email"
+  "email": "Email",
+  "verification_code": "Verification code"
 }

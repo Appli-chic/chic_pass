@@ -58,5 +58,6 @@
   "category_not_empty_error": "Cette catégorie contient encore des mots de passe et ne peut être supprimé.",
   "login": "Se connecter",
   "login_button": "SE CONNECTER",
-  "email": "Courriel"
+  "email": "Courriel",
+  "verification_code": "Code de vérification"
 }

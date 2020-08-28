@@ -17,6 +17,7 @@ class LoginScreen extends StatefulWidget {
 class _LoginScreenState extends State<LoginScreen> {
   ThemeProvider _themeProvider;
   TextEditingController _emailController = TextEditingController();
+  TextEditingController _askingCodeController = TextEditingController();
   bool _isAskingCode = true;
   bool _isLoading = false;
 
@@ -36,7 +37,7 @@ class _LoginScreenState extends State<LoginScreen> {
       isValid = false;
     }
 
-    if(isValid) {
+    if (isValid) {
       try {
         await AuthApi.askCodeToLogin(_emailController.text);
 
@@ -63,11 +64,49 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   _login() async {
+    bool isValid = true;
     setState(() {
       _isLoading = true;
     });
 
     if (!_checkEmailValid(_emailController.text)) {
+      isValid = false;
+    }
+
+    if (isValid) {}
+  }
+
+  Widget _displaysBody() {
+    if(_isAskingCode) {
+      return Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          Input(
+            margin: EdgeInsets.only(top: 2),
+            textController: _emailController,
+            hint: AppTranslations.of(context).text("email"),
+            inputType: TextInputType.emailAddress,
+          ),
+        ],
+      );
+    } else {
+      return Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          Input(
+            margin: EdgeInsets.only(top: 2),
+            textController: _emailController,
+            hint: AppTranslations.of(context).text("email"),
+            inputType: TextInputType.emailAddress,
+          ),
+          Input(
+            margin: EdgeInsets.only(top: 2),
+            textController: _askingCodeController,
+            hint: AppTranslations.of(context).text("verification_code"),
+            inputType: TextInputType.number,
+          ),
+        ],
+      );
     }
   }
 
@@ -95,17 +134,7 @@ class _LoginScreenState extends State<LoginScreen> {
           children: [
             Expanded(
               child: SingleChildScrollView(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Input(
-                      margin: EdgeInsets.only(top: 2),
-                      textController: _emailController,
-                      hint: AppTranslations.of(context).text("email"),
-                      inputType: TextInputType.emailAddress,
-                    ),
-                  ],
-                ),
+                child: _displaysBody(),
               ),
             ),
             Container(
