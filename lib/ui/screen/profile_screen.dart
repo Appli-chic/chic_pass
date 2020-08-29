@@ -1,4 +1,5 @@
 import 'package:chicpass/localization/app_translations.dart';
+import 'package:chicpass/model/db/user.dart';
 import 'package:chicpass/provider/theme_provider.dart';
 import 'package:chicpass/ui/component/dialog_message.dart';
 import 'package:chicpass/ui/component/setting_item.dart';
@@ -14,6 +15,7 @@ class ProfileScreen extends StatefulWidget {
 class _ProfileScreenState extends State<ProfileScreen> {
   ThemeProvider _themeProvider;
   bool _isConnected = false;
+  User _currentUser;
 
   @override
   void initState() {
@@ -23,6 +25,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
   _getConnectionState() async {
     var isConnected = await Security.isConnected();
+    _currentUser = await Security.getCurrentUser();
 
     setState(() {
       _isConnected = isConnected;
@@ -90,7 +93,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
         SettingItem(
           title: AppTranslations.of(context).text("account"),
           hasArrowIcon: false,
-          secondaryText: "applichic@gmail.com",
+          secondaryText: _currentUser.email,
         ),
         SettingItem(
           title: AppTranslations.of(context).text("synchronize_now"),
