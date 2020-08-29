@@ -1,4 +1,7 @@
+import 'dart:convert';
+
 import 'package:chicpass/main.dart';
+import 'package:chicpass/model/db/user.dart';
 import 'package:chicpass/utils/constant.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
@@ -6,6 +9,18 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 const MethodChannel _platform = MethodChannel('applichic.com/chicpass');
 
 class Security {
+  static Future<User> getCurrentUser() async {
+    final storage = FlutterSecureStorage();
+    String userJSON = await storage.read(key: USER_STORAGE_KEY);
+    return User.fromJson(json.decode(userJSON));
+  }
+
+  static setCurrentUser(User user) async {
+    final storage = FlutterSecureStorage();
+    await storage.write(
+        key: USER_STORAGE_KEY, value: json.encode(user.toJson()));
+  }
+
   static Future<bool> isConnected() async {
     final storage = FlutterSecureStorage();
     String refreshToken = await storage.read(key: env.refreshTokenKey);
@@ -37,6 +52,7 @@ class Security {
     final storage = FlutterSecureStorage();
     await storage.delete(key: env.refreshTokenKey);
     await storage.delete(key: env.accessTokenKey);
+    await storage.delete(key: USER_STORAGE_KEY);
   }
 
   // Encryption

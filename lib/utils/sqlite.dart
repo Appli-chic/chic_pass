@@ -1,5 +1,6 @@
 import 'package:chicpass/model/db/category.dart';
 import 'package:chicpass/model/db/entry.dart';
+import 'package:chicpass/model/db/user.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
 
@@ -11,9 +12,12 @@ Database db;
 openChicDatabase() async {
   db = await openDatabase(
     join(await getDatabasesPath(), DATABASE_NAME),
-    version: 10,
+    version: 1,
     onCreate: (db, version) async {
       // Create the structure of the database
+      await db.execute(
+          "CREATE TABLE ${User.tableName}(uid TEXT PRIMARY KEY, email TEXT, created_at DATETIME, updated_at DATETIME) ");
+
       await db.execute(
           "CREATE TABLE ${Vault.tableName}(uid TEXT PRIMARY KEY, name TEXT, signature TEXT, created_at DATETIME, updated_at DATETIME) ");
 

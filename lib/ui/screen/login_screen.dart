@@ -1,4 +1,5 @@
 import 'package:chicpass/api/auth_api.dart';
+import 'package:chicpass/api/user_api.dart';
 import 'package:chicpass/localization/app_translations.dart';
 import 'package:chicpass/model/api_error.dart';
 import 'package:chicpass/provider/theme_provider.dart';
@@ -7,6 +8,7 @@ import 'package:chicpass/ui/component/input.dart';
 import 'package:chicpass/ui/component/loading_dialog.dart';
 import 'package:chicpass/ui/component/rounded_button.dart';
 import 'package:chicpass/utils/constant.dart';
+import 'package:chicpass/utils/security.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -83,13 +85,17 @@ class _LoginScreenState extends State<LoginScreen> {
     }
 
     if (_askingCodeController.text.isEmpty) {
-      errors.add(AppTranslations.of(context).text("error_empty_verification_code"));
+      errors.add(
+          AppTranslations.of(context).text("error_empty_verification_code"));
       isValid = false;
     }
 
     if (isValid) {
       try {
         await AuthApi.login(_emailController.text, _askingCodeController.text);
+        var user = await UserApi.getCurrentUser();
+        await Security.setCurrentUser(user);
+
         Navigator.pop(context);
       } catch (e) {
         setState(() {
