@@ -2,6 +2,7 @@ import 'package:chicpass/api/auth_api.dart';
 import 'package:chicpass/localization/app_translations.dart';
 import 'package:chicpass/model/api_error.dart';
 import 'package:chicpass/provider/theme_provider.dart';
+import 'package:chicpass/ui/component/dialog_message.dart';
 import 'package:chicpass/ui/component/input.dart';
 import 'package:chicpass/ui/component/loading_dialog.dart';
 import 'package:chicpass/ui/component/rounded_button.dart';
@@ -28,12 +29,15 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   _askLoginCode() async {
+    var errors = List<String>();
     bool isValid = true;
+
     setState(() {
       _isLoading = true;
     });
 
     if (!_checkEmailValid(_emailController.text)) {
+      errors.add(AppTranslations.of(context).text("error_email_wrong_format"));
       isValid = false;
     }
 
@@ -50,34 +54,84 @@ class _LoginScreenState extends State<LoginScreen> {
           _isLoading = false;
         });
 
+        DialogMessage.displaysErrorListDialog(
+          [AppTranslations.of(context).text("error_server")],
+          _themeProvider,
+          context,
+        );
+      }
+    } else {
+      setState(() {
+        _isLoading = false;
+      });
+
+      DialogMessage.displaysErrorListDialog(errors, _themeProvider, context);
+    }
+  }
+
+  _login() async {
+    var errors = List<String>();
+    bool isValid = true;
+
+    setState(() {
+      _isLoading = true;
+    });
+
+    if (!_checkEmailValid(_emailController.text)) {
+      errors.add(AppTranslations.of(context).text("error_email_wrong_format"));
+      isValid = false;
+    }
+
+    if (_askingCodeController.text.isEmpty) {
+      errors.add(AppTranslations.of(context).text("error_empty_verification_code"));
+      isValid = false;
+    }
+
+    if (isValid) {
+      try {
+        await AuthApi.login(_emailController.text, _askingCodeController.text);
+        Navigator.pop(context);
+      } catch (e) {
+        setState(() {
+          _isLoading = false;
+        });
+
         if (e is ApiError) {
-          if (e.code == ERROR_SERVER) {
-            // Displays a message
+          if (e.code == CODE_ERROR_VERIFICATION_TOKEN_INVALID) {
+            DialogMessage.displaysErrorListDialog(
+              [
+                AppTranslations.of(context)
+                    .text("error_verification_code_invalid")
+              ],
+              _themeProvider,
+              context,
+            );
+          } else {
+            DialogMessage.displaysErrorListDialog(
+              [AppTranslations.of(context).text("error_server")],
+              _themeProvider,
+              context,
+            );
           }
+        } else {
+          DialogMessage.displaysErrorListDialog(
+            [AppTranslations.of(context).text("error_server")],
+            _themeProvider,
+            context,
+          );
         }
       }
     } else {
       setState(() {
         _isLoading = false;
       });
+
+      DialogMessage.displaysErrorListDialog(errors, _themeProvider, context);
     }
-  }
-
-  _login() async {
-    bool isValid = true;
-    setState(() {
-      _isLoading = true;
-    });
-
-    if (!_checkEmailValid(_emailController.text)) {
-      isValid = false;
-    }
-
-    if (isValid) {}
   }
 
   Widget _displaysBody() {
-    if(_isAskingCode) {
+    if (_isAskingCode) {
       return Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [

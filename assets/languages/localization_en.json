@@ -59,5 +59,10 @@
   "login": "Login",
   "login_button": "LOGIN",
   "email": "Email",
-  "verification_code": "Verification code"
+  "verification_code": "Verification code",
+  "error_email_wrong_format": "Please enter a valid email",
+  "error_empty_verification_code": "Please enter your verification code",
+  "error_server": "An error occured while connecting to the server",
+  "error_verification_code_invalid": "The verification code is invalid",
+  "sure_to_logout": "Do you really want to logout?"
 }

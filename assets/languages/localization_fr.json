@@ -59,5 +59,10 @@
   "login": "Se connecter",
   "login_button": "SE CONNECTER",
   "email": "Courriel",
-  "verification_code": "Code de vérification"
+  "verification_code": "Code de vérification",
+  "error_email_wrong_format": "Veuillez rentrer un courriel valide",
+  "error_empty_verification_code": "Veuillez rentrer votre code de vérification",
+  "error_server": "Une erreur est apparue lors de contact vers notre serveur",
+  "error_verification_code_invalid": "Le code vérification est incorrecte",
+  "sure_to_logout": "Êtes-vous sûr de vouloir vous déconnecter?"
 }

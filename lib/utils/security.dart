@@ -20,7 +20,7 @@ class Security {
 
   static Future<void> setRefreshToken(String refreshToken) async {
     final storage = FlutterSecureStorage();
-    storage.write(key: env.refreshTokenKey, value: refreshToken);
+    await storage.write(key: env.refreshTokenKey, value: refreshToken);
   }
 
   static Future<String> getAccessTokenToken() async {
@@ -30,7 +30,13 @@ class Security {
 
   static Future<void> setAccessTokenToken(String refreshToken) async {
     final storage = FlutterSecureStorage();
-    storage.write(key: env.accessTokenKey, value: refreshToken);
+    await storage.write(key: env.accessTokenKey, value: refreshToken);
+  }
+
+  static Future<void> logout() async {
+    final storage = FlutterSecureStorage();
+    await storage.delete(key: env.refreshTokenKey);
+    await storage.delete(key: env.accessTokenKey);
   }
 
   // Encryption
