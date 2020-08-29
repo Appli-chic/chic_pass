@@ -17,4 +17,10 @@ class VaultService {
       return Vault.fromMap(result[i]);
     });
   }
+
+  static Future<void> updateUserId(Vault vault) async {
+    await sqlQuery("UPDATE ${Vault.tableName} "
+        "SET user_uid = '${vault.userUid}' "
+        "WHERE ${Vault.tableName}.uid = '${vault.uid}' ");
+  }
 }

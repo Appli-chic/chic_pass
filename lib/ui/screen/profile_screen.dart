@@ -1,7 +1,11 @@
+import 'package:chicpass/api/vault_api.dart';
 import 'package:chicpass/localization/app_translations.dart';
 import 'package:chicpass/model/db/user.dart';
+import 'package:chicpass/provider/data_provider.dart';
 import 'package:chicpass/provider/theme_provider.dart';
+import 'package:chicpass/service/vault_service.dart';
 import 'package:chicpass/ui/component/dialog_message.dart';
+import 'package:chicpass/ui/component/loading_dialog.dart';
 import 'package:chicpass/ui/component/setting_item.dart';
 import 'package:chicpass/utils/security.dart';
 import 'package:flutter/material.dart';
@@ -14,6 +18,7 @@ class ProfileScreen extends StatefulWidget {
 
 class _ProfileScreenState extends State<ProfileScreen> {
   ThemeProvider _themeProvider;
+  DataProvider _dataProvider;
   bool _isConnected = false;
   User _currentUser;
 
@@ -72,6 +77,29 @@ class _ProfileScreenState extends State<ProfileScreen> {
     }
   }
 
+  _synchronize() async {
+    _dataProvider.setLoading(true);
+    var user = await Security.getCurrentUser();
+
+    try {
+      var vaults = await VaultService.getAll();
+
+      // Check if vaults have a user ID before to synchronize
+      for (var vault in vaults) {
+        if (vault.userUid == null || vault.userUid.isEmpty) {
+          vault.userUid = user.uid;
+          await VaultService.updateUserId(vault);
+        }
+      }
+
+      await VaultApi.sendVaults(vaults);
+    } catch (e) {
+      print(e);
+    }
+
+    _dataProvider.setLoading(false);
+  }
+
   Widget _displaysBodyWhenNotConnected() {
     return Column(
       children: <Widget>[
@@ -98,6 +126,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
         SettingItem(
           title: AppTranslations.of(context).text("synchronize_now"),
           iconData: Icons.sync,
+          onClick: _synchronize,
         ),
         Container(
           margin: EdgeInsets.only(top: 30),
@@ -134,23 +163,27 @@ class _ProfileScreenState extends State<ProfileScreen> {
   @override
   Widget build(BuildContext context) {
     _themeProvider = Provider.of<ThemeProvider>(context, listen: true);
+    _dataProvider = Provider.of<DataProvider>(context, listen: true);
 
-    return Scaffold(
-      backgroundColor: _themeProvider.backgroundColor,
-      appBar: AppBar(
-        leading: BackButton(
-          color: _themeProvider.textColor,
+    return LoadingDialog(
+      isDisplayed: _dataProvider.isLoading,
+      child: Scaffold(
+        backgroundColor: _themeProvider.backgroundColor,
+        appBar: AppBar(
+          leading: BackButton(
+            color: _themeProvider.textColor,
+          ),
+          brightness: _themeProvider.getBrightness(),
+          backgroundColor: _themeProvider.secondBackgroundColor,
+          title: Text(
+            AppTranslations.of(context).text("profile_title"),
+            style: TextStyle(color: _themeProvider.textColor),
+          ),
+          elevation: 0,
         ),
-        brightness: _themeProvider.getBrightness(),
-        backgroundColor: _themeProvider.secondBackgroundColor,
-        title: Text(
-          AppTranslations.of(context).text("profile_title"),
-          style: TextStyle(color: _themeProvider.textColor),
+        body: SingleChildScrollView(
+          child: _displaysBody(),
         ),
-        elevation: 0,
-      ),
-      body: SingleChildScrollView(
-        child: _displaysBody(),
       ),
     );
   }

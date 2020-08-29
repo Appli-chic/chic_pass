@@ -3,7 +3,7 @@ import 'package:chicpass/model/db/category.dart';
 import 'package:chicpass/provider/data_provider.dart';
 import 'package:chicpass/provider/theme_provider.dart';
 import 'package:chicpass/service/category_service.dart';
-import 'package:chicpass/service/entry_serice.dart';
+import 'package:chicpass/service/entry_service.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 

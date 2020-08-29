@@ -12,7 +12,12 @@ class Security {
   static Future<User> getCurrentUser() async {
     final storage = FlutterSecureStorage();
     String userJSON = await storage.read(key: USER_STORAGE_KEY);
-    return User.fromJson(json.decode(userJSON));
+
+    if (userJSON != null && userJSON.isNotEmpty) {
+      return User.fromJson(json.decode(userJSON));
+    } else {
+      return null;
+    }
   }
 
   static setCurrentUser(User user) async {

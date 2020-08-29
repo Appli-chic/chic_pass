@@ -2,7 +2,7 @@ import 'package:chicpass/localization/app_translations.dart';
 import 'package:chicpass/model/db/entry.dart';
 import 'package:chicpass/provider/data_provider.dart';
 import 'package:chicpass/provider/theme_provider.dart';
-import 'package:chicpass/service/entry_serice.dart';
+import 'package:chicpass/service/entry_service.dart';
 import 'package:chicpass/ui/component/input.dart';
 import 'package:chicpass/ui/component/password_item.dart';
 import 'package:flutter/material.dart';

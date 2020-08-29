@@ -28,7 +28,7 @@ class User {
   }
 
   Map<String, dynamic> toJson() {
-    var dateFormatter = DateFormat('yyyy-MM-dd HH:mm:ss');
+    var dateFormatter = DateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
     String createdAtString = dateFormatter.format(this.createdAt);
     String updatedAtString = dateFormatter.format(this.updatedAt);
 

@@ -1,7 +1,7 @@
 import 'package:chicpass/localization/app_translations.dart';
 import 'package:chicpass/model/db/entry.dart';
 import 'package:chicpass/provider/theme_provider.dart';
-import 'package:chicpass/service/entry_serice.dart';
+import 'package:chicpass/service/entry_service.dart';
 import 'package:chicpass/ui/component/dialog_message.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';

@@ -19,7 +19,7 @@ openChicDatabase() async {
           "CREATE TABLE ${User.tableName}(uid TEXT PRIMARY KEY, email TEXT, created_at DATETIME, updated_at DATETIME) ");
 
       await db.execute(
-          "CREATE TABLE ${Vault.tableName}(uid TEXT PRIMARY KEY, name TEXT, signature TEXT, created_at DATETIME, updated_at DATETIME) ");
+          "CREATE TABLE ${Vault.tableName}(uid TEXT PRIMARY KEY, name TEXT, signature TEXT, created_at DATETIME, updated_at DATETIME, user_uid TEXT, FOREIGN KEY(user_uid) REFERENCES ${User.tableName}(uid)) ");
 
       await db.execute(
           "CREATE TABLE ${Category.tableName}(uid TEXT PRIMARY KEY, title TEXT, icon_name TEXT, created_at DATETIME, updated_at DATETIME, vault_uid TEXT, FOREIGN KEY(vault_uid) REFERENCES ${Vault.tableName}(uid)) ");
