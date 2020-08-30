@@ -5,25 +5,35 @@ import 'package:intl/intl.dart';
 import 'package:uuid/uuid.dart';
 
 const GENERAL_SELECT = "SELECT e.uid, e.title, e.login, e.hash, e.created_at, "
-    "e.updated_at, e.vault_uid, e.category_uid, c.title as c_title, c.icon_name "
+    "e.updated_at, e.deleted_at, e.vault_uid, e.category_uid, c.title as c_title, c.icon_name "
     "FROM ${Entry.tableName} as e "
     "left join ${Category.tableName} as c ON c.uid = e.category_uid ";
 
 class EntryService {
   static Future<void> delete(Entry entry) async {
-    await sqlQuery(
-        "DELETE FROM ${Entry.tableName} WHERE ${Entry.tableName}.uid = '${entry.uid}'");
+    var dateFormatter = new DateFormat('yyyy-MM-dd HH:mm:ss');
+    String deletedAt = dateFormatter.format(DateTime.now());
+
+    await sqlQuery("UPDATE ${Entry.tableName} SET deleted_at = '$deletedAt', "
+        "updated_at = '$deletedAt' "
+        "WHERE ${Entry.tableName}.uid = '${entry.uid}'");
   }
 
   static Future<void> update(Entry entry) async {
     var dateFormatter = new DateFormat('yyyy-MM-dd HH:mm:ss');
     String createdAtString = dateFormatter.format(entry.createdAt);
     String updatedAtString = dateFormatter.format(entry.updatedAt);
+    String deletedAtString;
+
+    if (entry.deletedAt != null) {
+      deletedAtString = dateFormatter.format(entry.deletedAt);
+    }
 
     await sqlQuery("UPDATE ${Entry.tableName} "
         "SET title = '${entry.title}', login = '${entry.login}', "
         "hash = '${entry.hash}', created_at = '$createdAtString', "
-        "updated_at = '$updatedAtString', category_uid = '${entry.categoryUid}' "
+        "updated_at = '$updatedAtString', deleted_at = '$deletedAtString', "
+        "category_uid = '${entry.categoryUid}' "
         "WHERE ${Entry.tableName}.uid = '${entry.uid}' ");
   }
 
@@ -64,6 +74,7 @@ class EntryService {
     var entries = List<Entry>();
     var result = await sqlQuery(GENERAL_SELECT +
         "where e.vault_uid = '$vaultUid' "
+            "and e.deleted_at is null "
             "order by e.title");
 
     for (var data in result) {
@@ -85,6 +96,7 @@ class EntryService {
     var result = await sqlQuery(GENERAL_SELECT +
         "where e.vault_uid = '$vaultUid' "
             "and e.category_uid = '$categoryUid' "
+            "and e.deleted_at is null "
             "order by e.title");
 
     for (var data in result) {

@@ -48,8 +48,8 @@ class _PasswordDialogState extends State<PasswordDialog> {
         _dataProvider.setHash(hash);
         _dataProvider.setVault(widget.vault);
 
-        Navigator.of(context).pop();
         await Navigator.pushNamed(context, '/main_screen');
+        Navigator.of(context).pop();
       } else {
         setState(() {
           _error = AppTranslations.of(context).text("error_incorrect_password");

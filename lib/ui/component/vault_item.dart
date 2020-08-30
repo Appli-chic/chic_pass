@@ -15,19 +15,24 @@ import '../../main.dart';
 class VaultItem extends StatelessWidget {
   final LocalAuthentication auth = LocalAuthentication();
   final storage = FlutterSecureStorage();
+
   final Vault vault;
+  final Function() onTap;
 
   VaultItem({
     @required this.vault,
+    @required this.onTap,
   });
 
-  _askPassword(BuildContext context) {
-    showDialog(
+  _askPassword(BuildContext context) async {
+    await showDialog(
       context: context,
       builder: (_) {
         return PasswordDialog(vault: vault);
       },
     );
+
+    onTap();
   }
 
   _askFingerPrint(BuildContext context, DataProvider dataProvider) async {

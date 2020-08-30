@@ -16,16 +16,16 @@ openChicDatabase() async {
     onCreate: (db, version) async {
       // Create the structure of the database
       await db.execute(
-          "CREATE TABLE ${User.tableName}(uid TEXT PRIMARY KEY, email TEXT, created_at DATETIME, updated_at DATETIME) ");
+          "CREATE TABLE ${User.tableName}(uid TEXT PRIMARY KEY, email TEXT, created_at DATETIME, updated_at DATETIME, deleted_at DATETIME) ");
 
       await db.execute(
-          "CREATE TABLE ${Vault.tableName}(uid TEXT PRIMARY KEY, name TEXT, signature TEXT, created_at DATETIME, updated_at DATETIME, user_uid TEXT, FOREIGN KEY(user_uid) REFERENCES ${User.tableName}(uid)) ");
+          "CREATE TABLE ${Vault.tableName}(uid TEXT PRIMARY KEY, name TEXT, signature TEXT, created_at DATETIME, updated_at DATETIME, deleted_at DATETIME, user_uid TEXT, FOREIGN KEY(user_uid) REFERENCES ${User.tableName}(uid)) ");
 
       await db.execute(
-          "CREATE TABLE ${Category.tableName}(uid TEXT PRIMARY KEY, title TEXT, icon_name TEXT, created_at DATETIME, updated_at DATETIME, vault_uid TEXT, FOREIGN KEY(vault_uid) REFERENCES ${Vault.tableName}(uid)) ");
+          "CREATE TABLE ${Category.tableName}(uid TEXT PRIMARY KEY, title TEXT, icon_name TEXT, created_at DATETIME, updated_at DATETIME, deleted_at DATETIME, vault_uid TEXT, FOREIGN KEY(vault_uid) REFERENCES ${Vault.tableName}(uid)) ");
 
       await db.execute(
-          "CREATE TABLE ${Entry.tableName}(uid TEXT PRIMARY KEY, title TEXT, login TEXT, hash TEXT, created_at DATETIME, updated_at DATETIME, vault_uid TEXT, category_uid TEXT, FOREIGN KEY(vault_uid) REFERENCES ${Vault.tableName}(uid), FOREIGN KEY(category_uid) REFERENCES ${Category.tableName}(uid)) ");
+          "CREATE TABLE ${Entry.tableName}(uid TEXT PRIMARY KEY, title TEXT, login TEXT, hash TEXT, created_at DATETIME, updated_at DATETIME, deleted_at DATETIME, vault_uid TEXT, category_uid TEXT, FOREIGN KEY(vault_uid) REFERENCES ${Vault.tableName}(uid), FOREIGN KEY(category_uid) REFERENCES ${Category.tableName}(uid)) ");
     },
   );
 }

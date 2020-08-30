@@ -4,24 +4,34 @@ import 'package:intl/intl.dart';
 import 'package:uuid/uuid.dart';
 
 const GENERAL_SELECT =
-    "SELECT c.uid, c.title, c.icon_name, c.vault_uid, c.created_at, c.updated_at "
+    "SELECT c.uid, c.title, c.icon_name, c.vault_uid, c.created_at, c.updated_at, c.deleted_at "
     "FROM ${Category.tableName} as c ";
 
 class CategoryService {
   static Future<void> delete(Category category) async {
+    var dateFormatter = new DateFormat('yyyy-MM-dd HH:mm:ss');
+    String deletedAt = dateFormatter.format(DateTime.now());
+
     await sqlQuery(
-        "DELETE FROM ${Category.tableName} WHERE ${Category.tableName}.uid = '${category.uid}'");
+        "UPDATE ${Category.tableName} SET deleted_at = '$deletedAt', "
+        "updated_at = '$deletedAt' "
+        "WHERE ${Category.tableName}.uid = '${category.uid}'");
   }
 
   static Future<void> update(Category category) async {
     var dateFormatter = new DateFormat('yyyy-MM-dd HH:mm:ss');
     String createdAtString = dateFormatter.format(category.createdAt);
     String updatedAtString = dateFormatter.format(category.updatedAt);
+    String deletedAtString;
+
+    if (category.deletedAt != null) {
+      deletedAtString = dateFormatter.format(category.deletedAt);
+    }
 
     await sqlQuery("UPDATE ${Category.tableName} "
         "SET title = '${category.title}', icon_name = '${category.iconName}', "
         "created_at = '$createdAtString', updated_at = '$updatedAtString', "
-        "vault_uid = '${category.vaultUid}' "
+        "deleted_at = '$deletedAtString', vault_uid = '${category.vaultUid}' "
         "WHERE ${Category.tableName}.uid = '${category.uid}' ");
   }
 
@@ -41,15 +51,8 @@ class CategoryService {
   static Future<List<Category>> getAllByVault(String vaultUid) async {
     var data = await sqlQuery(GENERAL_SELECT +
         "where c.vault_uid = '$vaultUid' "
+            "and c.deleted_at is null "
             "order by c.title");
-
-    return List.generate(data.length, (i) {
-      return Category.fromMap(data[i]);
-    });
-  }
-
-  static Future<List<Category>> getAll() async {
-    var data = await getAllRows(Category.tableName);
 
     return List.generate(data.length, (i) {
       return Category.fromMap(data[i]);

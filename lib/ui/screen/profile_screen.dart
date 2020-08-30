@@ -75,6 +75,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
     if (isConfirmed) {
       await Security.logout();
       await _getConnectionState();
+
+      if (_isConnected) {
+        Synchronization.synchronize(_dataProvider);
+      }
     }
   }
 

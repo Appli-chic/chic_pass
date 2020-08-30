@@ -5,7 +5,7 @@ import 'package:uuid/uuid.dart';
 import '../model/db/vault.dart';
 
 const GENERAL_SELECT =
-    "SELECT v.uid, v.name, v.signature, v.user_uid, v.created_at, v.updated_at "
+    "SELECT v.uid, v.name, v.signature, v.user_uid, v.created_at, v.updated_at, v.deleted_at "
     "FROM ${Vault.tableName} as v ";
 
 class VaultService {
@@ -19,7 +19,8 @@ class VaultService {
   }
 
   static Future<List<Vault>> getAll() async {
-    var result = await getAllRows(Vault.tableName);
+    String query = GENERAL_SELECT + " where v.deleted_at is null";
+    var result = await sqlQuery(query);
 
     return List.generate(result.length, (i) {
       return Vault.fromMap(result[i]);

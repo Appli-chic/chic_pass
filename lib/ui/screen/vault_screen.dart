@@ -59,18 +59,15 @@ class _VaultScreenState extends State<VaultScreen> {
       itemBuilder: (BuildContext context, int index) {
         return VaultItem(
           vault: _vaults[index],
+          onTap: _loadVaults,
         );
       },
     );
   }
 
   _addNewVault() async {
-    var result = await Navigator.pushNamed(context, '/new_vault');
-
-    if (result != null && result) {
-      // Refresh the list of vaults
-      _loadVaults();
-    }
+    await Navigator.pushNamed(context, '/new_vault');
+    _loadVaults();
   }
 
   @override

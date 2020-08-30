@@ -13,6 +13,7 @@ class Entry {
   String categoryUid;
   DateTime createdAt;
   DateTime updatedAt;
+  DateTime deletedAt;
   Category category;
 
   Entry({
@@ -24,12 +25,18 @@ class Entry {
     this.categoryUid,
     this.createdAt,
     this.updatedAt,
+    this.deletedAt,
     this.category,
   });
 
   factory Entry.fromJson(Map<String, dynamic> json) {
     var createdAtString = DateTime.parse(json['CreatedAt']);
     var updatedAtString = DateTime.parse(json['UpdatedAt']);
+    var deletedAtString;
+
+    if (json['DeleteddAt'] != null) {
+      deletedAtString = DateTime.parse(json['DeleteddAt']);
+    }
 
     return Entry(
       uid: json['ID'],
@@ -40,6 +47,7 @@ class Entry {
       categoryUid: json['CategoryID'],
       createdAt: createdAtString,
       updatedAt: updatedAtString,
+      deletedAt: deletedAtString,
     );
   }
 
@@ -47,6 +55,11 @@ class Entry {
     var dateFormatter = DateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
     String createdAtString = dateFormatter.format(this.createdAt);
     String updatedAtString = dateFormatter.format(this.updatedAt);
+    String deletedAtString;
+
+    if (this.deletedAt != null) {
+      deletedAtString = dateFormatter.format(this.deletedAt);
+    }
 
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['ID'] = this.uid;
@@ -57,12 +70,18 @@ class Entry {
     data['CategoryID'] = this.categoryUid;
     data['CreatedAt'] = createdAtString;
     data['UpdatedAt'] = updatedAtString;
+    data['DeletedAt'] = deletedAtString;
     return data;
   }
 
   factory Entry.fromMap(Map<String, dynamic> data) {
     var createdAtString = DateTime.parse(data['created_at']);
     var updatedAtString = DateTime.parse(data['updated_at']);
+    var deletedAtString;
+
+    if (data['deleted_at'] != null) {
+      deletedAtString = DateTime.parse(data['deleted_at']);
+    }
 
     return Entry(
       uid: data['uid'],
@@ -73,6 +92,7 @@ class Entry {
       categoryUid: data['category_uid'],
       createdAt: createdAtString,
       updatedAt: updatedAtString,
+      deletedAt: deletedAtString,
     );
   }
 
@@ -80,6 +100,11 @@ class Entry {
     var dateFormatter = DateFormat('yyyy-MM-dd HH:mm:ss');
     String createdAtString = dateFormatter.format(this.createdAt);
     String updatedAtString = dateFormatter.format(this.updatedAt);
+    String deletedAtString;
+
+    if (this.deletedAt != null) {
+      deletedAtString = dateFormatter.format(this.deletedAt);
+    }
 
     return {
       'uid': this.uid,
@@ -90,6 +115,7 @@ class Entry {
       'category_uid': this.categoryUid,
       'created_at': createdAtString,
       'updated_at': updatedAtString,
+      'deleted_at': deletedAtString,
     };
   }
 }

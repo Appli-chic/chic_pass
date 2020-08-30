@@ -35,7 +35,12 @@ class _NewVaultScreenState extends State<NewVaultScreen> {
       errorWidgets.add(
         Container(
           margin: EdgeInsets.only(top: 8),
-          child: Text(error),
+          child: Text(
+            error,
+            style: TextStyle(
+              color: _themeProvider.textColor,
+            ),
+          ),
         ),
       );
     }
@@ -50,7 +55,9 @@ class _NewVaultScreenState extends State<NewVaultScreen> {
       ),
       actions: <Widget>[
         FlatButton(
-          child: Text(AppTranslations.of(context).text("ok")),
+          child: Text(
+            AppTranslations.of(context).text("ok"),
+          ),
           onPressed: () {
             Navigator.of(context).pop();
           },

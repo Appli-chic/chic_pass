@@ -40,7 +40,11 @@ class CategoryApi {
     var client = http.Client();
     var accessToken = await Security.getAccessTokenToken();
     var dateFormatter = DateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
-    String lastSyncString = dateFormatter.format(lastSync);
+    String lastSyncString;
+
+    if (lastSync != null) {
+      lastSyncString = dateFormatter.format(lastSync);
+    }
 
     var response = await client.get(
       "${env.apiUrl}$CATEGORIES?LastSynchro=$lastSyncString",
