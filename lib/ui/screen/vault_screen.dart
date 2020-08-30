@@ -1,8 +1,10 @@
 import 'package:chicpass/localization/app_translations.dart';
 import 'package:chicpass/model/db/vault.dart';
+import 'package:chicpass/provider/data_provider.dart';
 import 'package:chicpass/service/vault_service.dart';
 import 'package:chicpass/provider/theme_provider.dart';
 import 'package:chicpass/ui/component/vault_item.dart';
+import 'package:chicpass/utils/synchronization.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -13,7 +15,22 @@ class VaultScreen extends StatefulWidget {
 
 class _VaultScreenState extends State<VaultScreen> {
   ThemeProvider _themeProvider;
+  DataProvider _dataProvider;
   List<Vault> _vaults = [];
+
+  didChangeDependencies() {
+    super.didChangeDependencies();
+
+    if (_dataProvider == null) {
+      _dataProvider = Provider.of<DataProvider>(context, listen: true);
+      _defineLastSynchronizationDate();
+    }
+  }
+
+  _defineLastSynchronizationDate() async {
+    var date = await Synchronization.getLastSyncDate();
+    _dataProvider.setLastSynchronization(date);
+  }
 
   @override
   void initState() {

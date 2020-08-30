@@ -1,9 +1,7 @@
-import 'package:chicpass/api/vault_api.dart';
 import 'package:chicpass/localization/app_translations.dart';
 import 'package:chicpass/model/db/user.dart';
 import 'package:chicpass/provider/data_provider.dart';
 import 'package:chicpass/provider/theme_provider.dart';
-import 'package:chicpass/service/vault_service.dart';
 import 'package:chicpass/ui/component/dialog_message.dart';
 import 'package:chicpass/ui/component/loading_dialog.dart';
 import 'package:chicpass/ui/component/setting_item.dart';
@@ -99,6 +97,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
   Widget _displaysBodyWhenConnected() {
     return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
         SettingItem(
           title: AppTranslations.of(context).text("account"),
@@ -108,9 +107,16 @@ class _ProfileScreenState extends State<ProfileScreen> {
         SettingItem(
           title: AppTranslations.of(context).text("synchronize_now"),
           iconData: Icons.sync,
+          isIconRotating: _dataProvider.isSynchronizing,
           onClick: () {
             Synchronization.synchronize(_dataProvider);
           },
+        ),
+        SettingItem(
+          title: AppTranslations.of(context).text("last_synchronization"),
+          hasArrowIcon: false,
+          secondaryText: _dataProvider.getLastSynchronization(context),
+          secondaryTextSize: 12,
         ),
         Container(
           margin: EdgeInsets.only(top: 30),

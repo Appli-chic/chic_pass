@@ -13,16 +13,20 @@ import 'package:intl/intl.dart';
 class Synchronization {
   static Future<void> synchronize(DataProvider dataProvider) async {
     try {
+      dataProvider.setSynchronizing(true);
       var lastSyncDate = await getLastSyncDate();
       await push(lastSyncDate, dataProvider);
       await pull(lastSyncDate, dataProvider);
-      await setLastSyncDate();
+      await setLastSyncDate(dataProvider);
 
       dataProvider.reloadHome();
       dataProvider.reloadCategory();
     } catch (e) {
       print(e);
     }
+
+    await Future.delayed(const Duration(seconds: 2));
+    dataProvider.setSynchronizing(false);
   }
 
   static Future<DateTime> getLastSyncDate() async {
@@ -36,13 +40,14 @@ class Synchronization {
     }
   }
 
-  static Future<void> setLastSyncDate() async {
+  static Future<void> setLastSyncDate(DataProvider dataProvider) async {
     final storage = FlutterSecureStorage();
     var today = DateTime.now();
     var dateFormatter = DateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
     String todayString = dateFormatter.format(today);
 
     await storage.write(key: LAST_SYNC_STORAGE_KEY, value: todayString);
+    dataProvider.setLastSynchronization(today);
   }
 
   static Future<void> push(DateTime lastSync, DataProvider dataProvider) async {

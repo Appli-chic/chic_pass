@@ -67,5 +67,6 @@
   "error_empty_verification_code": "Please enter your verification code",
   "error_server": "An error occured while connecting to the server",
   "error_verification_code_invalid": "The verification code is invalid",
-  "sure_to_logout": "Do you really want to logout?"
+  "sure_to_logout": "Do you really want to logout?",
+  "last_synchronization": "Last synchronization"
 }
