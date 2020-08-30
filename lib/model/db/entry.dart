@@ -28,28 +28,35 @@ class Entry {
   });
 
   factory Entry.fromJson(Map<String, dynamic> json) {
+    var createdAtString = DateTime.parse(json['CreatedAt']);
+    var updatedAtString = DateTime.parse(json['UpdatedAt']);
+
     return Entry(
-      uid: json['uid'],
-      title: json['title'],
-      login: json['login'],
-      hash: json['hash'],
-      vaultUid: json['vault_uid'],
-      categoryUid: json['category_uid'],
-      createdAt: json['created_at'],
-      updatedAt: json['updated_at'],
+      uid: json['ID'],
+      title: json['Title'],
+      login: json['Login'],
+      hash: json['Hash'],
+      vaultUid: json['VaultID'],
+      categoryUid: json['CategoryID'],
+      createdAt: createdAtString,
+      updatedAt: updatedAtString,
     );
   }
 
   Map<String, dynamic> toJson() {
+    var dateFormatter = DateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
+    String createdAtString = dateFormatter.format(this.createdAt);
+    String updatedAtString = dateFormatter.format(this.updatedAt);
+
     final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['uid'] = this.uid;
-    data['title'] = this.title;
-    data['login'] = this.login;
-    data['hash'] = this.hash;
-    data['vault_uid'] = this.vaultUid;
-    data['category_uid'] = this.categoryUid;
-    data['created_at'] = this.createdAt;
-    data['updated_at'] = this.updatedAt;
+    data['ID'] = this.uid;
+    data['Title'] = this.title;
+    data['Login'] = this.login;
+    data['Hash'] = this.hash;
+    data['VaultID'] = this.vaultUid;
+    data['CategoryID'] = this.categoryUid;
+    data['CreatedAt'] = createdAtString;
+    data['UpdatedAt'] = updatedAtString;
     return data;
   }
 
@@ -70,7 +77,7 @@ class Entry {
   }
 
   Map<String, dynamic> toMap() {
-    var dateFormatter =  DateFormat('yyyy-MM-dd HH:mm:ss');
+    var dateFormatter = DateFormat('yyyy-MM-dd HH:mm:ss');
     String createdAtString = dateFormatter.format(this.createdAt);
     String updatedAtString = dateFormatter.format(this.updatedAt);
 

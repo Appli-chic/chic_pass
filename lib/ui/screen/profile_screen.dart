@@ -8,6 +8,7 @@ import 'package:chicpass/ui/component/dialog_message.dart';
 import 'package:chicpass/ui/component/loading_dialog.dart';
 import 'package:chicpass/ui/component/setting_item.dart';
 import 'package:chicpass/utils/security.dart';
+import 'package:chicpass/utils/synchronization.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -77,29 +78,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
     }
   }
 
-  _synchronize() async {
-    _dataProvider.setLoading(true);
-    var user = await Security.getCurrentUser();
-
-    try {
-      var vaults = await VaultService.getAll();
-
-      // Check if vaults have a user ID before to synchronize
-      for (var vault in vaults) {
-        if (vault.userUid == null || vault.userUid.isEmpty) {
-          vault.userUid = user.uid;
-          await VaultService.updateUserId(vault);
-        }
-      }
-
-      await VaultApi.sendVaults(vaults);
-    } catch (e) {
-      print(e);
-    }
-
-    _dataProvider.setLoading(false);
-  }
-
   Widget _displaysBodyWhenNotConnected() {
     return Column(
       children: <Widget>[
@@ -126,7 +104,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
         SettingItem(
           title: AppTranslations.of(context).text("synchronize_now"),
           iconData: Icons.sync,
-          onClick: _synchronize,
+          onClick: () {
+            Synchronization.synchronize(_dataProvider);
+          },
         ),
         Container(
           margin: EdgeInsets.only(top: 30),

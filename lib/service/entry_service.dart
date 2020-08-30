@@ -28,8 +28,11 @@ class EntryService {
   }
 
   static Future<void> save(Entry entry) async {
-    var uuid = Uuid();
-    entry.uid = uuid.v4();
+    if (entry.uid == null || entry.uid.isEmpty) {
+      var uuid = Uuid();
+      entry.uid = uuid.v4();
+    }
+
     await addRow(Entry.tableName, entry.toMap());
   }
 
@@ -38,6 +41,22 @@ class EntryService {
 
     return List.generate(result.length, (i) {
       return Entry.fromMap(result[i]);
+    });
+  }
+
+  static Future<List<Entry>> getEntriesToSynchronize(DateTime lastSync) async {
+    String query = GENERAL_SELECT;
+
+    if (lastSync != null) {
+      var dateFormatter = DateFormat('yyyy-MM-dd HH:mm:ss');
+      String lastSyncString = dateFormatter.format(lastSync);
+      query += "where e.updated_at > '$lastSyncString' ";
+    }
+
+    var data = await sqlQuery(query);
+
+    return List.generate(data.length, (i) {
+      return Entry.fromMap(data[i]);
     });
   }
 

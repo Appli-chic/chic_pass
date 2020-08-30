@@ -4,7 +4,7 @@ import 'package:intl/intl.dart';
 import 'package:uuid/uuid.dart';
 
 const GENERAL_SELECT =
-    "SELECT c.uid, c.title, c.icon_name, c.created_at, c.updated_at "
+    "SELECT c.uid, c.title, c.icon_name, c.vault_uid, c.created_at, c.updated_at "
     "FROM ${Category.tableName} as c ";
 
 class CategoryService {
@@ -26,8 +26,11 @@ class CategoryService {
   }
 
   static Future<void> save(Category category) async {
-    var uuid = Uuid();
-    category.uid = uuid.v4();
+    if (category.uid == null || category.uid.isEmpty) {
+      var uuid = Uuid();
+      category.uid = uuid.v4();
+    }
+
     await addRow(Category.tableName, category.toMap());
   }
 
@@ -35,10 +38,35 @@ class CategoryService {
     await addRow(Category.tableName, category.toMap());
   }
 
-  static Future<List<Category>> getAll(String vaultUid) async {
+  static Future<List<Category>> getAllByVault(String vaultUid) async {
     var data = await sqlQuery(GENERAL_SELECT +
         "where c.vault_uid = '$vaultUid' "
             "order by c.title");
+
+    return List.generate(data.length, (i) {
+      return Category.fromMap(data[i]);
+    });
+  }
+
+  static Future<List<Category>> getAll() async {
+    var data = await getAllRows(Category.tableName);
+
+    return List.generate(data.length, (i) {
+      return Category.fromMap(data[i]);
+    });
+  }
+
+  static Future<List<Category>> getCategoriesToSynchronize(
+      DateTime lastSync) async {
+    String query = GENERAL_SELECT;
+
+    if (lastSync != null) {
+      var dateFormatter = DateFormat('yyyy-MM-dd HH:mm:ss');
+      String lastSyncString = dateFormatter.format(lastSync);
+      query += "where c.updated_at > '$lastSyncString' ";
+    }
+
+    var data = await sqlQuery(query);
 
     return List.generate(data.length, (i) {
       return Category.fromMap(data[i]);

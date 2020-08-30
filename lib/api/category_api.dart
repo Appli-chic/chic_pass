@@ -1,28 +1,28 @@
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:chicpass/api/auth_api.dart';
 import 'package:chicpass/model/api_error.dart';
-import 'package:chicpass/model/db/vault.dart';
-import 'package:chicpass/service/vault_service.dart';
+import 'package:chicpass/model/db/category.dart';
+import 'package:chicpass/service/category_service.dart';
 import 'package:chicpass/utils/security.dart';
 import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
 
 import '../main.dart';
+import 'auth_api.dart';
 
-const String VAULTS = "api/vaults";
+const String CATEGORIES = "api/categories";
 
-class VaultApi {
-  static Future<void> sendVaults(List<Vault> vaults) async {
+class CategoryApi {
+  static Future<void> sendCategories(List<Category> categories) async {
     var client = http.Client();
     var accessToken = await Security.getAccessTokenToken();
 
     var response = await client.post(
-      "${env.apiUrl}$VAULTS",
+      "${env.apiUrl}$CATEGORIES",
       headers: {HttpHeaders.authorizationHeader: "Bearer $accessToken"},
       body: json.encode({
-        "vaults": vaults.map((v) => v.toJson()).toList(),
+        "categories": categories.map((v) => v.toJson()).toList(),
       }),
     );
 
@@ -30,35 +30,35 @@ class VaultApi {
       return;
     } else if (response.statusCode == 401) {
       await AuthApi.refreshAccessToken();
-      return await sendVaults(vaults);
+      return await sendCategories(categories);
     } else {
       throw ApiError.fromJson(json.decode(response.body));
     }
   }
 
-  static Future<void> synchronizeVaults(DateTime lastSync) async {
+  static Future<void> synchronizeCategories(DateTime lastSync) async {
     var client = http.Client();
     var accessToken = await Security.getAccessTokenToken();
     var dateFormatter = DateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
     String lastSyncString = dateFormatter.format(lastSync);
 
     var response = await client.get(
-      "${env.apiUrl}$VAULTS?LastSynchro=$lastSyncString",
+      "${env.apiUrl}$CATEGORIES?LastSynchro=$lastSyncString",
       headers: {HttpHeaders.authorizationHeader: "Bearer $accessToken"},
     );
 
     if (response.statusCode == 200) {
-      List<dynamic> dataList = json.decode(response.body)["vaults"];
+      List<dynamic> dataList = json.decode(response.body)["categories"];
 
       for (var data in dataList) {
-        var vault = Vault.fromJson(data);
-        await VaultService.save(vault);
+        var category = Category.fromJson(data);
+        await CategoryService.save(category);
       }
 
       return;
     } else if (response.statusCode == 401) {
       await AuthApi.refreshAccessToken();
-      return await synchronizeVaults(lastSync);
+      return await synchronizeCategories(lastSync);
     } else {
       throw ApiError.fromJson(json.decode(response.body));
     }

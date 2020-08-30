@@ -51,7 +51,7 @@ class _EntryDetailsScreenState extends State<EntryDetailsScreen> {
   }
 
   _loadCategories() async {
-    _categories = await CategoryService.getAll(_dataProvider.vault.uid);
+    _categories = await CategoryService.getAllByVault(_dataProvider.vault.uid);
 
     List<String> categoryStringList = [];
     _categories.forEach((c) {

@@ -35,7 +35,7 @@ class _ImportCategoryScreenState extends State<ImportCategoryScreen> {
   }
 
   _loadCategories() async {
-    _categories = await CategoryService.getAll(_dataProvider.vault.uid);
+    _categories = await CategoryService.getAllByVault(_dataProvider.vault.uid);
 
     List<String> categoryStringList = [];
     _categories.forEach((c) {

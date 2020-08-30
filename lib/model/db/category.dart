@@ -6,38 +6,45 @@ class Category {
   String uid;
   String title;
   String iconName;
+  String vaultUid;
   DateTime createdAt;
   DateTime updatedAt;
-  String vaultUid;
 
   Category({
     this.uid,
     this.title,
     this.iconName,
+    this.vaultUid,
     this.createdAt,
     this.updatedAt,
-    this.vaultUid,
   });
 
   factory Category.fromJson(Map<String, dynamic> json) {
+    var createdAtString = DateTime.parse(json['CreatedAt']);
+    var updatedAtString = DateTime.parse(json['UpdatedAt']);
+
     return Category(
-      uid: json['uid'],
-      title: json['title'],
-      iconName: json['icon_name'],
-      createdAt: json['created_at'],
-      updatedAt: json['updated_at'],
-      vaultUid: json['vault_uid'],
+      uid: json['ID'],
+      title: json['Title'],
+      iconName: json['IconName'],
+      vaultUid: json['VaultID'],
+      createdAt: createdAtString,
+      updatedAt: updatedAtString,
     );
   }
 
   Map<String, dynamic> toJson() {
+    var dateFormatter = DateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
+    String createdAtString = dateFormatter.format(this.createdAt);
+    String updatedAtString = dateFormatter.format(this.updatedAt);
+
     final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['uid'] = this.uid;
-    data['title'] = this.title;
-    data['icon_name'] = this.iconName;
-    data['created_at'] = this.createdAt;
-    data['updated_at'] = this.updatedAt;
-    data['vault_uid'] = this.vaultUid;
+    data['ID'] = this.uid;
+    data['Title'] = this.title;
+    data['IconName'] = this.iconName;
+    data['VaultID'] = this.vaultUid;
+    data['CreatedAt'] = createdAtString;
+    data['UpdatedAt'] = updatedAtString;
     return data;
   }
 
@@ -49,14 +56,14 @@ class Category {
       uid: data['uid'],
       title: data['title'],
       iconName: data['icon_name'],
+      vaultUid: data['vault_uid'],
       createdAt: createdAtString,
       updatedAt: updatedAtString,
-      vaultUid: data['vault_uid'],
     );
   }
 
   Map<String, dynamic> toMap() {
-    var dateFormatter =  DateFormat('yyyy-MM-dd HH:mm:ss');
+    var dateFormatter = DateFormat('yyyy-MM-dd HH:mm:ss');
     String createdAtString = dateFormatter.format(this.createdAt);
     String updatedAtString = dateFormatter.format(this.updatedAt);
 
@@ -64,9 +71,9 @@ class Category {
       'uid': this.uid,
       'title': this.title,
       'icon_name': this.iconName,
+      'vault_uid': vaultUid,
       'created_at': createdAtString,
       'updated_at': updatedAtString,
-      'vault_uid': vaultUid,
     };
   }
 }
