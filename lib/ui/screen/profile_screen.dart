@@ -75,10 +75,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
     if (isConfirmed) {
       await Security.logout();
       await _getConnectionState();
-
-      if (_isConnected) {
-        Synchronization.synchronize(_dataProvider);
-      }
     }
   }
 
@@ -91,6 +87,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
           onClick: () async {
             await Navigator.pushNamed(context, '/login_screen');
             await _getConnectionState();
+
+            if (_isConnected) {
+              Synchronization.synchronize(_dataProvider);
+            }
           },
         ),
       ],

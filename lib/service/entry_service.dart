@@ -1,6 +1,8 @@
 import 'package:chicpass/model/db/category.dart';
 import 'package:chicpass/model/db/entry.dart';
+import 'package:chicpass/provider/data_provider.dart';
 import 'package:chicpass/utils/sqlite.dart';
+import 'package:chicpass/utils/synchronization.dart';
 import 'package:intl/intl.dart';
 import 'package:uuid/uuid.dart';
 
@@ -10,16 +12,18 @@ const GENERAL_SELECT = "SELECT e.uid, e.title, e.login, e.hash, e.created_at, "
     "left join ${Category.tableName} as c ON c.uid = e.category_uid ";
 
 class EntryService {
-  static Future<void> delete(Entry entry) async {
+  static Future<void> delete(Entry entry, DataProvider dataProvider) async {
     var dateFormatter = new DateFormat('yyyy-MM-dd HH:mm:ss');
     String deletedAt = dateFormatter.format(DateTime.now());
 
     await sqlQuery("UPDATE ${Entry.tableName} SET deleted_at = '$deletedAt', "
         "updated_at = '$deletedAt' "
         "WHERE ${Entry.tableName}.uid = '${entry.uid}'");
+
+    Synchronization.synchronize(dataProvider);
   }
 
-  static Future<void> update(Entry entry) async {
+  static Future<void> update(Entry entry, DataProvider dataProvider) async {
     var dateFormatter = new DateFormat('yyyy-MM-dd HH:mm:ss');
     String createdAtString = dateFormatter.format(entry.createdAt);
     String updatedAtString = dateFormatter.format(entry.updatedAt);
@@ -35,15 +39,18 @@ class EntryService {
         "updated_at = '$updatedAtString', deleted_at = '$deletedAtString', "
         "category_uid = '${entry.categoryUid}' "
         "WHERE ${Entry.tableName}.uid = '${entry.uid}' ");
+
+    Synchronization.synchronize(dataProvider);
   }
 
-  static Future<void> save(Entry entry) async {
+  static Future<void> save(Entry entry, DataProvider dataProvider) async {
     if (entry.uid == null || entry.uid.isEmpty) {
       var uuid = Uuid();
       entry.uid = uuid.v4();
     }
 
     await addRow(Entry.tableName, entry.toMap());
+    Synchronization.synchronize(dataProvider);
   }
 
   static Future<List<Entry>> getAll() async {

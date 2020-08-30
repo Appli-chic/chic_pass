@@ -9,6 +9,7 @@ import 'package:chicpass/ui/component/loading_dialog.dart';
 import 'package:chicpass/ui/component/setting_item.dart';
 import 'package:chicpass/utils/imports.dart';
 import 'package:chicpass/utils/security.dart';
+import 'package:chicpass/utils/synchronization.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -48,8 +49,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
           for (var i = 0; i < (newCategoryList as List<Category>).length; i++) {
             var oldCategoryId = categoryList[i];
 
-            for(var entry in entryList)  {
-              if(entry.categoryUid == oldCategoryId.uid) {
+            for (var entry in entryList) {
+              if (entry.categoryUid == oldCategoryId.uid) {
                 entry.categoryUid = (newCategoryList as List<Category>)[i].uid;
               }
             }
@@ -58,6 +59,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
           // Save in the local database using a different thread
           await _addCategories(newCategoryList);
           await _addEntries(entryList);
+          Synchronization.synchronize(_dataProvider);
 
           _dataProvider.reloadHome();
           _dataProvider.reloadCategory();
@@ -74,7 +76,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
     for (var category in categories) {
       try {
         category.vaultUid = _dataProvider.vault.uid;
-        await CategoryService.saveWithUidDefined(category);
+        await CategoryService.saveWithUidDefined(category, _dataProvider);
       } catch (e) {
         print(e);
       }
@@ -86,7 +88,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
       try {
         entry.hash =
             await Security.encryptPassword(_dataProvider.hash, entry.hash);
-        await EntryService.save(entry);
+        await EntryService.save(entry, _dataProvider);
       } catch (e) {
         print(e);
       }

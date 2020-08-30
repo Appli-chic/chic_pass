@@ -1,4 +1,6 @@
+import 'package:chicpass/provider/data_provider.dart';
 import 'package:chicpass/utils/sqlite.dart';
+import 'package:chicpass/utils/synchronization.dart';
 import 'package:intl/intl.dart';
 import 'package:uuid/uuid.dart';
 
@@ -9,13 +11,25 @@ const GENERAL_SELECT =
     "FROM ${Vault.tableName} as v ";
 
 class VaultService {
-  static Future<void> save(Vault vault) async {
+  static Future<void> delete(Vault vault, DataProvider dataProvider) async {
+    var dateFormatter = new DateFormat('yyyy-MM-dd HH:mm:ss');
+    String deletedAt = dateFormatter.format(DateTime.now());
+
+    await sqlQuery("UPDATE ${Vault.tableName} SET deleted_at = '$deletedAt', "
+        "updated_at = '$deletedAt' "
+        "WHERE ${Vault.tableName}.uid = '${vault.uid}'");
+
+    Synchronization.synchronize(dataProvider);
+  }
+
+  static Future<void> save(Vault vault, DataProvider dataProvider) async {
     if (vault.uid == null || vault.uid.isEmpty) {
       var uuid = Uuid();
       vault.uid = uuid.v4();
     }
 
     await addRow(Vault.tableName, vault.toMap());
+    Synchronization.synchronize(dataProvider);
   }
 
   static Future<List<Vault>> getAll() async {
@@ -43,9 +57,12 @@ class VaultService {
     });
   }
 
-  static Future<void> updateUserId(Vault vault) async {
+  static Future<void> updateUserId(
+      Vault vault, DataProvider dataProvider) async {
     await sqlQuery("UPDATE ${Vault.tableName} "
         "SET user_uid = '${vault.userUid}' "
         "WHERE ${Vault.tableName}.uid = '${vault.uid}' ");
+
+    Synchronization.synchronize(dataProvider);
   }
 }

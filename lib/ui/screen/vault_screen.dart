@@ -26,6 +26,14 @@ class _VaultScreenState extends State<VaultScreen> {
     setState(() {});
   }
 
+  _onDismiss(Vault vault) {
+    try {
+      _vaults.remove(_vaults.where((e) => e.uid == vault.uid).toList()[0]);
+    } catch (e) {
+      print(e);
+    }
+  }
+
   Widget _displaysEmptyVaults() {
     return Center(
       child: Column(
@@ -54,14 +62,18 @@ class _VaultScreenState extends State<VaultScreen> {
   }
 
   Widget _displaysVaults() {
-    return ListView.builder(
-      itemCount: _vaults.length,
-      itemBuilder: (BuildContext context, int index) {
-        return VaultItem(
-          vault: _vaults[index],
-          onTap: _loadVaults,
-        );
-      },
+    return Container(
+      margin: EdgeInsets.only(top: 8),
+      child: ListView.builder(
+        itemCount: _vaults.length,
+        itemBuilder: (BuildContext context, int index) {
+          return VaultItem(
+            vault: _vaults[index],
+            onTap: _loadVaults,
+            onDismiss: _onDismiss,
+          );
+        },
+      ),
     );
   }
 

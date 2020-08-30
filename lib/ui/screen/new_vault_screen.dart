@@ -1,4 +1,5 @@
 import 'package:chicpass/localization/app_translations.dart';
+import 'package:chicpass/provider/data_provider.dart';
 import 'package:chicpass/provider/theme_provider.dart';
 import 'package:chicpass/service/vault_service.dart';
 import 'package:chicpass/ui/component/dialog_message.dart';
@@ -18,6 +19,7 @@ class NewVaultScreen extends StatefulWidget {
 
 class _NewVaultScreenState extends State<NewVaultScreen> {
   ThemeProvider _themeProvider;
+  DataProvider _dataProvider;
   bool _isPasswordHidden = true;
   TextEditingController _nameController = TextEditingController();
   TextEditingController _passwordController = TextEditingController();
@@ -91,6 +93,7 @@ class _NewVaultScreenState extends State<NewVaultScreen> {
           createdAt: DateTime.now(),
           updatedAt: DateTime.now(),
         ),
+        _dataProvider,
       );
 
       Navigator.pop(context, true);
@@ -106,6 +109,7 @@ class _NewVaultScreenState extends State<NewVaultScreen> {
   @override
   Widget build(BuildContext context) {
     _themeProvider = Provider.of<ThemeProvider>(context, listen: true);
+    _dataProvider = Provider.of<DataProvider>(context, listen: true);
 
     return LoadingDialog(
       isDisplayed: _isLoading,

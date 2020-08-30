@@ -71,8 +71,9 @@ class CategoryItem extends StatelessWidget {
     DialogMessage.displaysErrorListDialog(errors, themeProvider, context);
   }
 
-  _onDismiss(BuildContext context, ThemeProvider themeProvider) async {
-    await CategoryService.delete(category);
+  _onDismiss(BuildContext context, ThemeProvider themeProvider,
+      DataProvider dataProvider) async {
+    await CategoryService.delete(category, dataProvider);
     onDismiss(category);
   }
 
@@ -94,7 +95,7 @@ class CategoryItem extends StatelessWidget {
             direction, context, themeProvider, dataProvider);
       },
       onDismissed: (direction) {
-        _onDismiss(context, themeProvider);
+        _onDismiss(context, themeProvider, dataProvider);
       },
       secondaryBackground: Container(
         alignment: Alignment.centerRight,

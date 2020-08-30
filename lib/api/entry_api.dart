@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:chicpass/model/api_error.dart';
 import 'package:chicpass/model/db/category.dart';
 import 'package:chicpass/model/db/entry.dart';
+import 'package:chicpass/provider/data_provider.dart';
 import 'package:chicpass/service/entry_service.dart';
 import 'package:chicpass/utils/security.dart';
 import 'package:http/http.dart' as http;
@@ -37,7 +38,7 @@ class EntryApi {
     }
   }
 
-  static Future<void> synchronizeEntries(DateTime lastSync) async {
+  static Future<void> synchronizeEntries(DateTime lastSync, DataProvider dataProvider) async {
     var client = http.Client();
     var accessToken = await Security.getAccessTokenToken();
     var dateFormatter = DateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
@@ -57,13 +58,13 @@ class EntryApi {
 
       for (var data in dataList) {
         var entry = Entry.fromJson(data);
-        await EntryService.save(entry);
+        await EntryService.save(entry, dataProvider);
       }
 
       return;
     } else if (response.statusCode == 401) {
       await AuthApi.refreshAccessToken();
-      return await synchronizeEntries(lastSync);
+      return await synchronizeEntries(lastSync, dataProvider);
     } else {
       throw ApiError.fromJson(json.decode(response.body));
     }

@@ -14,8 +14,8 @@ class Synchronization {
   static Future<void> synchronize(DataProvider dataProvider) async {
     try {
       var lastSyncDate = await getLastSyncDate();
-      await push(lastSyncDate);
-      await pull(lastSyncDate);
+      await push(lastSyncDate, dataProvider);
+      await pull(lastSyncDate, dataProvider);
       await setLastSyncDate();
 
       dataProvider.reloadHome();
@@ -45,7 +45,7 @@ class Synchronization {
     await storage.write(key: LAST_SYNC_STORAGE_KEY, value: todayString);
   }
 
-  static Future<void> push(DateTime lastSync) async {
+  static Future<void> push(DateTime lastSync, DataProvider dataProvider) async {
     var user = await Security.getCurrentUser();
 
     // Retrieve data to synchronize from the sqlite
@@ -57,7 +57,7 @@ class Synchronization {
     for (var vault in vaults) {
       if (vault.userUid == null || vault.userUid.isEmpty) {
         vault.userUid = user.uid;
-        await VaultService.updateUserId(vault);
+        await VaultService.updateUserId(vault, dataProvider);
       }
     }
 
@@ -75,9 +75,9 @@ class Synchronization {
     }
   }
 
-  static Future<void> pull(DateTime lastSync) async {
-    await VaultApi.synchronizeVaults(lastSync);
-    await CategoryApi.synchronizeCategories(lastSync);
-    await EntryApi.synchronizeEntries(lastSync);
+  static Future<void> pull(DateTime lastSync, DataProvider dataProvider) async {
+    await VaultApi.synchronizeVaults(lastSync, dataProvider);
+    await CategoryApi.synchronizeCategories(lastSync, dataProvider);
+    await EntryApi.synchronizeEntries(lastSync, dataProvider);
   }
 }

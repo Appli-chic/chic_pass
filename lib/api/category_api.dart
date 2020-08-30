@@ -3,6 +3,7 @@ import 'dart:io';
 
 import 'package:chicpass/model/api_error.dart';
 import 'package:chicpass/model/db/category.dart';
+import 'package:chicpass/provider/data_provider.dart';
 import 'package:chicpass/service/category_service.dart';
 import 'package:chicpass/utils/security.dart';
 import 'package:http/http.dart' as http;
@@ -36,7 +37,7 @@ class CategoryApi {
     }
   }
 
-  static Future<void> synchronizeCategories(DateTime lastSync) async {
+  static Future<void> synchronizeCategories(DateTime lastSync, DataProvider dataProvider) async {
     var client = http.Client();
     var accessToken = await Security.getAccessTokenToken();
     var dateFormatter = DateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
@@ -56,13 +57,13 @@ class CategoryApi {
 
       for (var data in dataList) {
         var category = Category.fromJson(data);
-        await CategoryService.save(category);
+        await CategoryService.save(category, dataProvider);
       }
 
       return;
     } else if (response.statusCode == 401) {
       await AuthApi.refreshAccessToken();
-      return await synchronizeCategories(lastSync);
+      return await synchronizeCategories(lastSync, dataProvider);
     } else {
       throw ApiError.fromJson(json.decode(response.body));
     }

@@ -114,7 +114,7 @@ class _NewPasswordScreenState extends State<NewPasswordScreen> {
         createdAt: DateTime.now(),
       );
 
-      await EntryService.save(entry);
+      await EntryService.save(entry, _dataProvider);
       Navigator.pop(context, entry);
     } else {
       setState(() {

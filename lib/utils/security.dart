@@ -5,10 +5,29 @@ import 'package:chicpass/model/db/user.dart';
 import 'package:chicpass/utils/constant.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 const MethodChannel _platform = MethodChannel('applichic.com/chicpass');
 
 class Security {
+  static Future<void> clearSecureStorageOnReinstall() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+
+    try {
+      if (!prefs.getBool(HAS_RUN_BEFORE_STORAGE_KEY)) {
+        clearSecureStorage(prefs);
+      }
+    } catch (e) {
+      clearSecureStorage(prefs);
+    }
+  }
+
+  static Future<void> clearSecureStorage(SharedPreferences prefs) async {
+    FlutterSecureStorage storage = FlutterSecureStorage();
+    await storage.deleteAll();
+    prefs.setBool(HAS_RUN_BEFORE_STORAGE_KEY, true);
+  }
+
   static Future<User> getCurrentUser() async {
     final storage = FlutterSecureStorage();
     String userJSON = await storage.read(key: USER_STORAGE_KEY);

@@ -48,7 +48,7 @@ class _NewCategoryScreenState extends State<NewCategoryScreen> {
         vaultUid: _dataProvider.vault.uid,
       );
 
-      await CategoryService.save(category);
+      await CategoryService.save(category, _dataProvider);
       Navigator.pop(context, category);
     } else {
       setState(() {
@@ -81,7 +81,7 @@ class _NewCategoryScreenState extends State<NewCategoryScreen> {
         vaultUid: _dataProvider.vault.uid,
       );
 
-      await CategoryService.update(category);
+      await CategoryService.update(category, _dataProvider);
       _dataProvider.reloadHome();
       _dataProvider.reloadCategory();
 

@@ -138,7 +138,7 @@ class _EntryDetailsScreenState extends State<EntryDetailsScreen> {
             Navigator.of(context).pop();
 
             try {
-              await EntryService.delete(_entry);
+              await EntryService.delete(_entry, _dataProvider);
             } catch (e) {
               print(e);
             }
@@ -196,7 +196,7 @@ class _EntryDetailsScreenState extends State<EntryDetailsScreen> {
         createdAt: DateTime.now(),
       );
 
-      await EntryService.update(entry);
+      await EntryService.update(entry, _dataProvider);
       _dataProvider.reloadHome();
       _dataProvider.reloadCategory();
 

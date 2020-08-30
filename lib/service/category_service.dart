@@ -1,5 +1,7 @@
 import 'package:chicpass/model/db/category.dart';
+import 'package:chicpass/provider/data_provider.dart';
 import 'package:chicpass/utils/sqlite.dart';
+import 'package:chicpass/utils/synchronization.dart';
 import 'package:intl/intl.dart';
 import 'package:uuid/uuid.dart';
 
@@ -8,7 +10,8 @@ const GENERAL_SELECT =
     "FROM ${Category.tableName} as c ";
 
 class CategoryService {
-  static Future<void> delete(Category category) async {
+  static Future<void> delete(
+      Category category, DataProvider dataProvider) async {
     var dateFormatter = new DateFormat('yyyy-MM-dd HH:mm:ss');
     String deletedAt = dateFormatter.format(DateTime.now());
 
@@ -16,9 +19,12 @@ class CategoryService {
         "UPDATE ${Category.tableName} SET deleted_at = '$deletedAt', "
         "updated_at = '$deletedAt' "
         "WHERE ${Category.tableName}.uid = '${category.uid}'");
+
+    Synchronization.synchronize(dataProvider);
   }
 
-  static Future<void> update(Category category) async {
+  static Future<void> update(
+      Category category, DataProvider dataProvider) async {
     var dateFormatter = new DateFormat('yyyy-MM-dd HH:mm:ss');
     String createdAtString = dateFormatter.format(category.createdAt);
     String updatedAtString = dateFormatter.format(category.updatedAt);
@@ -33,19 +39,24 @@ class CategoryService {
         "created_at = '$createdAtString', updated_at = '$updatedAtString', "
         "deleted_at = '$deletedAtString', vault_uid = '${category.vaultUid}' "
         "WHERE ${Category.tableName}.uid = '${category.uid}' ");
+
+    Synchronization.synchronize(dataProvider);
   }
 
-  static Future<void> save(Category category) async {
+  static Future<void> save(Category category, DataProvider dataProvider) async {
     if (category.uid == null || category.uid.isEmpty) {
       var uuid = Uuid();
       category.uid = uuid.v4();
     }
 
     await addRow(Category.tableName, category.toMap());
+    Synchronization.synchronize(dataProvider);
   }
 
-  static Future<void> saveWithUidDefined(Category category) async {
+  static Future<void> saveWithUidDefined(
+      Category category, DataProvider dataProvider) async {
     await addRow(Category.tableName, category.toMap());
+    Synchronization.synchronize(dataProvider);
   }
 
   static Future<List<Category>> getAllByVault(String vaultUid) async {

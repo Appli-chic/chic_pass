@@ -8,6 +8,7 @@ import 'package:chicpass/ui/screen/login_screen.dart';
 import 'package:chicpass/ui/screen/main_screen.dart';
 import 'package:chicpass/ui/screen/new_password_screen.dart';
 import 'package:chicpass/ui/screen/new_vault_screen.dart';
+import 'package:chicpass/utils/security.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:provider/provider.dart';
@@ -25,6 +26,7 @@ Env env = Env();
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await openChicDatabase();
+  await Security.clearSecureStorageOnReinstall();
   runApp(App());
 }
 

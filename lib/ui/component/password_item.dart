@@ -1,5 +1,6 @@
 import 'package:chicpass/localization/app_translations.dart';
 import 'package:chicpass/model/db/entry.dart';
+import 'package:chicpass/provider/data_provider.dart';
 import 'package:chicpass/provider/theme_provider.dart';
 import 'package:chicpass/service/entry_service.dart';
 import 'package:chicpass/ui/component/dialog_message.dart';
@@ -51,14 +52,16 @@ class PasswordItem extends StatelessWidget {
     );
   }
 
-  _onDismiss(BuildContext context, ThemeProvider themeProvider) async {
-    await EntryService.delete(entry);
+  _onDismiss(BuildContext context, ThemeProvider themeProvider,
+      DataProvider dataProvider) async {
+    await EntryService.delete(entry, dataProvider);
     onDismiss(entry);
   }
 
   @override
   Widget build(BuildContext context) {
     var themeProvider = Provider.of<ThemeProvider>(context, listen: true);
+    var dataProvider = Provider.of<DataProvider>(context, listen: true);
 
     return Dismissible(
       key: Key("password_item${entry.uid}"),
@@ -72,7 +75,7 @@ class PasswordItem extends StatelessWidget {
         return _onConfirmDismiss(direction, context, themeProvider);
       },
       onDismissed: (direction) {
-        _onDismiss(context, themeProvider);
+        _onDismiss(context, themeProvider, dataProvider);
       },
       secondaryBackground: Container(
         alignment: Alignment.centerRight,

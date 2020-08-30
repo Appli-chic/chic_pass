@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:chicpass/api/auth_api.dart';
 import 'package:chicpass/model/api_error.dart';
 import 'package:chicpass/model/db/vault.dart';
+import 'package:chicpass/provider/data_provider.dart';
 import 'package:chicpass/service/vault_service.dart';
 import 'package:chicpass/utils/security.dart';
 import 'package:http/http.dart' as http;
@@ -36,13 +37,14 @@ class VaultApi {
     }
   }
 
-  static Future<void> synchronizeVaults(DateTime lastSync) async {
+  static Future<void> synchronizeVaults(
+      DateTime lastSync, DataProvider dataProvider) async {
     var client = http.Client();
     var accessToken = await Security.getAccessTokenToken();
     var dateFormatter = DateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
     String lastSyncString;
 
-    if(lastSync != null) {
+    if (lastSync != null) {
       lastSyncString = dateFormatter.format(lastSync);
     }
 
@@ -56,13 +58,13 @@ class VaultApi {
 
       for (var data in dataList) {
         var vault = Vault.fromJson(data);
-        await VaultService.save(vault);
+        await VaultService.save(vault, dataProvider);
       }
 
       return;
     } else if (response.statusCode == 401) {
       await AuthApi.refreshAccessToken();
-      return await synchronizeVaults(lastSync);
+      return await synchronizeVaults(lastSync, dataProvider);
     } else {
       throw ApiError.fromJson(json.decode(response.body));
     }

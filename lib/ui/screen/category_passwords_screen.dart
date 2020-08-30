@@ -146,7 +146,7 @@ class _CategoryPasswordsScreenState extends State<CategoryPasswordsScreen> {
             ),
             onPressed: () async {
               if (await _onConfirmDismiss()) {
-                await CategoryService.delete(_category);
+                await CategoryService.delete(_category, _dataProvider);
                 _dataProvider.reloadHome();
                 _dataProvider.reloadCategory();
 
