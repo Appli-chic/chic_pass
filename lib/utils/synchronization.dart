@@ -18,15 +18,14 @@ class Synchronization {
       await push(lastSyncDate, dataProvider);
       await pull(lastSyncDate, dataProvider);
       await setLastSyncDate(dataProvider);
-
-      dataProvider.reloadHome();
-      dataProvider.reloadCategory();
     } catch (e) {
       print(e);
     }
 
-    await Future.delayed(const Duration(seconds: 2));
+    await Future.delayed(const Duration(seconds: 1));
     dataProvider.setSynchronizing(false);
+    dataProvider.reloadHome();
+    dataProvider.reloadCategory();
   }
 
   static Future<DateTime> getLastSyncDate() async {
