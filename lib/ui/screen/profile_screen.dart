@@ -109,7 +109,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
           iconData: Icons.sync,
           isIconRotating: _dataProvider.isSynchronizing,
           onClick: () {
-            Synchronization.synchronize(_dataProvider);
+            Synchronization.synchronize(_dataProvider,
+                isFullSynchronization: true);
           },
         ),
         SettingItem(
