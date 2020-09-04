@@ -11,21 +11,29 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:intl/intl.dart';
 
 class Synchronization {
-  static Future<void> synchronize(DataProvider dataProvider) async {
-    try {
-      dataProvider.setSynchronizing(true);
-      var lastSyncDate = await getLastSyncDate();
-      await push(lastSyncDate, dataProvider);
-      await pull(lastSyncDate, dataProvider);
-      await setLastSyncDate(dataProvider);
-    } catch (e) {
-      print(e);
-    }
+  static Future<void> synchronize(DataProvider dataProvider,
+      {bool isFullSynchronization = false}) async {
+    if (!dataProvider.isSynchronizing) {
+      try {
+        dataProvider.setSynchronizing(true);
+        var lastSyncDate = await getLastSyncDate();
 
-    await Future.delayed(const Duration(seconds: 1));
-    dataProvider.setSynchronizing(false);
-    dataProvider.reloadHome();
-    dataProvider.reloadCategory();
+        if (isFullSynchronization) {
+          lastSyncDate = DateTime(2000);
+        }
+
+        await push(lastSyncDate, dataProvider);
+        await pull(lastSyncDate, dataProvider);
+        await setLastSyncDate(dataProvider);
+      } catch (e) {
+        print(e);
+      }
+
+      await Future.delayed(const Duration(seconds: 1));
+      dataProvider.setSynchronizing(false);
+      dataProvider.reloadHome();
+      dataProvider.reloadCategory();
+    }
   }
 
   static Future<DateTime> getLastSyncDate() async {

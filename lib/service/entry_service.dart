@@ -43,14 +43,18 @@ class EntryService {
     Synchronization.synchronize(dataProvider);
   }
 
-  static Future<void> save(Entry entry, DataProvider dataProvider) async {
+  static Future<void> save(Entry entry, DataProvider dataProvider,
+      {bool isSynchronizing = true}) async {
     if (entry.uid == null || entry.uid.isEmpty) {
       var uuid = Uuid();
       entry.uid = uuid.v4();
     }
 
     await addRow(Entry.tableName, entry.toMap());
-    Synchronization.synchronize(dataProvider);
+
+    if (isSynchronizing) {
+      Synchronization.synchronize(dataProvider);
+    }
   }
 
   static Future<List<Entry>> getAll() async {

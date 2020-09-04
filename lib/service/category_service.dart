@@ -54,9 +54,13 @@ class CategoryService {
   }
 
   static Future<void> saveWithUidDefined(
-      Category category, DataProvider dataProvider) async {
+      Category category, DataProvider dataProvider,
+      {bool isSynchronizing = true}) async {
     await addRow(Category.tableName, category.toMap());
-    Synchronization.synchronize(dataProvider);
+
+    if (isSynchronizing) {
+      Synchronization.synchronize(dataProvider);
+    }
   }
 
   static Future<List<Category>> getAllByVault(String vaultUid) async {

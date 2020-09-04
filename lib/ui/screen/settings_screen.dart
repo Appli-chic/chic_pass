@@ -59,7 +59,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
           // Save in the local database using a different thread
           await _addCategories(newCategoryList);
           await _addEntries(entryList);
-          Synchronization.synchronize(_dataProvider);
+          Synchronization.synchronize(_dataProvider,
+              isFullSynchronization: true);
 
           _dataProvider.reloadHome();
           _dataProvider.reloadCategory();
@@ -76,7 +77,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
     for (var category in categories) {
       try {
         category.vaultUid = _dataProvider.vault.uid;
-        await CategoryService.saveWithUidDefined(category, _dataProvider);
+        await CategoryService.saveWithUidDefined(category, _dataProvider,
+            isSynchronizing: false);
       } catch (e) {
         print(e);
       }
@@ -88,7 +90,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
       try {
         entry.hash =
             await Security.encryptPassword(_dataProvider.hash, entry.hash);
-        await EntryService.save(entry, _dataProvider);
+        await EntryService.save(entry, _dataProvider, isSynchronizing: false);
       } catch (e) {
         print(e);
       }
