@@ -96,11 +96,13 @@ class _HomeScreenState extends State<HomeScreen> {
               textController: _searchTextController,
               hint: AppTranslations.of(context).text("search_hint"),
               prefixIconData: Icons.search,
-              suffixIconData:
-                  _searchTextController.text.isNotEmpty ? Icons.close : null,
-              onSuffixIconClicked: () {
+              hasCancel: true,
+              onClearClick: () {
                 _searchTextController.clear();
                 _onSearch(_searchTextController.text);
+              },
+              onCancelClick: () {
+                FocusScope.of(context).unfocus();
               },
               onTextChanged: _onSearch,
             ),

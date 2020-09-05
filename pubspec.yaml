@@ -38,6 +38,7 @@ dependencies:
   file_picker: ^1.13.2
   local_auth: ^0.6.2+3
   uuid: ^2.2.0
+  flutter_keyboard_visibility: ^3.2.2
 
 dev_dependencies:
   flutter_test:

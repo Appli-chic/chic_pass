@@ -2,6 +2,7 @@ import 'package:chicpass/api/auth_api.dart';
 import 'package:chicpass/api/user_api.dart';
 import 'package:chicpass/localization/app_translations.dart';
 import 'package:chicpass/model/api_error.dart';
+import 'package:chicpass/provider/data_provider.dart';
 import 'package:chicpass/provider/theme_provider.dart';
 import 'package:chicpass/ui/component/dialog_message.dart';
 import 'package:chicpass/ui/component/input.dart';
@@ -9,6 +10,7 @@ import 'package:chicpass/ui/component/loading_dialog.dart';
 import 'package:chicpass/ui/component/rounded_button.dart';
 import 'package:chicpass/utils/constant.dart';
 import 'package:chicpass/utils/security.dart';
+import 'package:chicpass/utils/synchronization.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -19,10 +21,12 @@ class LoginScreen extends StatefulWidget {
 
 class _LoginScreenState extends State<LoginScreen> {
   ThemeProvider _themeProvider;
+  DataProvider _dataProvider;
   TextEditingController _emailController = TextEditingController();
   TextEditingController _askingCodeController = TextEditingController();
   bool _isAskingCode = true;
   bool _isLoading = false;
+  bool _canSkip = false;
 
   bool _checkEmailValid(String email) {
     return RegExp(r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-z"
@@ -96,7 +100,14 @@ class _LoginScreenState extends State<LoginScreen> {
         var user = await UserApi.getCurrentUser();
         await Security.setCurrentUser(user);
 
-        Navigator.pop(context);
+        if (_canSkip) {
+          await Synchronization.synchronize(_dataProvider,
+              isFullSynchronization: true);
+
+          await Navigator.pushReplacementNamed(context, '/vaults');
+        } else {
+          Navigator.pop(context);
+        }
       } catch (e) {
         setState(() {
           _isLoading = false;
@@ -173,6 +184,8 @@ class _LoginScreenState extends State<LoginScreen> {
   @override
   Widget build(BuildContext context) {
     _themeProvider = Provider.of<ThemeProvider>(context, listen: true);
+    _dataProvider = Provider.of<DataProvider>(context, listen: true);
+    _canSkip = ModalRoute.of(context).settings.arguments;
 
     return LoadingDialog(
       isDisplayed: _isLoading,
@@ -182,13 +195,24 @@ class _LoginScreenState extends State<LoginScreen> {
           leading: BackButton(
             color: _themeProvider.textColor,
           ),
+          elevation: 0,
           brightness: _themeProvider.getBrightness(),
           backgroundColor: _themeProvider.secondBackgroundColor,
           title: Text(
             AppTranslations.of(context).text("login"),
             style: TextStyle(color: _themeProvider.textColor),
           ),
-          elevation: 0,
+          actions: [
+            FlatButton(
+              onPressed: () async {
+                await Navigator.pushReplacementNamed(context, '/vaults');
+              },
+              child: Text(
+                AppTranslations.of(context).text("skip"),
+                style: TextStyle(color: _themeProvider.primaryColor),
+              ),
+            ),
+          ],
         ),
         body: Column(
           children: [

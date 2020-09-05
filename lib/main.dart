@@ -4,12 +4,14 @@ import 'package:chicpass/ui/screen/biometry_settings_screen.dart';
 import 'package:chicpass/ui/screen/category_passwords_screen.dart';
 import 'package:chicpass/ui/screen/display_screen.dart';
 import 'package:chicpass/ui/screen/import_category_screen.dart';
+import 'package:chicpass/ui/screen/landing_page.dart';
 import 'package:chicpass/ui/screen/login_screen.dart';
 import 'package:chicpass/ui/screen/main_screen.dart';
 import 'package:chicpass/ui/screen/new_password_screen.dart';
 import 'package:chicpass/ui/screen/new_vault_screen.dart';
 import 'package:chicpass/utils/security.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:provider/provider.dart';
 
@@ -72,35 +74,39 @@ class _AppState extends State<App> {
           create: (_) => DataProvider(),
         ),
       ],
-      child: MaterialApp(
-        debugShowCheckedModeBanner: false,
-        title: 'Chic Pass',
-        theme: ThemeData(
-          visualDensity: VisualDensity.adaptivePlatformDensity,
+      child: KeyboardVisibilityProvider(
+        child: MaterialApp(
+          debugShowCheckedModeBanner: false,
+          title: 'Chic Pass',
+          theme: ThemeData(
+            visualDensity: VisualDensity.adaptivePlatformDensity,
+          ),
+          localizationsDelegates: [
+            _newLocaleDelegate,
+            GlobalMaterialLocalizations.delegate,
+            GlobalWidgetsLocalizations.delegate,
+          ],
+          supportedLocales: [
+            const Locale('en', ''), // English
+            const Locale('fr', ''), // French
+          ],
+          initialRoute: '/',
+          routes: {
+            '/': (context) => LandingPage(),
+            '/vaults': (context) => VaultScreen(),
+            '/new_vault': (context) => NewVaultScreen(),
+            '/main_screen': (context) => MainScreen(),
+            '/new_password_screen': (context) => NewPasswordScreen(),
+            '/new_category_screen': (context) => NewCategoryScreen(),
+            '/category_passwords_screen': (context) =>
+                CategoryPasswordsScreen(),
+            '/entry_details_screen': (context) => EntryDetailsScreen(),
+            '/display_screen': (context) => DisplayScreen(),
+            '/import_category_screen': (context) => ImportCategoryScreen(),
+            '/biometry_settings_screen': (context) => BiometrySettingsScreen(),
+            '/login_screen': (context) => LoginScreen(),
+          },
         ),
-        localizationsDelegates: [
-          _newLocaleDelegate,
-          GlobalMaterialLocalizations.delegate,
-          GlobalWidgetsLocalizations.delegate,
-        ],
-        supportedLocales: [
-          const Locale('en', ''), // English
-          const Locale('fr', ''), // French
-        ],
-        initialRoute: '/',
-        routes: {
-          '/': (context) => VaultScreen(),
-          '/new_vault': (context) => NewVaultScreen(),
-          '/main_screen': (context) => MainScreen(),
-          '/new_password_screen': (context) => NewPasswordScreen(),
-          '/new_category_screen': (context) => NewCategoryScreen(),
-          '/category_passwords_screen': (context) => CategoryPasswordsScreen(),
-          '/entry_details_screen': (context) => EntryDetailsScreen(),
-          '/display_screen': (context) => DisplayScreen(),
-          '/import_category_screen': (context) => ImportCategoryScreen(),
-          '/biometry_settings_screen': (context) => BiometrySettingsScreen(),
-          '/login_screen': (context) => LoginScreen(),
-        },
       ),
     );
   }

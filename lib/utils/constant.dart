@@ -5,6 +5,7 @@ const String DATABASE_NAME = "chic_pass.db";
 const String USER_STORAGE_KEY = "USER_STORAGE_KEY";
 const String LAST_SYNC_STORAGE_KEY = "LAST_SYNC_STORAGE_KEY";
 const String HAS_RUN_BEFORE_STORAGE_KEY = 'hasRunBefore';
+const String FIRST_CONNECTION_KEY = 'FIRST_CONNECTION_KEY';
 
 const categoryList = [
   "bank.png",

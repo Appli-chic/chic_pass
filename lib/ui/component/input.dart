@@ -1,6 +1,8 @@
+import 'package:chicpass/localization/app_translations.dart';
 import 'package:chicpass/provider/theme_provider.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
 import 'package:provider/provider.dart';
 
 class TextFieldType {
@@ -32,6 +34,7 @@ class Input extends StatefulWidget {
   final TextCapitalization textCapitalization;
   final FocusNode focus;
   final Widget suffix;
+  final bool hasCancel;
   final Function(String) onSubmitted;
   final Function(String) onTextChanged;
   final TextFieldType fieldType;
@@ -39,6 +42,8 @@ class Input extends StatefulWidget {
   final Function singleSelectChoose;
   final int singleSelectDefaultIndex;
   final Function(String) onClick;
+  final Function() onClearClick;
+  final Function() onCancelClick;
 
   Input({
     this.key,
@@ -55,6 +60,7 @@ class Input extends StatefulWidget {
     this.inputType = TextInputType.text,
     this.textCapitalization = TextCapitalization.none,
     this.suffix,
+    this.hasCancel = false,
     this.onSubmitted,
     this.onTextChanged,
     this.fieldType = TextFieldType.text,
@@ -62,6 +68,8 @@ class Input extends StatefulWidget {
     this.singleSelectChoose,
     this.singleSelectDefaultIndex,
     this.onClick,
+    this.onClearClick,
+    this.onCancelClick,
   });
 
   @override
@@ -100,7 +108,34 @@ class _InputState extends State<Input> {
   }
 
   Widget _displaySuffix() {
-    if (widget.suffix != null) {
+    if (widget.hasCancel) {
+      if (widget.textController.text.isEmpty &&
+          KeyboardVisibilityProvider.isKeyboardVisible(context)) {
+        return FlatButton(
+          onPressed: () {
+            widget.onCancelClick();
+          },
+          child: Text(
+            AppTranslations.of(context).text("cancel_lowercase"),
+            style: TextStyle(
+              color: _themeProvider.primaryColor,
+            ),
+          ),
+        );
+      } else if (widget.textController.text.isNotEmpty) {
+        return IconButton(
+          onPressed: () {
+            widget.onClearClick();
+          },
+          icon: Icon(
+            Icons.close,
+            color: _themeProvider.thirdTextColor,
+          ),
+        );
+      } else {
+        return Container();
+      }
+    } else if (widget.suffix != null) {
       return widget.suffix;
     } else if (widget.suffixIconData != null) {
       return _displaySuffixIcon();

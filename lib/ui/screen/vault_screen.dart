@@ -108,7 +108,10 @@ class _VaultScreenState extends State<VaultScreen> {
       appBar: AppBar(
         leading: IconButton(
           icon: Icon(Icons.person, color: _themeProvider.textColor),
-          onPressed: () {},
+          onPressed: () async {
+            await Navigator.pushReplacementNamed(context, '/login_screen',
+                arguments: true);
+          },
         ),
         brightness: _themeProvider.getBrightness(),
         backgroundColor: _themeProvider.secondBackgroundColor,
