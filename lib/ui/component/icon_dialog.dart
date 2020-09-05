@@ -45,6 +45,8 @@ class _IconDialogState extends State<IconDialog> {
   @override
   Widget build(BuildContext context) {
     _themeProvider = Provider.of<ThemeProvider>(context, listen: true);
+    var smallestDimension = MediaQuery.of(context).size.shortestSide;
+    final isMobileLayout = smallestDimension < 600;
 
     return AlertDialog(
       shape: RoundedRectangleBorder(
@@ -57,7 +59,7 @@ class _IconDialogState extends State<IconDialog> {
       ),
       content: Container(
         height: MediaQuery.of(context).size.height / 2,
-        width: MediaQuery.of(context).size.width * .7,
+        width: isMobileLayout ? MediaQuery.of(context).size.width * .7 : 400,
         color: _themeProvider.secondBackgroundColor,
         child: Theme(
           data: ThemeData(

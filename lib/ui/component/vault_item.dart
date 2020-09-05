@@ -49,21 +49,25 @@ class VaultItem extends StatelessWidget {
     }
 
     if (canCheckBiometrics) {
-      var authenticated = await auth.authenticateWithBiometrics(
-        localizedReason: AppTranslations.of(context).text("scan_fingerprint"),
-        useErrorDialogs: true,
-        stickyAuth: true,
-      );
+      try {
+        var authenticated = await auth.authenticateWithBiometrics(
+          localizedReason: AppTranslations.of(context).text("scan_fingerprint"),
+          useErrorDialogs: true,
+          stickyAuth: true,
+        );
 
-      if (authenticated) {
-        String fingerPrintDataString =
-            await storage.read(key: env.fingerprintKey);
-        dynamic fingerPrintData = json.decode(fingerPrintDataString);
+        if (authenticated) {
+          String fingerPrintDataString =
+              await storage.read(key: env.fingerprintKey);
+          dynamic fingerPrintData = json.decode(fingerPrintDataString);
 
-        dataProvider.setHash(fingerPrintData[vault.uid]);
-        dataProvider.setVault(vault);
+          dataProvider.setHash(fingerPrintData[vault.uid]);
+          dataProvider.setVault(vault);
 
-        await Navigator.pushNamed(context, '/main_screen');
+          await Navigator.pushNamed(context, '/main_screen');
+        }
+      } catch (e) {
+        _askPassword(context);
       }
     }
   }
@@ -77,22 +81,26 @@ class VaultItem extends StatelessWidget {
     }
 
     if (canCheckBiometrics) {
-      var authenticated = await auth.authenticateWithBiometrics(
-        localizedReason: AppTranslations.of(context).text("scan_face"),
-        useErrorDialogs: true,
-        stickyAuth: true,
-      );
+      try {
+        var authenticated = await auth.authenticateWithBiometrics(
+          localizedReason: AppTranslations.of(context).text("scan_face"),
+          useErrorDialogs: true,
+          stickyAuth: true,
+        );
 
-      if (authenticated) {
-        String faceRecognitionDataString =
-            await storage.read(key: env.faceRecognitionKey);
-        dynamic faceRecognitionPrintData =
-            json.decode(faceRecognitionDataString);
+        if (authenticated) {
+          String faceRecognitionDataString =
+              await storage.read(key: env.faceRecognitionKey);
+          dynamic faceRecognitionPrintData =
+              json.decode(faceRecognitionDataString);
 
-        dataProvider.setHash(faceRecognitionPrintData[vault.uid]);
-        dataProvider.setVault(vault);
+          dataProvider.setHash(faceRecognitionPrintData[vault.uid]);
+          dataProvider.setVault(vault);
 
-        await Navigator.pushNamed(context, '/main_screen');
+          await Navigator.pushNamed(context, '/main_screen');
+        }
+      } catch (e) {
+        _askPassword(context);
       }
     }
   }

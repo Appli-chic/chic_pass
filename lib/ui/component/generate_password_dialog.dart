@@ -153,6 +153,8 @@ class _GeneratePasswordDialogState extends State<GeneratePasswordDialog> {
     }
 
     var width = MediaQuery.of(context).size.width;
+    var smallestDimension = MediaQuery.of(context).size.shortestSide;
+    final isMobileLayout = smallestDimension < 600;
 
     return AlertDialog(
       shape: RoundedRectangleBorder(
@@ -167,7 +169,7 @@ class _GeneratePasswordDialogState extends State<GeneratePasswordDialog> {
       ),
       content: SingleChildScrollView(
         child: Container(
-          width: width,
+          width: isMobileLayout ? width : 400,
           child: Theme(
             data: ThemeData(
               primaryColor: _themeProvider.primaryColor,
