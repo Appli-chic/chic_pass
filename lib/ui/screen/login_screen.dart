@@ -187,6 +187,10 @@ class _LoginScreenState extends State<LoginScreen> {
     _dataProvider = Provider.of<DataProvider>(context, listen: true);
     _canSkip = ModalRoute.of(context).settings.arguments;
 
+    if (_canSkip == null) {
+      _canSkip = false;
+    }
+
     return LoadingDialog(
       isDisplayed: _isLoading,
       child: Scaffold(
@@ -203,15 +207,17 @@ class _LoginScreenState extends State<LoginScreen> {
             style: TextStyle(color: _themeProvider.textColor),
           ),
           actions: [
-            FlatButton(
-              onPressed: () async {
-                await Navigator.pushReplacementNamed(context, '/vaults');
-              },
-              child: Text(
-                AppTranslations.of(context).text("skip"),
-                style: TextStyle(color: _themeProvider.primaryColor),
-              ),
-            ),
+            _canSkip
+                ? FlatButton(
+                    onPressed: () async {
+                      await Navigator.pushReplacementNamed(context, '/vaults');
+                    },
+                    child: Text(
+                      AppTranslations.of(context).text("skip"),
+                      style: TextStyle(color: _themeProvider.primaryColor),
+                    ),
+                  )
+                : Container(),
           ],
         ),
         body: Column(

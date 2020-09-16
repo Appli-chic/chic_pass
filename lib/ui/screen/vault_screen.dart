@@ -4,6 +4,7 @@ import 'package:chicpass/provider/data_provider.dart';
 import 'package:chicpass/service/vault_service.dart';
 import 'package:chicpass/provider/theme_provider.dart';
 import 'package:chicpass/ui/component/vault_item.dart';
+import 'package:chicpass/utils/security.dart';
 import 'package:chicpass/utils/synchronization.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -16,6 +17,7 @@ class VaultScreen extends StatefulWidget {
 class _VaultScreenState extends State<VaultScreen> {
   ThemeProvider _themeProvider;
   DataProvider _dataProvider;
+  bool _isConnected = true;
   List<Vault> _vaults = [];
 
   didChangeDependencies() {
@@ -35,7 +37,16 @@ class _VaultScreenState extends State<VaultScreen> {
   @override
   void initState() {
     _loadVaults();
+    _getConnectionState();
     super.initState();
+  }
+
+  _getConnectionState() async {
+    var isConnected = await Security.isConnected();
+
+    setState(() {
+      _isConnected = isConnected;
+    });
   }
 
   _loadVaults() async {
@@ -106,13 +117,14 @@ class _VaultScreenState extends State<VaultScreen> {
     return Scaffold(
       backgroundColor: _themeProvider.backgroundColor,
       appBar: AppBar(
-        leading: IconButton(
-          icon: Icon(Icons.person, color: _themeProvider.textColor),
-          onPressed: () async {
-            await Navigator.pushReplacementNamed(context, '/login_screen',
-                arguments: true);
-          },
-        ),
+        leading: _isConnected
+            ? Container()
+            : IconButton(
+                icon: Icon(Icons.person, color: _themeProvider.textColor),
+                onPressed: () async {
+                  await Navigator.pushNamed(context, '/login_screen');
+                },
+              ),
         brightness: _themeProvider.getBrightness(),
         backgroundColor: _themeProvider.secondBackgroundColor,
         elevation: 0,
