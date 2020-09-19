@@ -196,9 +196,11 @@ class _LoginScreenState extends State<LoginScreen> {
       child: Scaffold(
         backgroundColor: _themeProvider.backgroundColor,
         appBar: AppBar(
-          leading: BackButton(
-            color: _themeProvider.textColor,
-          ),
+          leading: _canSkip
+              ? Container()
+              : BackButton(
+                  color: _themeProvider.textColor,
+                ),
           elevation: 0,
           brightness: _themeProvider.getBrightness(),
           backgroundColor: _themeProvider.secondBackgroundColor,
