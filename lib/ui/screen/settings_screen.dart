@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:chicpass/localization/app_translations.dart';
 import 'package:chicpass/model/db/category.dart';
 import 'package:chicpass/model/db/entry.dart';
@@ -24,16 +26,17 @@ class _SettingsScreenState extends State<SettingsScreen> {
   DataProvider _dataProvider;
 
   _importCSV() async {
-    var file = await FilePicker.getFile(
+    var fileResult = await FilePicker.platform.pickFiles(
       type: FileType.custom,
       allowedExtensions: ['csv'],
     );
 
-    if (file != null) {
+    if (fileResult != null) {
       try {
         _dataProvider.setLoading(true);
 
         // If the file exists then we parse it
+        var file = new File(fileResult.files[0].path);
         var lines = await file.readAsLines();
         var tupleData = importButtercup(lines, _dataProvider.vault.uid);
         var categoryList = tupleData.item1;
